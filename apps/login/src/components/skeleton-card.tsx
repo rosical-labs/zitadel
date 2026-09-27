@@ -36,19 +36,19 @@ export const SkeletonCard = ({
   return (
     <div
       className={clsx(
-        "bg-gray-900/80",
+        "bg-card border-border border shadow-xs",
         actualPadding,
         {
-          "relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent":
+          "before:via-foreground/5 relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:to-transparent":
             isLoading,
         },
         actualRoundness, // Apply the full roundness classes directly
       )}
     >
       <div className={actualSpacing}>
-        <div className={clsx("h-14 bg-gray-700", actualRoundness.split(" ")[0])} />
-        <div className={clsx("h-3 w-11/12 bg-gray-700", actualRoundness.split(" ")[0])} />
-        <div className={clsx("h-3 w-8/12 bg-gray-700", actualRoundness.split(" ")[0])} />
+        <div className={clsx("bg-muted h-14", actualRoundness.split(" ")[0])} />
+        <div className={clsx("bg-muted h-3 w-11/12", actualRoundness.split(" ")[0])} />
+        <div className={clsx("bg-muted h-3 w-8/12", actualRoundness.split(" ")[0])} />
       </div>
     </div>
   );

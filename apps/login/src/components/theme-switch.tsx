@@ -14,7 +14,7 @@ function getThemeToggleRoundness() {
 function getThemeSwitchCardAppearance(): string {
   const themeConfig = getThemeConfig();
   const appearance = APPEARANCE_STYLES[themeConfig.appearance];
-  return appearance?.card || "bg-black/5 dark:bg-white/5"; // Fallback to current styling
+  return appearance?.card || APPEARANCE_STYLES.flat.card; // Fallback to flat design
 }
 
 // Helper function to get selected button styling for clear visibility
@@ -22,7 +22,7 @@ function getSelectedButtonStyle(isSelected: boolean): string {
   const themeConfig = getThemeConfig();
 
   if (!isSelected) {
-    return "text-gray-400 hover:text-gray-300 dark:text-gray-500 dark:hover:text-gray-400";
+    return "text-muted-foreground hover:text-foreground";
   }
 
   // Selected state styling based on appearance theme
@@ -33,7 +33,7 @@ function getSelectedButtonStyle(isSelected: boolean): string {
       return "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-md";
     case "flat":
     default:
-      return "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700";
+      return "bg-accent text-accent-foreground shadow-xs";
   }
 }
 
@@ -59,21 +59,21 @@ export default function ThemeSwitch() {
   return (
     <div className={`flex space-x-1 p-1 ${toggleRoundness} ${cardAppearance}`}>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} transition-colors ${getSelectedButtonStyle(theme === "light")}`}
+        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "light")}`}
         onClick={() => setTheme("light")}
         aria-label="Switch to light mode"
       >
         <SunIcon className="h-5 w-5" />
       </button>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} transition-colors ${getSelectedButtonStyle(theme === "system")}`}
+        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "system")}`}
         onClick={() => setTheme("system")}
         aria-label="Switch to system mode"
       >
         <ComputerDesktopIcon className="h-4 w-4" />
       </button>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} transition-colors ${getSelectedButtonStyle(theme === "dark")}`}
+        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "dark")}`}
         onClick={() => setTheme("dark")}
         aria-label="Switch to dark mode"
       >

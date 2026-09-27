@@ -21,13 +21,11 @@ export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
 const styles = (error: boolean, disabled: boolean, roundnessClasses: string = "rounded-md") =>
   clsx(
     {
-      "h-[40px] mb-[2px] p-[7px] bg-input-light-background dark:bg-input-dark-background transition-colors duration-300 grow": true,
-      "border border-input-light-border dark:border-input-dark-border hover:border-black hover:dark:border-white focus:border-primary-light-500 focus:dark:border-primary-dark-500": true,
-      "focus:outline-none focus:ring-0 text-base text-black dark:text-white placeholder:italic placeholder-gray-700 dark:placeholder-gray-700": true,
-      "border border-warn-light-500 dark:border-warn-dark-500 hover:border-warn-light-500 hover:dark:border-warn-dark-500 focus:border-warn-light-500 focus:dark:border-warn-dark-500":
-        error,
-      "pointer-events-none text-gray-500 dark:text-gray-800 border border-input-light-border dark:border-input-dark-border hover:border-light-hoverborder hover:dark:border-hoverborder cursor-default":
-        disabled,
+      "h-10 mb-[2px] w-full min-w-0 grow border bg-transparent px-3 py-1 shadow-xs transition-[color,box-shadow] dark:bg-input/30": true,
+      "text-base md:text-sm text-foreground placeholder:text-muted-foreground outline-none focus:outline-none focus:ring-[3px]": true,
+      "border-input focus:border-ring focus:ring-ring/50": !error,
+      "border-warn-light-500 dark:border-warn-dark-500 focus:ring-destructive/20 dark:focus:ring-destructive/40": error,
+      "pointer-events-none cursor-not-allowed opacity-50": disabled,
     },
     roundnessClasses, // Apply the full roundness classes directly
   );
@@ -59,8 +57,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const actualRoundness = roundness || getDefaultInputRoundness();
 
     return (
-      <label className="text-12px text-input-light-label dark:text-input-dark-label relative flex flex-col">
-        <span className={`mb-1 leading-3 ${error ? "text-warn-light-500 dark:text-warn-dark-500" : ""}`}>
+      <label className="text-foreground relative flex flex-col text-sm">
+        <span className={`mb-2 leading-none font-medium select-none ${error ? "text-destructive" : ""}`}>
           {label} {required && "*"}
         </span>
         <input
@@ -80,7 +78,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {suffix && (
           <span
             className={clsx(
-              "bg-background-light-500 dark:bg-background-dark-500 absolute right-[3px] bottom-[22px] z-30 translate-y-1/2 transform p-2",
+              "bg-background text-muted-foreground absolute right-[3px] bottom-[22px] z-30 translate-y-1/2 transform p-2",
               // Extract just the roundness part for the suffix (no padding)
               actualRoundness.split(" ")[0], // Take only the first part (rounded-full, rounded-md, etc.)
             )}
@@ -89,7 +87,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           </span>
         )}
 
-        <div className="leading-14.5px h-14.5px text-12px text-warn-light-500 dark:text-warn-dark-500 flex flex-row items-center">
+        <div className="leading-14.5px h-14.5px text-destructive flex flex-row items-center text-xs">
           <span>{error ? error : " "}</span>
         </div>
 
