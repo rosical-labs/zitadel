@@ -84,7 +84,7 @@ export const ROUNDNESS_CLASSES = {
     themeSwitch: "rounded-none",
   },
   mid: {
-    card: "rounded-lg",
+    card: "rounded-xl",
     button: "rounded-md",
     input: "rounded-md",
     image: "rounded-lg",
@@ -128,11 +128,12 @@ export const SPACING_STYLES = {
 // Appearance styling (complete design philosophies)
 export const APPEARANCE_STYLES = {
   flat: {
-    card: "bg-background-light-400 dark:bg-background-dark-500 border border-black/10 dark:border-white/10",
-    button: "border border-button-light-border dark:border-button-dark-border", // No shadows for flat design
-    "idp-button": "border border-button-light-border dark:border-button-dark-border", // No shadows for flat design
+    // shadcn look: token colors, hairline borders, extra-small shadows
+    card: "bg-card text-card-foreground border border-border shadow-xs",
+    button: "shadow-xs",
+    "idp-button": "border border-input shadow-xs hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50",
     typography: "font-normal",
-    background: "bg-background-light-500 dark:bg-background-dark-500", // Same as usual background
+    background: "bg-card",
   },
   material: {
     card: "bg-background-light-400 dark:bg-background-dark-500 shadow-sm border-0",

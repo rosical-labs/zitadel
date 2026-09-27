@@ -19,7 +19,7 @@ function getLanguageSwitcherRoundness(): string {
 function getLanguageSwitcherCardAppearance(): string {
   const themeConfig = getThemeConfig();
   const appearance = APPEARANCE_STYLES[themeConfig.appearance];
-  return appearance?.card || "bg-black/5 dark:bg-white/5"; // Fallback to current styling
+  return appearance?.card || APPEARANCE_STYLES.flat.card; // Fallback to flat design
 }
 
 export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
@@ -45,19 +45,22 @@ export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
       <Listbox value={selected} onChange={handleChange}>
         <ListboxButton
           className={clsx(
-            `relative block w-full py-1.5 pr-8 pl-3 text-left text-sm/6 text-black dark:text-white ${switcherRoundness}`,
+            `text-foreground relative block h-9 w-full pr-8 pl-3 text-left text-sm ${switcherRoundness}`,
             cardAppearance,
-            "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+            "data-[focus]:ring-ring/50 transition-[color,box-shadow] outline-none data-[focus]:ring-[3px]",
           )}
         >
           {selected.name}
-          <ChevronDownIcon className="group pointer-events-none absolute top-2.5 right-2.5 size-4" aria-hidden="true" />
+          <ChevronDownIcon
+            className="group text-muted-foreground pointer-events-none absolute top-2.5 right-2.5 size-4"
+            aria-hidden="true"
+          />
         </ListboxButton>
         <ListboxOptions
           anchor="bottom"
           transition
           className={clsx(
-            `bg-background-light-500 dark:bg-background-dark-500 w-[var(--button-width)] rounded-md border border-black/5 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none dark:border-white/5`,
+            `bg-popover text-popover-foreground border-border w-[var(--button-width)] rounded-md border p-1 shadow-md [--anchor-gap:var(--spacing-1)] focus:outline-none`,
             "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
           )}
         >
@@ -65,10 +68,10 @@ export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
             <ListboxOption
               key={lang.code}
               value={lang}
-              className={`group flex cursor-default items-center gap-2 px-3 py-1.5 select-none data-[focus]:bg-black/10 dark:data-[focus]:bg-white/10 ${switcherRoundness}`}
+              className={`group data-[focus]:bg-accent data-[focus]:text-accent-foreground flex cursor-default items-center gap-2 px-2 py-1.5 text-sm select-none ${switcherRoundness}`}
             >
               <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
-              <div className="text-sm/6 text-black dark:text-white">{lang.name}</div>
+              <div>{lang.name}</div>
             </ListboxOption>
           ))}
         </ListboxOptions>
