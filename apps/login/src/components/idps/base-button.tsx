@@ -18,7 +18,7 @@ export type SignInWithIdentityProviderProps = DetailedHTMLProps<
 function getDefaultIdpButtonAppearance(): string {
   const themeConfig = getThemeConfig();
   const appearance = APPEARANCE_STYLES[themeConfig.appearance];
-  return appearance?.["idp-button"] || "border border-divider-light dark:border-divider-dark"; // Fallback to basic border
+  return appearance?.["idp-button"] || APPEARANCE_STYLES.flat["idp-button"]; // Fallback to flat design
 }
 
 export const BaseButton = forwardRef<HTMLButtonElement, SignInWithIdentityProviderProps>(function BaseButton(props, ref) {
@@ -33,10 +33,10 @@ export const BaseButton = forwardRef<HTMLButtonElement, SignInWithIdentityProvid
       ref={ref}
       disabled={formStatus.pending}
       className={clsx(
-        `text-text-light-500 focus:border-primary-light-500 dark:text-text-dark-500 focus:dark:border-primary-dark-500 flex flex-1 cursor-pointer flex-row items-center px-4 text-sm transition-all outline-none hover:border-black hover:dark:border-white`,
+        `text-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 cursor-pointer flex-row items-center px-4 text-sm font-medium transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50`,
         buttonRoundness,
         idpButtonAppearance,
-        `bg-background-light-400 dark:bg-background-dark-500`, // Keep background as fallback for non-glass themes
+        `bg-background dark:bg-input/30`, // Keep background as fallback for non-glass themes
         props.className,
       )}
     >

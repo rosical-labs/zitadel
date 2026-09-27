@@ -2,14 +2,91 @@
 @use "tailwindcss";
 @config "../../tailwind.config.mjs";
 
+// shadcn design tokens backed by ZITADEL instance branding.
+// setTheme() in src/helpers/colors.ts writes --theme-* vars on <html> at runtime;
+// the fallbacks are the shadcn zinc values used before branding is applied.
+:root {
+  --background: var(--theme-light-background-500, oklch(1 0 0));
+  --foreground: var(--theme-light-text-500, oklch(0.141 0.005 285.823));
+  --card: var(--theme-light-background-400, oklch(1 0 0));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--theme-light-primary-500, oklch(0.21 0.006 285.885));
+  --primary-foreground: var(--theme-light-primary-contrast-500, oklch(0.985 0 0));
+  --secondary: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --muted-foreground: color-mix(in oklab, var(--foreground) 55%, var(--background));
+  --accent: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --accent-foreground: var(--foreground);
+  --destructive: var(--theme-light-warn-500, oklch(0.577 0.245 27.325));
+  --destructive-foreground: var(--theme-light-warn-contrast-500, oklch(0.985 0 0));
+  --border: color-mix(in oklab, var(--foreground) 9%, var(--background));
+  --input: color-mix(in oklab, var(--foreground) 9%, var(--background));
+  --ring: color-mix(in oklab, var(--foreground) 35%, var(--background));
+}
+
+.dark {
+  --background: var(--theme-dark-background-500, oklch(0.141 0.005 285.823));
+  --foreground: var(--theme-dark-text-500, oklch(0.985 0 0));
+  --card: var(--theme-dark-background-400, oklch(0.21 0.006 285.885));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--theme-dark-primary-500, oklch(0.92 0.004 286.32));
+  --primary-foreground: var(--theme-dark-primary-contrast-500, oklch(0.21 0.006 285.885));
+  --secondary: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --muted-foreground: color-mix(in oklab, var(--foreground) 67%, var(--background));
+  --accent: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --accent-foreground: var(--foreground);
+  --destructive: var(--theme-dark-warn-500, oklch(0.704 0.191 22.216));
+  --destructive-foreground: var(--theme-dark-warn-contrast-500, oklch(0.141 0.005 285.823));
+  --border: color-mix(in oklab, var(--foreground) 10%, var(--background));
+  --input: color-mix(in oklab, var(--foreground) 15%, var(--background));
+  --ring: color-mix(in oklab, var(--foreground) 50%, var(--background));
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
   h1,
   .ztdl-h1 {
-    @apply text-center text-2xl;
+    @apply text-center text-2xl font-semibold tracking-tight;
   }
 
   .ztdl-p {
-    @apply text-text-light-secondary-500 dark:text-text-dark-secondary-500 text-sm;
+    @apply text-muted-foreground text-sm;
   }
 }
 
@@ -24,11 +101,7 @@ html {
 
 .form-checkbox:checked {
   background-image: none !important;
-  background-color: var(--theme-light-primary-500);
-}
-
-.dark .form-checkbox:checked {
-  background-color: var(--theme-dark-primary-500);
+  background-color: var(--primary);
 }
 
 .form-checkbox:checked::after {
@@ -41,36 +114,5 @@ html {
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  background-color: var(--theme-light-primary-contrast-500);
-}
-
-.dark .form-checkbox:checked::after {
-  background-color: var(--theme-dark-primary-contrast-500);
-}
-
-.skeleton {
-  --accents-2: var(--theme-light-background-400);
-  --accents-1: var(--theme-light-background-500);
-
-  background-image: linear-gradient(270deg, var(--accents-1), var(--accents-2), var(--accents-2), var(--accents-1));
-  background-size: 400% 100%;
-  animation: skeleton_loading 8s ease-in-out infinite;
-}
-
-.dark .skeleton {
-  --accents-2: var(--theme-dark-background-400);
-  --accents-1: var(--theme-dark-background-500);
-
-  background-image: linear-gradient(270deg, var(--accents-1), var(--accents-2), var(--accents-2), var(--accents-1));
-  background-size: 400% 100%;
-  animation: skeleton_loading 8s ease-in-out infinite;
-}
-
-@keyframes skeleton_loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  background-color: var(--primary-foreground);
 }
