@@ -60,7 +60,7 @@ export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
           anchor="bottom"
           transition
           className={clsx(
-            `bg-popover text-popover-foreground border-border w-[var(--button-width)] rounded-md border p-1 shadow-md [--anchor-gap:var(--spacing-1)] focus:outline-none`,
+            `bg-popover text-popover-foreground border-border z-50 max-h-48 w-[var(--button-width)] overflow-y-auto rounded-md border p-1 shadow-md [--anchor-gap:6px] [--anchor-max-height:12rem] focus:outline-none`,
             "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
           )}
         >

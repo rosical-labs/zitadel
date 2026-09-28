@@ -20,14 +20,14 @@ export function CopyToClipboard({ value }: Props) {
   }, [copied, value]);
 
   return (
-    <div className="flex flex-row items-center px-2">
+    <div className="flex shrink-0 flex-row items-center">
       <button
         id="tooltip-ctc"
         type="button"
-        className="text-primary-light-500 dark:text-primary-dark-500"
+        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 flex size-8 items-center justify-center rounded-md transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setCopied(true)}
       >
-        {!copied ? <ClipboardIcon className="h-5 w-5" /> : <ClipboardDocumentCheckIcon className="h-5 w-5" />}
+        {!copied ? <ClipboardIcon className="size-4" /> : <ClipboardDocumentCheckIcon className="size-4" />}
       </button>
     </div>
   );

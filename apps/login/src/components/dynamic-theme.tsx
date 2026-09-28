@@ -35,13 +35,10 @@ export function DynamicTheme({
         )}
 
         <Card className="w-full" padding="p-6 sm:p-8">
-          {titleContent && (
-            <div className="mb-6 text-left [&_h1]:text-left [&_h1]:text-xl [&_h1]:leading-tight [&_h1:has(+.ztdl-p)]:mb-1.5">
-              {titleContent}
-            </div>
-          )}
+          {titleContent && <div className="text-left">{titleContent}</div>}
 
-          <div className="space-y-6">{formContent}</div>
+          {/* Hidden when a page passes only an empty placeholder, so the card does not end in blank space. */}
+          <div className={`space-y-6 has-[>:only-child:empty]:hidden ${titleContent ? "mt-6" : ""}`}>{formContent}</div>
         </Card>
       </div>
     </ThemeWrapper>

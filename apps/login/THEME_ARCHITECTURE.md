@@ -1,6 +1,6 @@
 # Current Theme System Architecture
 
-Our theme system provides a simple, environment variable-driven approach for consistent component styling and responsive layout switching.
+Our theme system provides a simple, environment variable-driven approach for consistent component styling.
 
 ## 🏗️ **Current Implementation**
 
@@ -27,19 +27,6 @@ const themeConfig = getThemeConfig();
 // Get component-specific styling
 const buttonRoundness = getComponentRoundness("button");
 // Returns: "rounded-md" (CSS class)
-```
-
-### **Responsive Layout Hook**
-
-```tsx
-// Client-side responsive layout detection
-import { useResponsiveLayout } from "@/lib/theme-hooks";
-
-function MyComponent() {
-  const { isSideBySide, isResponsiveOverride } = useResponsiveLayout();
-
-  return <div className={isSideBySide ? "flex" : "flex-col"}>{/* Layout adapts automatically */}</div>;
-}
 ```
 
 ## 🎨 **Component Integration Patterns**
@@ -75,30 +62,10 @@ export function UserAvatar({ loginName, displayName }) {
 }
 ```
 
-### **Pattern 3: Theme-Aware Layout Components**
+### **Pattern 3: Page Frame**
 
-```tsx
-import { useResponsiveLayout } from "@/lib/theme-hooks";
-
-export function DynamicTheme({ children, branding }) {
-  const { isSideBySide } = useResponsiveLayout();
-
-  return (
-    <ThemeWrapper branding={branding}>
-      {isSideBySide ? (
-        // Side-by-side layout for desktop
-        <div className="flex max-w-[1200px]">
-          <div className="w-1/2">{/* Left content */}</div>
-          <div className="w-1/2">{/* Right content */}</div>
-        </div>
-      ) : (
-        // Top-to-bottom layout for mobile
-        <div className="flex-col max-w-[440px]">{children}</div>
-      )}
-    </ThemeWrapper>
-  );
-}
-```
+`DynamicTheme` renders every page the same way: the instance logo above one centered card. It does not switch
+layouts, so `NEXT_PUBLIC_THEME_LAYOUT` has no visual effect.
 
 ## 🎯 **Theme Configuration Structure**
 
@@ -116,27 +83,20 @@ export interface ComponentRoundnessConfig {
 }
 ```
 
-### **Responsive Layout Logic**
-
-```tsx
-// Automatic layout switching based on screen size
-const isSideBySide = themeConfig.layout === "side-by-side" && !isMdOrSmaller;
-
-// md breakpoint: 768px (Tailwind default)
-// Below 768px: Always use top-to-bottom layout
-// Above 768px: Use configured layout (side-by-side or top-to-bottom)
-```
+With `NEXT_PUBLIC_THEME_ROUNDNESS=edgy`, the root layout also sets `data-roundness="edgy"` on `<html>`, and
+`globals.scss` sets the Tailwind `--radius-*` variables to 0 there. Any `rounded-sm` … `rounded-4xl` utility,
+including ones hard-coded in flow components, then renders square; `rounded-full` stays round.
 
 ## � **File Structure**
 
 ```
 src/lib/
 ├── theme.ts           # Server-safe theme functions
-├── theme-hooks.ts     # Client-side responsive hooks
+├── theme-hooks.ts     # Client-side theme config hook
 └── themeUtils.tsx     # Legacy utility functions
 
 src/components/
-├── dynamic-theme.tsx  # Main responsive layout component
+├── dynamic-theme.tsx  # Page frame: logo above one centered card
 ├── theme-wrapper.tsx  # Theme application wrapper
 ├── button.tsx         # Example themed component
 ├── card.tsx          # Example themed component
@@ -155,18 +115,6 @@ export function NewComponent() {
   const roundness = getComponentRoundness("card");
 
   return <div className={`p-4 ${roundness} bg-white`}>{/* Component content */}</div>;
-}
-```
-
-### **Using Responsive Layout**
-
-```tsx
-import { useResponsiveLayout } from "@/lib/theme-hooks";
-
-export function ResponsiveComponent() {
-  const { isSideBySide } = useResponsiveLayout();
-
-  return <div className={isSideBySide ? "text-left" : "text-center"}>Content adapts to layout</div>;
 }
 ```
 
@@ -195,11 +143,10 @@ export default function LoginPage() {
 
 1. **Environment Variable Configuration**: Simple `.env.local` setup
 2. **Server-Safe Functions**: Work in both SSR and client components
-3. **Responsive Layout Switching**: Automatic mobile/desktop adaptation
-4. **Component-Specific Styling**: Different roundness per component type
-5. **Type Safety**: Full TypeScript support
-6. **Zero Runtime Dependencies**: No context providers or complex state
-7. **SSR Compatible**: No hydration mismatches
+3. **Component-Specific Styling**: Different roundness per component type
+4. **Type Safety**: Full TypeScript support
+5. **Zero Runtime Dependencies**: No context providers or complex state
+6. **SSR Compatible**: No hydration mismatches
 
 ## 🔄 **Architecture Benefits**
 

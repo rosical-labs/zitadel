@@ -10,7 +10,7 @@ export const SignInWithApple = forwardRef<HTMLButtonElement, SignInWithIdentityP
 
     return (
       <BaseButton {...restProps} ref={ref}>
-        <div className="flex h-12 w-12 items-center justify-center">
+        <div className="flex size-9 shrink-0 items-center justify-center">
           <div className="h-6 w-6">
             <svg viewBox="0 0 170 170" fill="currentColor">
               <title>Apple Logo</title>
@@ -21,7 +21,7 @@ export const SignInWithApple = forwardRef<HTMLButtonElement, SignInWithIdentityP
         {children ? (
           children
         ) : (
-          <span className="ml-4">{name ? name : <Translated i18nKey="signInWithApple" namespace="idp" />}</span>
+          <span className="ml-2">{name ? name : <Translated i18nKey="signInWithApple" namespace="idp" />}</span>
         )}
       </BaseButton>
     );

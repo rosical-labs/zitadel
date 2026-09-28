@@ -33,7 +33,7 @@ export const BaseButton = forwardRef<HTMLButtonElement, SignInWithIdentityProvid
       ref={ref}
       disabled={formStatus.pending}
       className={clsx(
-        `text-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 cursor-pointer flex-row items-center px-4 text-sm font-medium transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50`,
+        `text-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex min-h-10 flex-1 cursor-pointer flex-row items-center px-3 text-sm font-medium transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50`,
         buttonRoundness,
         idpButtonAppearance,
         `bg-background dark:bg-input/30`, // Keep background as fallback for non-glass themes
