@@ -49,30 +49,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Tooltip.Provider>
             <Suspense
               fallback={
-                <BackgroundWrapper
-                  className={`bg-background-light-600 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
-                >
-                  <div className="relative mx-auto w-full max-w-[440px] py-8">
+                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
+                  <div className="w-full max-w-[400px]">
                     <Skeleton>
                       <div className="h-40"></div>
                     </Skeleton>
-                    <div className="flex flex-row items-center justify-end space-x-4 py-4">
-                      <ThemeSwitch />
-                    </div>
+                  </div>
+                  <div className="mt-6 flex items-center justify-center gap-2">
+                    <ThemeSwitch />
                   </div>
                 </BackgroundWrapper>
               }
             >
               <LanguageProvider>
-                <BackgroundWrapper
-                  className={`bg-background-light-600 dark:bg-background-dark-600 relative flex min-h-screen flex-col justify-center`}
-                >
-                  <div className="relative mx-auto w-full max-w-[1100px] py-8">
-                    <div>{children}</div>
-                    <div className="mx-auto flex max-w-[440px] flex-row items-center justify-end space-x-4 px-4 py-4 md:max-w-full md:px-8">
-                      <LanguageSwitcher languages={languages} />
-                      <ThemeSwitch />
-                    </div>
+                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
+                  <main className="w-full max-w-[400px]">{children}</main>
+                  <div className="mt-6 flex items-center justify-center gap-2">
+                    <LanguageSwitcher languages={languages} />
+                    <ThemeSwitch />
                   </div>
                 </BackgroundWrapper>
               </LanguageProvider>
