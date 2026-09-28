@@ -59,24 +59,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Tooltip.Provider>
             <Suspense
               fallback={
-                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
+                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground relative flex min-h-dvh flex-col items-center justify-center px-4 pt-16 pb-10 sm:pt-20">
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2 sm:top-6 sm:right-6">
+                    <ThemeSwitch />
+                  </div>
                   <div className="w-full max-w-[400px]">
                     <SkeletonCard isLoading />
-                  </div>
-                  <div className="mt-6 flex items-center justify-center gap-2">
-                    <ThemeSwitch />
                   </div>
                 </BackgroundWrapper>
               }
             >
               <LanguageProvider>
-                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
+                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground relative flex min-h-dvh flex-col items-center justify-center px-4 pt-16 pb-10 sm:pt-20">
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2 sm:top-6 sm:right-6">
+                    <LanguageSwitcher languages={languages} />
+                    <ThemeSwitch />
+                  </div>
                   <main className="w-full max-w-[400px]">{children}</main>
-                  <footer className="mt-6 flex w-full max-w-[400px] flex-col items-center gap-4">
-                    <div className="flex items-center justify-center gap-2">
-                      <LanguageSwitcher languages={languages} />
-                      <ThemeSwitch />
-                    </div>
+                  <footer className="mt-6 flex w-full max-w-[400px] justify-center">
                     <LegalFooter legal={legal} />
                   </footer>
                 </BackgroundWrapper>
