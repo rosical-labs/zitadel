@@ -12,9 +12,9 @@ export default function Error({ error, reset }: any) {
 
   return (
     <Boundary labels={["Login Error"]} color="red">
-      <div className="space-y-4">
-        <div className="text-sm text-red-500 dark:text-red-500">
-          <strong className="font-bold">Error:</strong> {error?.message}
+      <div className="space-y-6">
+        <div className="text-destructive text-sm">
+          <strong className="font-semibold">Error:</strong> {error?.message}
         </div>
         <div>
           <Button data-i18n-key="error.tryagain" onClick={() => reset()}>

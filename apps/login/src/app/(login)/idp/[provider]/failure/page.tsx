@@ -63,7 +63,7 @@ export default async function Page(props: {
         </h1>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <Alert type={AlertType.ALERT}>
           <Translated i18nKey="loginError.description" namespace="idp" />
         </Alert>

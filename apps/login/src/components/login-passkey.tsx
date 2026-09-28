@@ -186,14 +186,14 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
   }
 
   return (
-    <div className="w-full">
+    <div className="flex w-full flex-col gap-6">
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
       {error && (
-        <div className="py-4">
+        <div>
           <Alert>{error}</Alert>
         </div>
       )}
-      <div className="mt-8 flex w-full flex-row items-center">
+      <div className="flex w-full flex-row items-center justify-between gap-3">
         {altPassword ? (
           <Button
             type="button"
@@ -260,7 +260,7 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
           }}
           data-testid="submit-button"
         >
-          {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="verify.submit" namespace="passkey" />
+          {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="passkey" />
         </Button>
       </div>
     </div>

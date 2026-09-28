@@ -61,7 +61,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             <Translated i18nKey="unknownContext" namespace="error" />
           </Alert>
         </div>
-        <div className="w-full"></div>
+        <div className="flex w-full flex-col gap-6"></div>
       </DynamicTheme>
     );
   }
@@ -77,7 +77,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             <Translated i18nKey="disabled.description" namespace="register" />
           </p>
         </div>
-        <div className="w-full"></div>
+        <div className="flex w-full flex-col gap-6"></div>
       </DynamicTheme>
     );
   }
@@ -93,7 +93,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {!organization && (
           <Alert>
             <Translated i18nKey="unknownContext" namespace="error" />

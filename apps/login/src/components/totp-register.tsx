@@ -101,19 +101,23 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center gap-5">
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
       {uri && (
         <>
-          <QRCodeSVG className="my-4 h-40 w-40 rounded-md bg-white p-2" value={uri} />
-          <div className="border-divider-light dark:border-divider-dark my-2 mb-4 flex w-96 rounded-lg border px-4 py-2 pr-2 text-sm">
-            <Link href={uri} target="_blank" className="flex-1 overflow-x-auto">
+          <QRCodeSVG className="border-border size-44 rounded-md border bg-white p-2" value={uri} />
+          <div className="border-border bg-muted/40 flex w-full min-w-0 items-center gap-2 rounded-md border py-1 pr-1 pl-3 text-xs">
+            <Link
+              href={uri}
+              target="_blank"
+              className="text-muted-foreground hover:text-foreground min-w-0 flex-1 truncate font-mono"
+            >
               {uri}
             </Link>
 
             <CopyToClipboard value={uri}></CopyToClipboard>
           </div>
-          <form className="w-full">
+          <form className="flex w-full flex-col gap-6">
             <div className="">
               <TextInput
                 type="text"
@@ -125,12 +129,12 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
             </div>
 
             {error && (
-              <div className="py-4">
+              <div>
                 <Alert>{error}</Alert>
               </div>
             )}
 
-            <div className="mt-8 flex w-full flex-row items-center">
+            <div className="flex w-full flex-row items-center justify-between gap-3">
               <span className="flex-grow"></span>
               <Button
                 type="submit"
@@ -140,7 +144,7 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
                 onClick={handleSubmit(continueWithCode)}
                 data-testid="submit-button"
               >
-                {loading && <Spinner className="mr-2 h-5 w-5" />}
+                {loading && <Spinner className="size-4" />}
                 <Translated i18nKey="set.submit" namespace="otp" />
               </Button>
             </div>

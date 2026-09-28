@@ -93,7 +93,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         />
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <ConsentScreen
           userCode={userCode}
           sessionId={sessionFactors.id}

@@ -75,7 +75,7 @@ export default async function Page(props: {
         )}
 
         {!session && (
-          <div className="py-4">
+          <div>
             <Alert>
               {/* context was provided but the session could not be resolved (cookie missing, invalid or expired) */}
               <Translated i18nKey={loginName || sessionId ? "sessionExpired" : "unknownContext"} namespace="error" />
@@ -93,7 +93,7 @@ export default async function Page(props: {
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {method && session && (
           <LoginOTP
             loginName={loginName ?? session.factors?.user?.loginName}

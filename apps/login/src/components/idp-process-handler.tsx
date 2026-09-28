@@ -94,16 +94,16 @@ export function IdpProcessHandler({
   }, [provider, id, token, requestId, organization, link, sessionId, linkFingerprint, postErrorRedirectUrl, router, t]);
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex w-full items-center justify-center">
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
       {loading && (
-        <div className="flex flex-col items-center space-y-4">
-          <Spinner className="h-8 w-8" />
-          <p className="text-sm text-gray-700 dark:text-gray-300">{t("processing.message")}</p>
+        <div className="flex flex-col items-center gap-3 py-4">
+          <Spinner className="text-muted-foreground size-6" />
+          <p className="text-muted-foreground text-sm">{t("processing.message")}</p>
         </div>
       )}
       {error && (
-        <div className="max-w-md py-4">
+        <div className="w-full">
           <Alert>{error}</Alert>
         </div>
       )}

@@ -137,7 +137,7 @@ export default async function Page(props: {
         )}
 
         {!session && (
-          <div className="py-4">
+          <div>
             <Alert>
               {/* context was provided but the session could not be resolved (cookie missing, invalid or expired) */}
               <Translated i18nKey={loginName || sessionId ? "sessionExpired" : "unknownContext"} namespace="error" />
@@ -146,7 +146,7 @@ export default async function Page(props: {
         )}
 
         {error && (
-          <div className="py-4">
+          <div>
             <Alert>{error?.message}</Alert>
           </div>
         )}
@@ -161,7 +161,7 @@ export default async function Page(props: {
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {totpResponse && "uri" in totpResponse && "secret" in totpResponse ? (
           <div>
             <TotpRegister
@@ -176,7 +176,7 @@ export default async function Page(props: {
             ></TotpRegister>
           </div>
         ) : (
-          <div className="mt-8 flex w-full flex-row items-center">
+          <div className="flex w-full flex-row items-center justify-between gap-3">
             <BackButton />
             <span className="flex-grow"></span>
 

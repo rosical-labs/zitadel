@@ -171,8 +171,8 @@ export function SetPasswordForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className="mb-4 grid grid-cols-1 gap-4 pt-4">
+      <form className="flex w-full flex-col gap-6">
+        <div className="grid grid-cols-1 gap-5">
           <input
             type="text"
             name="username"
@@ -185,15 +185,15 @@ export function SetPasswordForm({
           />
           {codeRequired && (
             <Alert type={AlertType.INFO}>
-              <div className="flex flex-row">
-                <span className="mr-auto flex-1 text-left">
+              <div className="flex flex-row items-start justify-between gap-4">
+                <span className="text-left">
                   <Translated i18nKey="set.noCodeReceived" namespace="password" />
                 </span>
                 <button
                   aria-label={t("set.resend")}
                   disabled={loading}
                   type="button"
-                  className="text-primary-light-500 hover:text-primary-light-400 dark:text-primary-dark-500 hover:dark:text-primary-dark-400 ml-4 cursor-pointer disabled:cursor-default disabled:text-gray-400 dark:disabled:text-gray-700"
+                  className="ztdl-link shrink-0"
                   onClick={() => {
                     resendCode();
                   }}
@@ -259,7 +259,7 @@ export function SetPasswordForm({
 
         {error && <Alert>{error}</Alert>}
 
-        <div className="mt-8 flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <Button
             type="submit"
@@ -268,7 +268,7 @@ export function SetPasswordForm({
             onClick={handleSubmit(submitPassword)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="set.submit" namespace="password" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="password" />
           </Button>
         </div>
       </form>

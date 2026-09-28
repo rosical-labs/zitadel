@@ -45,7 +45,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         <h1>
           <Translated i18nKey="change.title" namespace="password" />
         </h1>
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="change.description" namespace="password" />
         </p>
 
@@ -53,7 +53,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             lookup is reported by the form gate below (failedLoading), and under
             enumeration protection no session may exist by design. */}
         {!loginName && (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
             </Alert>
@@ -72,7 +72,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         ) : null}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {passwordComplexity && loginName && sessionFactors?.factors?.user?.id ? (
           <ChangePasswordForm
             sessionId={sessionFactors.id}
@@ -82,7 +82,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             passwordComplexitySettings={passwordComplexity}
           />
         ) : (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="failedLoading" namespace="error" />
             </Alert>

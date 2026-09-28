@@ -35,7 +35,7 @@ export default async function CompleteRegistrationPage(props: {
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <RegisterFormIDPIncomplete
           idpUserId={idpUserId}
           idpId={idpId}

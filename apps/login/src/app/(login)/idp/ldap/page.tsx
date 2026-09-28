@@ -42,7 +42,7 @@ export default async function Page(props: {
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <LDAPUsernamePasswordForm
           idpId={idpId}
           link={link === "true"}

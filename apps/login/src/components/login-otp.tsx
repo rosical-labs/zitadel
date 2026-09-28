@@ -212,18 +212,18 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
+      <form className="flex w-full flex-col gap-6">
         {["email", "sms"].includes(method) && (
           <Alert type={AlertType.INFO}>
-            <div className="flex flex-row">
-              <span className="mr-auto flex-1 text-left">
+            <div className="flex flex-row items-start justify-between gap-4">
+              <span className="text-left">
                 <Translated i18nKey="verify.noCodeReceived" namespace="otp" />
               </span>
               <button
                 aria-label={t("verify.resendCode")}
                 disabled={loading}
                 type="button"
-                className="text-primary-light-500 hover:text-primary-light-400 dark:text-primary-dark-500 hover:dark:text-primary-dark-400 ml-4 cursor-pointer disabled:cursor-default disabled:text-gray-400 dark:disabled:text-gray-700"
+                className="ztdl-link shrink-0"
                 onClick={async () => {
                   setLoading(true);
                   const response = await updateSessionForOTPChallenge();
@@ -239,7 +239,7 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
             </div>
           </Alert>
         )}
-        <div className="mt-4">
+        <div>
           <TextInput
             type="text"
             autoFocus
@@ -251,12 +251,12 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
         </div>
 
         {error && (
-          <div className="py-4" data-testid="error">
+          <div data-testid="error">
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <span className="flex-grow"></span>
           <Button
@@ -267,7 +267,7 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
             onClick={handleSubmit(setCodeAndContinue)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="verify.submit" namespace="otp" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="otp" />
           </Button>
         </div>
       </form>

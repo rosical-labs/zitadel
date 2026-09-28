@@ -111,8 +111,8 @@ export function PasswordForm({ loginSettings, loginName, organization, defaultOr
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className={`${error && "animate-shake transform-gpu"}`}>
+      <form className="flex w-full flex-col gap-6">
+        <div className={`flex flex-col gap-3 ${error ? "animate-shake transform-gpu" : ""}`}>
           <TextInput
             type="password"
             autoComplete="password"
@@ -123,7 +123,7 @@ export function PasswordForm({ loginSettings, loginName, organization, defaultOr
           />
           {!loginSettings?.hidePasswordReset && (
             <button
-              className="hover:text-primary-light-500 dark:hover:text-primary-dark-500 text-sm transition-all"
+              className="ztdl-link self-start text-sm"
               onClick={() => resetPasswordAndContinue()}
               type="button"
               disabled={loading}
@@ -137,18 +137,18 @@ export function PasswordForm({ loginSettings, loginName, organization, defaultOr
         </div>
 
         {info && (
-          <div className="py-4">
+          <div>
             <Alert type={AlertType.INFO}>{info}</Alert>
           </div>
         )}
 
         {error && (
-          <div className="py-4" data-testid="error">
+          <div data-testid="error">
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <span className="flex-grow"></span>
           <Button
@@ -159,7 +159,7 @@ export function PasswordForm({ loginSettings, loginName, organization, defaultOr
             onClick={handleSubmit(submitPassword)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="verify.submit" namespace="password" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="password" />
           </Button>
         </div>
       </form>
