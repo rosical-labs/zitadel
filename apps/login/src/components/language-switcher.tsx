@@ -6,6 +6,7 @@ import { APPEARANCE_STYLES, getComponentRoundness, getThemeConfig } from "@/lib/
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import { GlobeIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -41,41 +42,38 @@ export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
   };
 
   return (
-    <div className="w-32">
-      <Listbox value={selected} onChange={handleChange}>
-        <ListboxButton
-          className={clsx(
-            `text-foreground relative block h-9 w-full pr-8 pl-3 text-left text-sm ${switcherRoundness}`,
-            cardAppearance,
-            "data-[focus]:ring-ring/50 transition-[color,box-shadow] outline-none data-[focus]:ring-[3px]",
-          )}
-        >
-          {selected.name}
-          <ChevronDownIcon
-            className="group text-muted-foreground pointer-events-none absolute top-2.5 right-2.5 size-4"
-            aria-hidden="true"
-          />
-        </ListboxButton>
-        <ListboxOptions
-          anchor="bottom"
-          transition
-          className={clsx(
-            `bg-popover text-popover-foreground border-border z-50 max-h-48 w-[var(--button-width)] overflow-y-auto rounded-md border p-1 shadow-md [--anchor-gap:6px] [--anchor-max-height:12rem] focus:outline-none`,
-            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
-          )}
-        >
-          {languages.map((lang) => (
-            <ListboxOption
-              key={lang.code}
-              value={lang}
-              className={`group data-[focus]:bg-accent data-[focus]:text-accent-foreground flex cursor-default items-center gap-2 px-2 py-1.5 text-sm select-none ${switcherRoundness}`}
-            >
-              <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
-              <div>{lang.name}</div>
-            </ListboxOption>
-          ))}
-        </ListboxOptions>
-      </Listbox>
-    </div>
+    <Listbox value={selected} onChange={handleChange}>
+      <ListboxButton
+        className={clsx(
+          `text-foreground hover:bg-accent hover:text-accent-foreground inline-flex h-8 items-center gap-1.5 px-2.5 text-sm ${switcherRoundness}`,
+          cardAppearance,
+          "data-[focus]:ring-ring/50 transition-[color,background-color,box-shadow] outline-none data-[focus]:ring-[3px]",
+        )}
+      >
+        <GlobeIcon className="text-muted-foreground size-4 shrink-0" aria-hidden="true" />
+        <span className="hidden sm:inline">{selected.name}</span>
+        <span className="uppercase sm:hidden">{selected.code}</span>
+        <ChevronDownIcon className="text-muted-foreground pointer-events-none size-3.5 shrink-0" aria-hidden="true" />
+      </ListboxButton>
+      <ListboxOptions
+        anchor="bottom end"
+        transition
+        className={clsx(
+          `bg-popover text-popover-foreground border-border z-50 max-h-48 min-w-40 overflow-y-auto rounded-md border p-1 shadow-md [--anchor-gap:6px] [--anchor-max-height:12rem] focus:outline-none`,
+          "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
+        )}
+      >
+        {languages.map((lang) => (
+          <ListboxOption
+            key={lang.code}
+            value={lang}
+            className={`group data-[focus]:bg-accent data-[focus]:text-accent-foreground flex cursor-default items-center gap-2 px-2 py-1.5 text-sm select-none ${switcherRoundness}`}
+          >
+            <CheckIcon className="invisible size-4 group-data-[selected]:visible" />
+            <div>{lang.name}</div>
+          </ListboxOption>
+        ))}
+      </ListboxOptions>
+    </Listbox>
   );
 }
