@@ -3,7 +3,7 @@
 import { getComponentRoundness } from "@/lib/theme";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { clsx } from "clsx";
-import { ChangeEvent, DetailedHTMLProps, forwardRef, InputHTMLAttributes, ReactNode } from "react";
+import { ChangeEvent, CSSProperties, DetailedHTMLProps, forwardRef, InputHTMLAttributes, ReactNode } from "react";
 
 export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   label: string;
@@ -35,6 +35,14 @@ function getDefaultInputRoundness(): string {
   return getComponentRoundness("input");
 }
 
+// Reserve room for "@suffix" (~1ch per character, at most half the field) so typed text never runs under it.
+function suffixWidthStyle(suffix: string | undefined): CSSProperties | undefined {
+  if (!suffix) {
+    return undefined;
+  }
+  return { "--suffix-width": `min(${suffix.length + 1}ch + 0.75rem, 50%)` } as CSSProperties;
+}
+
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
     {
@@ -61,11 +69,14 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         <span className={`leading-none font-medium select-none ${error ? "text-destructive" : ""}`}>
           {label} {required && "*"}
         </span>
-        <span className="relative flex">
+        <span className="relative flex" style={suffixWidthStyle(suffix)}>
           <input
             suppressHydrationWarning
             ref={ref}
-            className={styles(!!error, !!disabled, actualRoundness)}
+            className={clsx(
+              styles(!!error, !!disabled, actualRoundness),
+              suffix && "pr-[calc(var(--suffix-width)+0.25rem)]",
+            )}
             defaultValue={defaultValue}
             required={required}
             disabled={disabled}
@@ -77,7 +88,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           />
 
           {suffix && (
-            <span className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <span className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 max-w-(--suffix-width) truncate pr-3 leading-9">
               @{suffix}
             </span>
           )}
