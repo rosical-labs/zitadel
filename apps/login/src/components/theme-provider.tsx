@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   return (
-    <ThemeP attribute="class" defaultTheme="system" storageKey="cp-theme" value={{ dark: "dark" }}>
+    <ThemeP attribute="class" defaultTheme="light" storageKey="cp-theme" value={{ dark: "dark" }}>
       {children}
     </ThemeP>
   );
