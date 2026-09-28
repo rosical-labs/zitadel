@@ -472,5 +472,12 @@
     "tryagain": "Tekrar Dene",
     "couldNotContinueSession": "Oturuma devam edilemedi - kullanıcı bilgileri eksik",
     "couldNotClearSession": "Oturum sonlandırılamadı. Lütfen tekrar deneyin."
+  },
+  "footer": {
+    "label": "Yasal bilgiler ve destek",
+    "tos": "Koşullar",
+    "privacy": "Gizlilik",
+    "help": "Yardım",
+    "support": "Destek"
   }
 }

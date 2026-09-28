@@ -472,5 +472,12 @@
     "tryagain": "Try Again",
     "couldNotContinueSession": "Could not continue with session - missing user information",
     "couldNotClearSession": "Could not end the session. Please try again."
+  },
+  "footer": {
+    "label": "Legal and support",
+    "tos": "Terms",
+    "privacy": "Privacy",
+    "help": "Help",
+    "support": "Support"
   }
 }

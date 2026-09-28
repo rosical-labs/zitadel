@@ -472,5 +472,12 @@
     "tryagain": "Spróbuj ponownie",
     "couldNotContinueSession": "Nie udało się kontynuować sesji - brak informacji o użytkowniku",
     "couldNotClearSession": "Nie udało się zakończyć sesji. Spróbuj ponownie."
+  },
+  "footer": {
+    "label": "Informacje prawne i wsparcie",
+    "tos": "Regulamin",
+    "privacy": "Prywatność",
+    "help": "Pomoc",
+    "support": "Wsparcie"
   }
 }
