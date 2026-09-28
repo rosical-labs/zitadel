@@ -472,5 +472,12 @@
     "tryagain": "Riprova",
     "couldNotContinueSession": "Impossibile continuare con la sessione - informazioni utente mancanti",
     "couldNotClearSession": "Impossibile terminare la sessione. Riprova."
+  },
+  "footer": {
+    "label": "Note legali e supporto",
+    "tos": "Termini",
+    "privacy": "Privacy",
+    "help": "Aiuto",
+    "support": "Supporto"
   }
 }

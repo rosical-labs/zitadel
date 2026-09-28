@@ -472,5 +472,12 @@
       "multipleUsersFound": "複数のユーザーが見つかりました",
       "userNotFound": "ユーザーがシステムに見つかりません"
     }
+  },
+  "footer": {
+    "label": "法的情報とサポート",
+    "tos": "利用規約",
+    "privacy": "プライバシー",
+    "help": "ヘルプ",
+    "support": "サポート"
   }
 }

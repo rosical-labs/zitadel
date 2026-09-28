@@ -472,5 +472,12 @@
     "tryagain": "Próbáld újra",
     "couldNotContinueSession": "Nem sikerült folytatni a munkamenetet - hiányzó felhasználói információk",
     "couldNotClearSession": "A munkamenetet nem sikerült befejezni. Kérjük, próbálja újra."
+  },
+  "footer": {
+    "label": "Jogi információk és támogatás",
+    "tos": "Feltételek",
+    "privacy": "Adatvédelem",
+    "help": "Súgó",
+    "support": "Támogatás"
   }
 }
