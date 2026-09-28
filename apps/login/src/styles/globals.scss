@@ -3,8 +3,8 @@
 @config "../../tailwind.config.mjs";
 
 // shadcn design tokens backed by ZITADEL instance branding.
-// setTheme() in src/helpers/colors.ts writes --theme-* vars on <html> at runtime;
-// the fallbacks are the shadcn zinc values used before branding is applied.
+// ThemeWrapper renders the --theme-* vars (getThemeVariables in src/helpers/colors.ts) into the SSR HTML;
+// the fallbacks are the shadcn zinc values used where no branding is rendered.
 :root {
   --background: var(--theme-light-background-500, oklch(1 0 0));
   --foreground: var(--theme-light-text-500, oklch(0.141 0.005 285.823));
@@ -87,6 +87,16 @@
 
   .ztdl-p {
     @apply text-muted-foreground text-sm;
+  }
+}
+
+@layer components {
+  // Page backdrop: a soft tint of the instance primary color in the top-left corner.
+  // Only background-image, so bg-background and a NEXT_PUBLIC_THEME_BACKGROUND_IMAGE inline style still win.
+  .ztdl-page-bg {
+    background-image:
+      radial-gradient(70rem 45rem at 0% 0%, color-mix(in oklab, var(--primary) 9%, transparent), transparent 70%),
+      radial-gradient(50rem 35rem at 100% 100%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 70%);
   }
 }
 
