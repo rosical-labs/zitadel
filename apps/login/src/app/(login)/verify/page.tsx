@@ -135,9 +135,9 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {!id && (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
             </Alert>

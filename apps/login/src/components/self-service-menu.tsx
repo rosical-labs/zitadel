@@ -15,7 +15,7 @@ export function SelfServiceMenu() {
   // }
 
   return (
-    <div className="flex w-full flex-col space-y-2">
+    <div className="flex w-full flex-col gap-2">
       {list.map((menuitem, index) => {
         return <SelfServiceItem link={menuitem.link} key={"self-service-" + index} name={menuitem.name} />;
       })}
@@ -28,7 +28,7 @@ const SelfServiceItem = ({ name, link }: { name: string; link: string }) => {
     <Link
       prefetch={false}
       href={link}
-      className="group border-divider-light bg-background-light-400 dark:bg-background-dark-400 flex w-full flex-row items-center rounded-md border px-4 py-2 transition-all hover:shadow-lg dark:hover:bg-white/10"
+      className="group border-border bg-card hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 flex w-full flex-row items-center gap-3 rounded-md border px-3 py-2.5 text-left text-sm font-medium shadow-xs transition-colors outline-none focus-visible:ring-[3px]"
     >
       {name}
     </Link>

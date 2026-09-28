@@ -177,14 +177,14 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
+      <form className="flex w-full flex-col gap-6">
         {error && (
-          <div className="py-4">
+          <div>
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
 
           <span className="flex-grow"></span>
@@ -196,7 +196,7 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
             onClick={submitRegisterAndContinue}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="set.submit" namespace="u2f" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="u2f" />
           </Button>
         </div>
       </form>

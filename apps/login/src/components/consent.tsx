@@ -45,10 +45,10 @@ export function ConsentScreen({
   const scopes = scope?.filter((s) => !!s);
 
   return (
-    <div className="flex w-full flex-col items-center space-y-4 pt-4">
-      <ul className="w-full list-disc space-y-2">
+    <div className="flex w-full flex-col gap-6">
+      <ul className="flex w-full flex-col gap-2">
         {scopes?.length === 0 && (
-          <span className="border-divider-light bg-background-light-400 dark:bg-background-dark-400 flex w-full flex-row items-center rounded-md border px-4 py-2 text-sm transition-all">
+          <span className="border-border bg-muted/40 flex w-full flex-row items-center rounded-md border px-3 py-2 text-sm">
             <Translated i18nKey="device.scope.openid" namespace="device" />
           </span>
         )}
@@ -62,7 +62,7 @@ export function ConsentScreen({
           return (
             <li
               key={s}
-              className="border-divider-light bg-background-light-400 dark:bg-background-dark-400 flex w-full flex-row items-center rounded-md border px-4 py-2 text-sm transition-all"
+              className="border-border bg-muted/40 flex w-full flex-row items-center rounded-md border px-3 py-2 text-sm"
             >
               <span>{resolvedDescription}</span>
             </li>
@@ -75,12 +75,12 @@ export function ConsentScreen({
       </p>
 
       {error && (
-        <div className="py-4">
+        <div>
           <Alert>{error}</Alert>
         </div>
       )}
 
-      <div className="mt-4 flex w-full flex-row items-center">
+      <div className="flex w-full flex-row items-center justify-between gap-3">
         <Button
           onClick={() => {
             denyDeviceAuth();
@@ -88,7 +88,7 @@ export function ConsentScreen({
           variant={ButtonVariants.Secondary}
           data-testid="deny-button"
         >
-          {loading && <Spinner className="mr-2 h-5 w-5" />}
+          {loading && <Spinner className="size-4" />}
           <Translated i18nKey="device.request.deny" namespace="device" />
         </Button>
         <span className="flex-grow"></span>

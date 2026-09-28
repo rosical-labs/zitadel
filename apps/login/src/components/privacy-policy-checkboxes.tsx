@@ -37,19 +37,25 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
   };
 
   return (
-    <>
-      <p className="text-text-light-secondary-500 dark:text-text-dark-secondary-500 mt-4 flex flex-row items-center text-sm">
+    <div className="flex flex-col gap-3">
+      <p className="text-muted-foreground flex flex-row items-center gap-1.5 text-sm">
         <Translated i18nKey="agreeTo" namespace="register" />
         {helpLink && (
           <span>
-            <Link href={helpLink} target="_blank" aria-label="Open help in a new tab" data-testid="help-link">
+            <Link
+              href={helpLink}
+              target="_blank"
+              aria-label="Open help in a new tab"
+              data-testid="help-link"
+              className="hover:text-foreground focus-visible:ring-ring/50 flex rounded-full transition-colors outline-none focus-visible:ring-[3px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="ml-1 h-5 w-5"
+                className="size-4"
               >
                 <path
                   strokeLinecap="round"
@@ -62,9 +68,8 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
         )}
       </p>
       {tosLink && (
-        <div className="mt-4 flex items-center">
+        <div className="flex items-center gap-3">
           <Checkbox
-            className="mr-4"
             checked={acceptanceState.tosAccepted}
             value={"tos"}
             onChangeVal={(checked: boolean) => {
@@ -78,9 +83,9 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
             data-testid="tos-checkbox"
           />
 
-          <div className="mr-4 w-[28rem]">
-            <p className="text-text-light-500 dark:text-text-dark-500 text-sm">
-              <Link href={tosLink} className="underline" target="_blank" data-testid="tos-link">
+          <div className="min-w-0">
+            <p className="text-sm">
+              <Link href={tosLink} className="ztdl-link" target="_blank" data-testid="tos-link">
                 <Translated i18nKey="termsOfService" namespace="register" />
               </Link>
             </p>
@@ -88,9 +93,8 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
         </div>
       )}
       {privacyPolicyLink && (
-        <div className="mt-4 flex items-center">
+        <div className="flex items-center gap-3">
           <Checkbox
-            className="mr-4"
             checked={acceptanceState.privacyPolicyAccepted}
             value={"privacypolicy"}
             onChangeVal={(checked: boolean) => {
@@ -104,15 +108,15 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
             data-testid="privacy-policy-checkbox"
           />
 
-          <div className="mr-4 w-[28rem]">
-            <p className="text-text-light-500 dark:text-text-dark-500 text-sm">
-              <Link href={privacyPolicyLink} className="underline" target="_blank" data-testid="privacy-policy-link">
+          <div className="min-w-0">
+            <p className="text-sm">
+              <Link href={privacyPolicyLink} className="ztdl-link" target="_blank" data-testid="privacy-policy-link">
                 <Translated i18nKey="privacyPolicy" namespace="register" />
               </Link>
             </p>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

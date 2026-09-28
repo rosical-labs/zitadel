@@ -74,16 +74,16 @@ export function SignInWithIdp({
   };
 
   return (
-    <div className="flex w-full flex-col space-y-2 text-sm">
+    <div className="flex w-full flex-col gap-3 text-sm">
       {state?.samlData && <AutoSubmitForm url={state.samlData.url} fields={state.samlData.fields} />}
       {showLabel && (
-        <p className="ztdl-p text-center">
+        <p className="ztdl-separator">
           <Translated i18nKey="orSignInWith" namespace="idp" />
         </p>
       )}
       {!!identityProviders?.length && identityProviders?.map(renderIDPButton)}
       {state?.error && (
-        <div className="py-4">
+        <div>
           <Alert>{state?.error}</Alert>
         </div>
       )}

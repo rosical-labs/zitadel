@@ -123,8 +123,8 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className="mb-4 grid grid-cols-1 gap-4 pt-4">
+      <form className="flex w-full flex-col gap-6">
+        <div className="grid grid-cols-1 gap-5">
           <input
             type="text"
             name="username"
@@ -187,7 +187,7 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
 
         {error && <Alert>{error}</Alert>}
 
-        <div className="mt-8 flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <Button
             type="submit"
@@ -196,7 +196,7 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
             onClick={handleSubmit(submitChange)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="change.submit" namespace="password" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="change.submit" namespace="password" />
           </Button>
         </div>
       </form>

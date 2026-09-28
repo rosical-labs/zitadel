@@ -89,7 +89,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {!(loginName || sessionId) && (
           <Alert>
             <Translated i18nKey="unknownContext" namespace="error" />
@@ -110,7 +110,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           </Alert>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton />
           <span className="flex-grow"></span>
         </div>

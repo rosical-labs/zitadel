@@ -93,8 +93,8 @@ export function RegisterFormIDPIncomplete({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className="mb-4 grid grid-cols-1 gap-4">
+      <form className="flex w-full flex-col gap-6">
+        <div className="grid grid-cols-1 gap-5">
           {!idpUserName && (
             <div className="">
               <TextInput
@@ -109,7 +109,7 @@ export function RegisterFormIDPIncomplete({
               />
             </div>
           )}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5">
             <div className="">
               <TextInput
                 type="firstname"
@@ -148,12 +148,12 @@ export function RegisterFormIDPIncomplete({
         </div>
 
         {error && (
-          <div className="py-4">
+          <div>
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <Button
             type="submit"
@@ -162,7 +162,7 @@ export function RegisterFormIDPIncomplete({
             onClick={handleSubmit(submitAndRegister)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="submit" namespace="register" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="submit" namespace="register" />
           </Button>
         </div>
       </form>

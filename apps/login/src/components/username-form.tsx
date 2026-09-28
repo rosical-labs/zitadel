@@ -100,8 +100,8 @@ export function UsernameForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className="">
+      <form className="flex w-full flex-col gap-6">
+        <div className="flex flex-col gap-3">
           <TextInput
             type="text"
             autoComplete="username"
@@ -116,7 +116,7 @@ export function UsernameForm({
           />
           {allowRegister && (
             <button
-              className="hover:text-primary-light-500 dark:hover:text-primary-dark-500 text-sm transition-all"
+              className="ztdl-link self-start text-sm"
               onClick={() => {
                 const registerParams = new URLSearchParams();
                 if (organization) {
@@ -138,11 +138,11 @@ export function UsernameForm({
         </div>
 
         {error && (
-          <div className="py-4" data-testid="error">
+          <div data-testid="error">
             <Alert>{error}</Alert>
           </div>
         )}
-        <div className="mt-4 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <span className="flex-grow"></span>
           <Button
@@ -153,7 +153,7 @@ export function UsernameForm({
             disabled={loading || !formState.isValid}
             onClick={handleSubmit((e) => submitLoginName(e, organization))}
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />}
+            {loading && <Spinner className="size-4" />}
             <Translated i18nKey="submit" namespace="loginname" />
           </Button>
         </div>

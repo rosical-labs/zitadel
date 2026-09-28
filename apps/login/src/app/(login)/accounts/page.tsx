@@ -115,15 +115,18 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="w-full">
-        <div className="flex w-full flex-col space-y-2">
+      <div className="flex w-full flex-col gap-6">
+        <div className="flex w-full flex-col gap-2">
           <SessionsList sessions={sessions} requestId={requestId} />
-          <Link href={`/loginname?` + params}>
-            <div className="flex flex-row items-center rounded-md px-4 py-3 transition-all hover:bg-black/10 dark:hover:bg-white/10">
-              <div className="mr-4 flex h-8 w-8 flex-row items-center justify-center rounded-full bg-black/5 dark:bg-white/5">
-                <UserPlusIcon className="h-5 w-5" />
+          <Link
+            href={`/loginname?` + params}
+            className="focus-visible:ring-ring/50 rounded-md outline-none focus-visible:ring-[3px]"
+          >
+            <div className="hover:bg-accent hover:text-accent-foreground flex flex-row items-center gap-3 rounded-md border border-dashed px-3 py-2.5 transition-colors">
+              <div className="bg-muted text-muted-foreground flex size-8 shrink-0 flex-row items-center justify-center rounded-md">
+                <UserPlusIcon className="size-4" />
               </div>
-              <span className="text-sm">
+              <span className="text-sm font-medium">
                 <Translated i18nKey="addAnother" namespace="accounts" />
               </span>
             </div>

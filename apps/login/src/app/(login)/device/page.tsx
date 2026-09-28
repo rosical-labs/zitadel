@@ -43,7 +43,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <DeviceCodeForm userCode={userCode}></DeviceCodeForm>
       </div>
     </DynamicTheme>
