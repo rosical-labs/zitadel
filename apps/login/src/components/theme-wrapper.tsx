@@ -1,9 +1,9 @@
 "use client";
 
-import { setTheme } from "@/helpers/colors";
+import { getThemeVariables, setTheme } from "@/helpers/colors";
 import { BrandingSettings, ThemeMode } from "@zitadel/proto/zitadel/settings/v2/branding_settings_pb";
 import { useTheme } from "next-themes";
-import { ReactNode, useEffect, useLayoutEffect } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useMemo } from "react";
 import { setThemeMode } from "./branding-context";
 
 type Props = {
@@ -13,6 +13,15 @@ type Props = {
 
 export const ThemeWrapper = ({ children, branding }: Props) => {
   const { setTheme: setNextTheme } = useTheme();
+
+  // Rendered into the SSR HTML so the first paint already uses the branding colors.
+  const themeVariablesCss = useMemo(
+    () =>
+      `:root{${getThemeVariables(branding)
+        .map(([name, value]) => `${name}:${value};`)
+        .join("")}}`,
+    [branding],
+  );
 
   useEffect(() => {
     setTheme(document, branding);
@@ -41,7 +50,7 @@ export const ThemeWrapper = ({ children, branding }: Props) => {
         styleEl.id = STYLE_ID;
         document.head.appendChild(styleEl);
       }
-      // Capture the current font-family (Lato from next/font) before overriding,
+      // Capture the current font-family (Geist from next/font) before overriding,
       // so it serves as fallback if the custom font fails to load.
       const existingFont = getComputedStyle(document.documentElement).fontFamily || "sans-serif";
       const fontStack = `'ZitadelCustomFont', ${existingFont}`;
@@ -56,10 +65,10 @@ export const ThemeWrapper = ({ children, branding }: Props) => {
       `;
 
       document.documentElement.style.setProperty("--zitadel-font-family", fontStack);
-      // Inline style overrides the class-based Lato from next/font
+      // Inline style overrides the class-based Geist from next/font
       document.documentElement.style.setProperty("font-family", fontStack);
     } else {
-      // No custom font — remove injected style and let Lato class take over
+      // No custom font — remove injected style and let Geist class take over
       const existing = document.getElementById(STYLE_ID);
       if (existing) {
         existing.remove();
@@ -110,12 +119,17 @@ export const ThemeWrapper = ({ children, branding }: Props) => {
         case ThemeMode.AUTO:
         case ThemeMode.UNSPECIFIED:
         default:
-          setNextTheme("system");
+          // Keep the visitor's stored choice; without one, ThemeProvider defaults to light.
           break;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branding?.themeMode]);
 
-  return <div>{children}</div>;
+  return (
+    <div>
+      <style>{themeVariablesCss}</style>
+      {children}
+    </div>
+  );
 };
