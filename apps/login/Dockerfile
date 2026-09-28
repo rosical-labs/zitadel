@@ -14,6 +14,7 @@ ENV HOSTNAME="::" \
     NODE_OPTIONS="--use-openssl-ca --require /app/load-ssl-cert-dir.cjs" \
     SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt" \
     ZITADEL_TLS_ENABLED="false" \
+    # Must match the build-time value in .github/workflows/login-image.yml, or SSR and client disagree.
     NEXT_PUBLIC_THEME_ROUNDNESS="edgy" \
     OTEL_SERVICE_NAME="zitadel-login" \
     OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"

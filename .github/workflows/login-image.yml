@@ -55,9 +55,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # NEXT_PUBLIC_BASE_PATH=/ui/v2/login comes from the committed apps/login/.env.
-      # Theme knobs (NEXT_PUBLIC_THEME_*) are read at runtime; the image default is set in apps/login/Dockerfile.
+      # Next inlines NEXT_PUBLIC_* into the server and client bundles here, so theme knobs must be set at build time.
       - name: Build Login standalone
         run: pnpm nx run --nxBail --skip-nx-cache @zitadel/login:build
+        env:
+          NEXT_PUBLIC_THEME_ROUNDNESS: edgy
       - name: Run Login unit tests
         run: pnpm nx run --nxBail --exclude-task-dependencies @zitadel/login:test-unit
       - name: Set up Docker Buildx
