@@ -55,7 +55,9 @@ type BrandingColors = {
   };
 };
 
-export function setTheme(document: any, policy?: BrandingSettings) {
+// CSS custom properties (name, value) for a branding policy, in the order setTheme applies them.
+// Pure, so the server can render the same values the client applies.
+export function getThemeVariables(policy?: BrandingSettings): [string, string][] {
   const lP: BrandingColors = {
     lightTheme: {
       backgroundColor: policy?.lightTheme?.backgroundColor || BACKGROUND,
@@ -74,35 +76,39 @@ export function setTheme(document: any, policy?: BrandingSettings) {
   const dark = computeMap(lP, true);
   const light = computeMap(lP, false);
 
-  setColorShades(dark.background, "background", "dark", document);
-  setColorShades(light.background, "background", "light", document);
-
-  setColorShades(dark.primary, "primary", "dark", document);
-  setColorShades(light.primary, "primary", "light", document);
-
-  setColorShades(dark.warn, "warn", "dark", document);
-  setColorShades(light.warn, "warn", "light", document);
-
-  setColorAlpha(dark.text, "text", "dark", document);
-  setColorAlpha(light.text, "text", "light", document);
-
-  setColorAlpha(dark.link, "link", "dark", document);
-  setColorAlpha(light.link, "link", "light", document);
+  return [
+    ...colorShades(dark.background, "background", "dark"),
+    ...colorShades(light.background, "background", "light"),
+    ...colorShades(dark.primary, "primary", "dark"),
+    ...colorShades(light.primary, "primary", "light"),
+    ...colorShades(dark.warn, "warn", "dark"),
+    ...colorShades(light.warn, "warn", "light"),
+    ...colorAlpha(dark.text, "text", "dark"),
+    ...colorAlpha(light.text, "text", "light"),
+    ...colorAlpha(dark.link, "link", "dark"),
+    ...colorAlpha(light.link, "link", "light"),
+  ];
 }
 
-function setColorShades(map: Color[], type: string, theme: string, document: any) {
-  map.forEach((color) => {
-    document.documentElement.style.setProperty(`--theme-${theme}-${type}-${color.name}`, color.hex);
-    document.documentElement.style.setProperty(`--theme-${theme}-${type}-contrast-${color.name}`, color.contrastColor);
+export function setTheme(document: any, policy?: BrandingSettings) {
+  getThemeVariables(policy).forEach(([name, value]) => {
+    document.documentElement.style.setProperty(name, value);
   });
 }
 
-function setColorAlpha(map: Color[], type: string, theme: string, document: any) {
-  map.forEach((color) => {
-    document.documentElement.style.setProperty(`--theme-${theme}-${type}-${color.name}`, color.hex);
-    document.documentElement.style.setProperty(`--theme-${theme}-${type}-contrast-${color.name}`, color.contrastColor);
-    document.documentElement.style.setProperty(`--theme-${theme}-${type}-secondary-${color.name}`, `${color.hex}c7`);
-  });
+function colorShades(map: Color[], type: string, theme: string): [string, string][] {
+  return map.flatMap((color): [string, string][] => [
+    [`--theme-${theme}-${type}-${color.name}`, color.hex],
+    [`--theme-${theme}-${type}-contrast-${color.name}`, color.contrastColor],
+  ]);
+}
+
+function colorAlpha(map: Color[], type: string, theme: string): [string, string][] {
+  return map.flatMap((color): [string, string][] => [
+    [`--theme-${theme}-${type}-${color.name}`, color.hex],
+    [`--theme-${theme}-${type}-contrast-${color.name}`, color.contrastColor],
+    [`--theme-${theme}-${type}-secondary-${color.name}`, `${color.hex}c7`],
+  ]);
 }
 
 function computeColors(hex: string): Color[] {
