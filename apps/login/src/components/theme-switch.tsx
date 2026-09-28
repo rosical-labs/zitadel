@@ -57,23 +57,23 @@ export default function ThemeSwitch() {
 
   // themeMode is AUTO (1) or UNSPECIFIED (0): show light, system, dark options
   return (
-    <div className={`flex space-x-1 p-1 ${toggleRoundness} ${cardAppearance}`}>
+    <div className={`flex h-8 items-center gap-0.5 px-0.5 ${toggleRoundness} ${cardAppearance}`}>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "light")}`}
+        className={`flex size-6.5 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "light")}`}
         onClick={() => setTheme("light")}
         aria-label="Switch to light mode"
       >
-        <SunIcon className="h-5 w-5" />
+        <SunIcon className="h-4 w-4" />
       </button>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "system")}`}
+        className={`flex size-6.5 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "system")}`}
         onClick={() => setTheme("system")}
         aria-label="Switch to system mode"
       >
         <ComputerDesktopIcon className="h-4 w-4" />
       </button>
       <button
-        className={`flex h-8 w-8 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "dark")}`}
+        className={`flex size-6.5 flex-row items-center justify-center ${toggleRoundness} focus-visible:ring-ring/50 transition-colors outline-none focus-visible:ring-[3px] ${getSelectedButtonStyle(theme === "dark")}`}
         onClick={() => setTheme("dark")}
         aria-label="Switch to dark mode"
       >
