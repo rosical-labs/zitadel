@@ -13,17 +13,18 @@ export enum AlertType {
   INFO,
 }
 
-const warning = "border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300";
-const neutral = "border-border bg-card text-card-foreground";
+// shadcn "destructive" and "default" alert variants.
+const alert = "border-destructive/30 bg-destructive/10 text-destructive";
+const neutral = "border-border bg-muted/40 text-card-foreground [&>svg]:text-muted-foreground";
 
 export function Alert({ children, type = AlertType.ALERT }: Props) {
   return (
     <div
       className={clsx(
-        "flex w-full scroll-px-40 flex-row items-start gap-2.5 border px-4 py-3 text-left text-sm",
+        "flex w-full flex-row items-start gap-2.5 border px-4 py-3 text-left text-sm leading-normal",
         getComponentRoundness("card"),
         {
-          [warning]: type === AlertType.ALERT,
+          [alert]: type === AlertType.ALERT,
           [neutral]: type === AlertType.INFO,
         },
       )}

@@ -82,7 +82,7 @@
 
   h1,
   .ztdl-h1 {
-    @apply text-center text-2xl font-semibold tracking-tight;
+    @apply text-left text-xl leading-tight font-semibold tracking-tight;
   }
 
   .ztdl-p {
@@ -91,6 +91,16 @@
 }
 
 @layer components {
+  // "Or continue with" divider: a centered label between two hairlines.
+  .ztdl-separator {
+    @apply text-muted-foreground before:bg-border after:bg-border flex items-center gap-3 text-xs before:h-px before:flex-1 after:h-px after:flex-1;
+  }
+
+  // The one text-link style for inline links and text buttons in the flows.
+  .ztdl-link {
+    @apply text-primary focus-visible:ring-ring/50 cursor-pointer font-medium underline-offset-4 transition-colors outline-none hover:underline focus-visible:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50;
+  }
+
   // Page backdrop: a soft tint of the instance primary color in the top-left corner.
   // Only background-image, so bg-background and a NEXT_PUBLIC_THEME_BACKGROUND_IMAGE inline style still win.
   .ztdl-page-bg {
@@ -98,6 +108,25 @@
       radial-gradient(70rem 45rem at 0% 0%, color-mix(in oklab, var(--primary) 9%, transparent), transparent 70%),
       radial-gradient(50rem 35rem at 100% 100%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 70%);
   }
+}
+
+// A title directly followed by its description sits close to it (shadcn CardHeader rhythm).
+// Unlayered so it wins over the space-y-* utilities the pages wrap their title blocks in.
+h1:has(+ .ztdl-p) {
+  margin-bottom: 0.375rem;
+}
+
+// NEXT_PUBLIC_THEME_ROUNDNESS=edgy (set on <html> by the root layout): every rounded-* utility up to
+// rounded-4xl becomes square, including the ones hard-coded in flow components. rounded-full stays round.
+html[data-roundness="edgy"] {
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
 }
 
 html {

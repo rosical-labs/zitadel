@@ -7,7 +7,7 @@ import { BaseButton, SignInWithIdentityProviderProps } from "./base-button";
 function GitHubLogo() {
   return (
     <>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1024 1024" className="hidden h-8 w-8 dark:block">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1024 1024" className="hidden size-5 dark:block">
         <path
           fill="#fafafa"
           fillRule="evenodd"
@@ -15,7 +15,7 @@ function GitHubLogo() {
           clipRule="evenodd"
         ></path>
       </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1024 1024" className="block h-8 w-8 dark:hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1024 1024" className="block size-5 dark:hidden">
         <path
           fill="#1B1F23"
           fillRule="evenodd"
@@ -33,13 +33,13 @@ export const SignInWithGithub = forwardRef<HTMLButtonElement, SignInWithIdentity
 
     return (
       <BaseButton {...restProps} ref={ref}>
-        <div className="mx-2 my-2 flex items-center justify-center">
+        <div className="flex size-9 shrink-0 items-center justify-center">
           <GitHubLogo />
         </div>
         {children ? (
           children
         ) : (
-          <span className="ml-4">{name ? name : <Translated i18nKey="signInWithGithub" namespace="idp" />}</span>
+          <span className="ml-2">{name ? name : <Translated i18nKey="signInWithGithub" namespace="idp" />}</span>
         )}
       </BaseButton>
     );

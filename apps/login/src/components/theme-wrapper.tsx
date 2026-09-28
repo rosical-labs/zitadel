@@ -15,9 +15,12 @@ export const ThemeWrapper = ({ children, branding }: Props) => {
   const { setTheme: setNextTheme } = useTheme();
 
   // Rendered into the SSR HTML so the first paint already uses the branding colors.
+  // Skips the A100-A700 shades (not mapped in tailwind.config.mjs) and the "link" palette (no class uses it),
+  // which would add ~6 KB of unused CSS per page. setTheme still sets every variable on the client.
   const themeVariablesCss = useMemo(
     () =>
       `:root{${getThemeVariables(branding)
+        .filter(([name]) => !/-A\d+$/.test(name) && !name.includes("-link-"))
         .map(([name, value]) => `${name}:${value};`)
         .join("")}}`,
     [branding],
