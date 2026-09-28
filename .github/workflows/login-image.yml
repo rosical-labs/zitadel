@@ -1,0 +1,93 @@
+# Fork-only workflow: builds the restyled login UI and publishes it to ghcr.io/rosical-labs/zitadel-login.
+# Mirrors the login image steps of pack.yml, without the upstream-only registries, Nx Cloud and FIPS variants.
+name: Login Image
+
+on:
+  push:
+    tags:
+      - "v*-r*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag to publish, e.g. v4.19.1-r1"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_NAME: ghcr.io/rosical-labs/zitadel-login
+  IMAGE_TAG: ${{ inputs.tag || github.ref_name }}
+  NODE_VERSION: "22"
+  # Nx does not hash NEXT_PUBLIC_* variables, so a remote cache entry could lack the build-time theme.
+  NX_NO_CLOUD: "true"
+  NX_DAEMON: "false"
+
+jobs:
+  login-image:
+    name: Build and Push Login Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Validate image tag
+        run: |
+          if [[ ! "$IMAGE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-r[0-9]+$ ]]; then
+            echo "::error::Image tag '$IMAGE_TAG' does not match vX.Y.Z-rN"
+            exit 1
+          fi
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # NEXT_PUBLIC_BASE_PATH=/ui/v2/login comes from the committed apps/login/.env.
+      # Theme knobs (NEXT_PUBLIC_THEME_*) are read at runtime; the image default is set in apps/login/Dockerfile.
+      - name: Build Login standalone
+        run: pnpm nx run --nxBail --skip-nx-cache @zitadel/login:build
+      - name: Run Login unit tests
+        run: pnpm nx run --nxBail --exclude-task-dependencies @zitadel/login:test-unit
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: v0.28.0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Tags and Labels for the Login Container Image
+        id: login-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/rosical-labs/zitadel
+            org.opencontainers.image.version=${{ env.IMAGE_TAG }}
+            org.opencontainers.image.licenses=MIT
+          tags: |
+            type=raw,value=${{ env.IMAGE_TAG }}
+      - name: Build and Push the Login Container Image
+        uses: docker/build-push-action@v6
+        timeout-minutes: 5
+        with:
+          context: apps/login
+          file: apps/login/Dockerfile
+          platforms: linux/amd64
+          push: true
+          labels: ${{ steps.login-meta.outputs.labels }}
+          tags: ${{ steps.login-meta.outputs.tags }}
