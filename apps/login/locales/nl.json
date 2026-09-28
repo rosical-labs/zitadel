@@ -472,5 +472,12 @@
     "tryagain": "Opnieuw proberen",
     "couldNotContinueSession": "Kon de sessie niet voortzetten - ontbrekende gebruikersinformatie",
     "couldNotClearSession": "De sessie kon niet worden beëindigd. Probeer het opnieuw."
+  },
+  "footer": {
+    "label": "Juridisch en ondersteuning",
+    "tos": "Voorwaarden",
+    "privacy": "Privacy",
+    "help": "Help",
+    "support": "Ondersteuning"
   }
 }

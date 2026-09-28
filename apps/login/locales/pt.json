@@ -472,5 +472,12 @@
     "tryagain": "Tentar Novamente",
     "couldNotContinueSession": "Não foi possível continuar a sessão — informações do usuário ausentes",
     "couldNotClearSession": "Não foi possível terminar a sessão. Tente novamente."
+  },
+  "footer": {
+    "label": "Informações legais e suporte",
+    "tos": "Termos",
+    "privacy": "Privacidade",
+    "help": "Ajuda",
+    "support": "Suporte"
   }
 }

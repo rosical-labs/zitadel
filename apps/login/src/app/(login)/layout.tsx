@@ -3,12 +3,14 @@ import "@/styles/globals.scss";
 import { BackgroundWrapper } from "@/components/background-wrapper";
 import { LanguageProvider } from "@/components/language-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { Skeleton } from "@/components/skeleton";
+import { LegalFooter } from "@/components/legal-footer";
+import { SkeletonCard } from "@/components/skeleton-card";
 import { ThemeProvider } from "@/components/theme-provider";
 import ThemeSwitch from "@/components/theme-switch";
 import { LANGS, getLanguage } from "@/lib/i18n";
 import { getServiceConfig } from "@/lib/service-url";
-import { getAllowedLanguages } from "@/lib/zitadel";
+import { getThemeConfig } from "@/lib/theme";
+import { getAllowedLanguages, getLegalAndSupportSettings } from "@/lib/zitadel";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -41,8 +43,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     console.error("Failed to load supported languages", e);
   }
 
+  // Instance-level links only: org-specific legal settings would need the org from each page's search params.
+  let legal;
+  try {
+    legal = await getLegalAndSupportSettings({ serviceConfig });
+  } catch (e) {
+    console.error("Failed to load legal and support settings", e);
+  }
+
   return (
-    <html className={`${geist.className}`} suppressHydrationWarning>
+    <html className={`${geist.className}`} data-roundness={getThemeConfig().roundness} suppressHydrationWarning>
       <head />
       <body>
         <ThemeProvider>
@@ -51,9 +61,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               fallback={
                 <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
                   <div className="w-full max-w-[400px]">
-                    <Skeleton>
-                      <div className="h-40"></div>
-                    </Skeleton>
+                    <SkeletonCard isLoading />
                   </div>
                   <div className="mt-6 flex items-center justify-center gap-2">
                     <ThemeSwitch />
@@ -64,10 +72,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <LanguageProvider>
                 <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground flex min-h-dvh flex-col items-center justify-center px-4 py-10">
                   <main className="w-full max-w-[400px]">{children}</main>
-                  <div className="mt-6 flex items-center justify-center gap-2">
-                    <LanguageSwitcher languages={languages} />
-                    <ThemeSwitch />
-                  </div>
+                  <footer className="mt-6 flex w-full max-w-[400px] flex-col items-center gap-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <LanguageSwitcher languages={languages} />
+                      <ThemeSwitch />
+                    </div>
+                    <LegalFooter legal={legal} />
+                  </footer>
                 </BackgroundWrapper>
               </LanguageProvider>
             </Suspense>

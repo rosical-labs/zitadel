@@ -472,5 +472,12 @@
     "tryagain": "Erneut versuchen",
     "couldNotContinueSession": "Sitzung konnte nicht fortgesetzt werden - fehlende Benutzerinformationen",
     "couldNotClearSession": "Die Sitzung konnte nicht beendet werden. Bitte versuchen Sie es erneut."
+  },
+  "footer": {
+    "label": "Rechtliches und Support",
+    "tos": "AGB",
+    "privacy": "Datenschutz",
+    "help": "Hilfe",
+    "support": "Support"
   }
 }
