@@ -149,8 +149,8 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         )}
       </div>
 
-      <div className="w-full">
-        <div className="flex flex-col space-y-4">
+      <div className="flex w-full flex-col gap-6">
+        <div className="flex flex-col gap-5">
           {!(loginName || sessionId) && (
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
@@ -179,7 +179,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             ></ChooseSecondFactorToSetup>
           )}
 
-          <div className="mt-8 flex w-full flex-row items-center">
+          <div className="flex w-full flex-row items-center justify-between gap-3">
             <BackButton />
             <span className="flex-grow"></span>
           </div>

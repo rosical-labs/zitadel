@@ -69,7 +69,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
   if (!loginSettings) {
     return (
       <DynamicTheme branding={branding}>
-        <div className="mx-auto flex max-w-sm flex-col space-y-4 pt-4">
+        <div className="flex flex-col space-y-4">
           <Alert>
             <Translated i18nKey="errors.couldNotGetLoginSettings" namespace="loginname" />
           </Alert>
@@ -104,7 +104,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
     <DynamicTheme branding={branding}>
       <div className="flex flex-col space-y-4">
         <h1>{session?.factors?.user?.displayName ?? <Translated i18nKey="set.title" namespace="password" />}</h1>
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="set.description" namespace="password" />
         </p>
 
@@ -112,7 +112,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             A missing session is expected here: the set/reset flow works via code +
             userId, and under enumeration protection no session exists by design. */}
         {!loginName && !userId && (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
             </Alert>
@@ -131,7 +131,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         ) : null}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {!initial && (
           <Alert type={AlertType.INFO}>
             <Translated i18nKey="set.codeSent" namespace="password" />
@@ -152,7 +152,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             codeRequired={!(initial === "true")}
           />
         ) : (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="failedLoading" namespace="error" />
             </Alert>

@@ -51,7 +51,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           <Translated i18nKey="verify.title" namespace="u2f" />
         </h1>
 
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="verify.description" namespace="u2f" />
         </p>
 
@@ -71,7 +71,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {(loginName || sessionId) && (
           <LoginPasskey
             loginName={loginName}

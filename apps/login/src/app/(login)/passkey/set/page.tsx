@@ -57,7 +57,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           <Translated i18nKey="set.title" namespace="passkey" />
         </h1>
 
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="set.description" namespace="passkey" />
         </p>
 
@@ -78,12 +78,12 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         ) : null}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <Alert type={AlertType.INFO}>
           <span>
             <Translated i18nKey="set.info.description" namespace="passkey" />
             <a
-              className="text-primary-light-500 hover:text-primary-light-300 dark:text-primary-dark-500 hover:dark:text-primary-dark-300"
+              className="ztdl-link"
               target="_blank"
               href="https://zitadel.com/docs/guides/manage/user/reg-create-user#with-passwordless"
             >
@@ -93,7 +93,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </Alert>
 
         {!session && !user && (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
             </Alert>

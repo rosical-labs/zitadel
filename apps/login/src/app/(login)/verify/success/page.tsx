@@ -58,7 +58,7 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         <h1>
           <Translated i18nKey="successTitle" namespace="verify" />
         </h1>
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="successDescription" namespace="verify" />
         </p>
 
@@ -75,7 +75,7 @@ export default async function Page(props: { searchParams: Promise<any> }) {
           )
         )}
       </div>
-      <div className="w-full">{continueUrl && <VerifySuccessContinue continueUrl={continueUrl} />}</div>
+      <div className="flex w-full flex-col gap-6">{continueUrl && <VerifySuccessContinue continueUrl={continueUrl} />}</div>
     </DynamicTheme>
   );
 }

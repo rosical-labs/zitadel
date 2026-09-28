@@ -90,7 +90,7 @@ export default async function Page(props: {
         )}
 
         {!session && (
-          <div className="py-4">
+          <div>
             <Alert>
               <Translated i18nKey="unknownContext" namespace="error" />
             </Alert>
@@ -107,7 +107,7 @@ export default async function Page(props: {
         )}
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {method && session && (
           <LoginOTP
             loginName={loginName ?? session.factors?.user?.loginName}

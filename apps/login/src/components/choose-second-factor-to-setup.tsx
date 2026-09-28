@@ -63,7 +63,7 @@ export function ChooseSecondFactorToSetup({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <div className="grid w-full grid-cols-1 gap-5 pt-4">
+      <div className="grid w-full grid-cols-1 gap-3">
         {loginSettings.secondFactors.map((factor) => {
           switch (factor) {
             case SecondFactorType.OTP:
@@ -83,7 +83,7 @@ export function ChooseSecondFactorToSetup({
       </div>
       {!force && (
         <button
-          className="hover:text-primary-light-500 dark:hover:text-primary-dark-500 text-sm transition-all"
+          className="ztdl-link self-start text-sm"
           onClick={async () => {
             const skipResponse = await skipMFAAndContinueWithNextUrl({
               userId,
@@ -102,7 +102,7 @@ export function ChooseSecondFactorToSetup({
         </button>
       )}
       {error && (
-        <div className="py-4" data-testid="error">
+        <div data-testid="error">
           <Alert>{error}</Alert>
         </div>
       )}
