@@ -61,7 +61,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {loginSettings?.allowLocalAuthentication && (
           <UsernameForm
             loginName={loginName}
@@ -77,7 +77,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         )}
 
         {loginSettings?.allowExternalIdp && !!identityProviders?.length && (
-          <div className="w-full pt-6 pb-4">
+          <div className="w-full">
             <SignInWithIdp
               identityProviders={identityProviders}
               requestId={requestId}

@@ -472,5 +472,12 @@
     "tryagain": "Réessayer",
     "couldNotContinueSession": "Impossible de continuer la session - informations utilisateur manquantes",
     "couldNotClearSession": "La session n'a pas pu être terminée. Veuillez réessayer."
+  },
+  "footer": {
+    "label": "Mentions légales et assistance",
+    "tos": "Conditions",
+    "privacy": "Confidentialité",
+    "help": "Aide",
+    "support": "Assistance"
   }
 }

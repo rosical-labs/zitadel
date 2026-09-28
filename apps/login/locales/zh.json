@@ -472,5 +472,12 @@
     "tryagain": "重试",
     "couldNotContinueSession": "无法继续会话 - 缺少用户信息",
     "couldNotClearSession": "无法结束会话。请重试。"
+  },
+  "footer": {
+    "label": "法律与支持",
+    "tos": "条款",
+    "privacy": "隐私",
+    "help": "帮助",
+    "support": "支持"
   }
 }
