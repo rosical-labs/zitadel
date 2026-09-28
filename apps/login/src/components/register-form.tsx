@@ -116,8 +116,8 @@ export function RegisterForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="w-full">
-        <div className="mb-4 grid grid-cols-2 gap-4">
+      <form className="flex w-full flex-col gap-6">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
           <div className="">
             <TextInput
               type="firstname"
@@ -159,11 +159,11 @@ export function RegisterForm({
         {/* show chooser if both methods are allowed */}
         {loginSettings && loginSettings.allowLocalAuthentication && loginSettings.passkeysType == PasskeysType.ALLOWED && (
           <>
-            <p className="ztdl-p mt-4 mb-6 block text-left">
+            <p className="-mb-3 text-left text-sm font-medium">
               <Translated i18nKey="selectMethod" namespace="register" />
             </p>
 
-            <div className="pb-4">
+            <div>
               <AuthenticationMethodRadio selected={selected} selectionChanged={setSelected} />
             </div>
           </>
@@ -171,7 +171,7 @@ export function RegisterForm({
         {!loginSettings?.allowLocalAuthentication &&
           loginSettings?.passkeysType !== PasskeysType.ALLOWED &&
           (!loginSettings?.allowExternalIdp || !idpCount) && (
-            <div className="py-4">
+            <div>
               <Alert type={AlertType.INFO}>
                 <Translated i18nKey="noMethodAvailableWarning" namespace="register" />
               </Alert>
@@ -179,12 +179,12 @@ export function RegisterForm({
           )}
 
         {error && (
-          <div className="py-4">
+          <div>
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton data-testid="back-button" />
           <Button
             type="submit"
@@ -200,7 +200,7 @@ export function RegisterForm({
             })}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />}
+            {loading && <Spinner className="size-4" />}
             <Translated i18nKey="submit" namespace="register" />
           </Button>
         </div>

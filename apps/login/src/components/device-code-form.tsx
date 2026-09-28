@@ -60,8 +60,8 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
 
   return (
     <>
-      <form className="w-full">
-        <div className="mt-4">
+      <form className="flex w-full flex-col gap-6">
+        <div>
           <TextInput
             type="text"
             autoComplete="one-time-code"
@@ -73,12 +73,12 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
         </div>
 
         {error && (
-          <div className="py-4" data-testid="error">
+          <div data-testid="error">
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton />
           <span className="flex-grow"></span>
           <Button
@@ -89,7 +89,7 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
             onClick={handleSubmit(submitCodeAndContinue)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />} <Translated i18nKey="usercode.submit" namespace="device" />
+            {loading && <Spinner className="size-4" />} <Translated i18nKey="usercode.submit" namespace="device" />
           </Button>
         </div>
       </form>

@@ -38,7 +38,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
 
   return missingData ? (
     <DynamicTheme branding={branding}>
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col space-y-4">
         <h1>
           <Translated i18nKey="missingdata.title" namespace="register" />
         </h1>
@@ -46,7 +46,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           <Translated i18nKey="missingdata.description" namespace="register" />
         </p>
       </div>
-      <div className="w-full"></div>
+      <div className="flex w-full flex-col gap-6"></div>
     </DynamicTheme>
   ) : loginSettings?.allowRegister && loginSettings.allowLocalAuthentication ? (
     <DynamicTheme branding={branding}>
@@ -59,7 +59,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {legal && passwordComplexitySettings && (
           <SetRegisterPasswordForm
             passwordComplexitySettings={passwordComplexitySettings}
@@ -82,7 +82,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           <Translated i18nKey="disabled.description" namespace="register" />
         </p>
       </div>
-      <div className="w-full"></div>
+      <div className="flex w-full flex-col gap-6"></div>
     </DynamicTheme>
   );
 }

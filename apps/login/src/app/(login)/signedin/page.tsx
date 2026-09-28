@@ -63,12 +63,12 @@ export default async function Page(props: { searchParams: Promise<any> }) {
               <h1>
                 <Translated i18nKey="error.title" namespace="signedin" />
               </h1>
-              <p className="ztdl-p mb-6 block">
+              <p className="ztdl-p">
                 <Translated i18nKey="error.description" namespace="signedin" />
               </p>
               <Alert>{err.message}</Alert>
             </div>
-            <div className="w-full"></div>
+            <div className="flex w-full flex-col gap-6"></div>
           </DynamicTheme>
         );
       });
@@ -97,7 +97,7 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         <h1>
           <Translated i18nKey="title" namespace="signedin" data={{ user: sessionFactors?.factors?.user?.displayName }} />
         </h1>
-        <p className="ztdl-p mb-6 block">
+        <p className="ztdl-p">
           <Translated i18nKey="description" namespace="signedin" />
         </p>
 
@@ -109,7 +109,7 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         />
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {requestId && requestId.startsWith("device_") && (
           <Alert type={AlertType.INFO}>
             You can now close this window and return to the device where you started the authorization process to continue.
@@ -117,7 +117,7 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         )}
 
         {redirectUri && !isSamePage && (
-          <div className="mt-8 flex w-full flex-row items-center">
+          <div className="flex w-full flex-row items-center justify-between gap-3">
             <span className="flex-grow"></span>
 
             <Link href={redirectUri}>

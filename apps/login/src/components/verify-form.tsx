@@ -130,17 +130,17 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
           </Alert>
         </div>
       )}
-      <form className="w-full">
+      <form className="flex w-full flex-col gap-6">
         <Alert type={AlertType.INFO}>
-          <div className="flex flex-row">
-            <span className="mr-auto flex-1 text-left">
+          <div className="flex flex-row items-start justify-between gap-4">
+            <span className="text-left">
               <Translated i18nKey="verify.noCodeReceived" namespace="verify" />
             </span>
             <button
               aria-label="Resend Code"
               disabled={loading}
               type="button"
-              className="text-primary-light-500 hover:text-primary-light-400 dark:text-primary-dark-500 hover:dark:text-primary-dark-400 ml-4 cursor-pointer disabled:cursor-default disabled:text-gray-400 dark:disabled:text-gray-700"
+              className="ztdl-link shrink-0"
               onClick={() => {
                 resendCode();
               }}
@@ -150,7 +150,7 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
             </button>
           </div>
         </Alert>
-        <div className="mt-4">
+        <div>
           <TextInput
             type="text"
             autoComplete="one-time-code"
@@ -162,12 +162,12 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
         </div>
 
         {error && (
-          <div className="py-4" data-testid="error">
+          <div data-testid="error">
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton />
           <span className="flex-grow"></span>
           <Button
@@ -178,7 +178,7 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
             onClick={handleSubmit(fcn)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="mr-2 h-5 w-5" />}
+            {loading && <Spinner className="size-4" />}
             <Translated i18nKey="verify.submit" namespace="verify" />
           </Button>
         </div>

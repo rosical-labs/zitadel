@@ -25,10 +25,10 @@ export default async function LinkingFailedPage(props: {
         <h1>
           <Translated i18nKey="title" namespace="idp" />
         </h1>
-        <p className="ztdl-p text-center">
+        <p className="ztdl-p">
           <Translated i18nKey="errors.linkingFailed" namespace="idp" />
         </p>
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && <p className="text-destructive text-sm">{error}</p>}
       </div>
     </DynamicTheme>
   );

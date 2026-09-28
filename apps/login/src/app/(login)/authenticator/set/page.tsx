@@ -163,7 +163,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         ></UserAvatar>
       </div>
 
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         {loginSettings && (
           <ChooseAuthenticatorToSetup
             authMethods={sessionWithData.authMethods}
@@ -174,8 +174,8 @@ export default async function Page(props: { searchParams: Promise<Record<string 
 
         {loginSettings?.allowExternalIdp && !!identityProviders.length && (
           <>
-            <div className="flex flex-col py-3">
-              <p className="ztdl-p text-center">
+            <div className="flex flex-col">
+              <p className="ztdl-separator">
                 <Translated i18nKey="linkWithIDP" namespace="authenticator" />
               </p>
             </div>
@@ -191,7 +191,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           </>
         )}
 
-        <div className="mt-8 flex w-full flex-row items-center">
+        <div className="flex w-full flex-row items-center justify-between gap-3">
           <BackButton />
           <span className="flex-grow"></span>
         </div>

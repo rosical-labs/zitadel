@@ -13,7 +13,7 @@ export function VerifySuccessContinue({ continueUrl }: Props) {
   const t = useTranslations("verify");
 
   return (
-    <div className="mt-8 flex w-full flex-row items-center justify-end">
+    <div className="flex w-full flex-row items-center justify-end gap-3">
       <Button
         type="button"
         variant={ButtonVariants.Primary}
