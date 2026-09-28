@@ -46,9 +46,18 @@ export const SkeletonCard = ({
       )}
     >
       <div className={actualSpacing}>
-        <div className={clsx("bg-muted h-14", actualRoundness.split(" ")[0])} />
-        <div className={clsx("bg-muted h-3 w-11/12", actualRoundness.split(" ")[0])} />
-        <div className={clsx("bg-muted h-3 w-8/12", actualRoundness.split(" ")[0])} />
+        <div className="space-y-2">
+          <div className={clsx("bg-muted h-5 w-1/2", actualRoundness.split(" ")[0])} />
+          <div className={clsx("bg-muted h-3.5 w-3/4", actualRoundness.split(" ")[0])} />
+        </div>
+        <div className="space-y-2">
+          <div className={clsx("bg-muted h-3.5 w-1/4", actualRoundness.split(" ")[0])} />
+          <div className={clsx("bg-muted h-9", actualRoundness.split(" ")[0])} />
+        </div>
+        <div className="flex justify-between">
+          <div className={clsx("bg-muted h-9 w-20", actualRoundness.split(" ")[0])} />
+          <div className={clsx("bg-muted h-9 w-24", actualRoundness.split(" ")[0])} />
+        </div>
       </div>
     </div>
   );

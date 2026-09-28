@@ -13,7 +13,7 @@ export const SignInWithZitadel = forwardRef<HTMLButtonElement, SignInWithIdentit
 
     return (
       <BaseButton {...restProps} ref={ref}>
-        <div className="flex h-12 w-12 items-center justify-center">
+        <div className="flex size-9 shrink-0 items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width={24}
@@ -179,7 +179,7 @@ export const SignInWithZitadel = forwardRef<HTMLButtonElement, SignInWithIdentit
         {children ? (
           children
         ) : (
-          <span className="ml-4">{name ? name : <Translated i18nKey="signInWithZitadel" namespace="idp" />}</span>
+          <span className="ml-2">{name ? name : <Translated i18nKey="signInWithZitadel" namespace="idp" />}</span>
         )}
       </BaseButton>
     );
