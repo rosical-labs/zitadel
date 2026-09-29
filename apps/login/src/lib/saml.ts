@@ -1,3 +1,4 @@
+import { getAccessDeniedMessageKey } from "@/lib/access-denied";
 import { isSafeRedirectUri } from "@/lib/client-utils";
 import { Cookie } from "@/lib/cookies";
 import { isClassifiedError } from "@/lib/grpc/interceptors/error-classification";
@@ -6,6 +7,7 @@ import { createResponse, getLoginSettings, ServiceConfig } from "@/lib/zitadel";
 import { Code, create } from "@zitadel/client";
 import { CreateResponseRequestSchema } from "@zitadel/proto/zitadel/saml/v2/saml_service_pb";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
+import { getTranslations } from "next-intl/server";
 import { isSessionValid } from "./session";
 
 type LoginWithSAMLAndSession = {
@@ -121,9 +123,15 @@ export async function loginWithSAMLAndSession({
             params.append("organization", selectedSession.factors?.user?.organizationId);
           }
           return { redirect: signedinUrl + "?" + params.toString() };
-        } else {
-          return { error: "Unknown error occurred" };
         }
+
+        const accessDeniedMessageKey = getAccessDeniedMessageKey(error);
+        if (accessDeniedMessageKey) {
+          const t = await getTranslations("error");
+          return { error: t(accessDeniedMessageKey) };
+        }
+
+        return { error: "Unknown error occurred" };
       }
     }
   }
