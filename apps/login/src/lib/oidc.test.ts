@@ -13,15 +13,21 @@ vi.mock("@/lib/grpc/interceptors/error-classification", () => ({
 }));
 
 vi.mock("@zitadel/client", () => ({
-  Code: { FailedPrecondition: 9 },
+  Code: { FailedPrecondition: 9, PermissionDenied: 7 },
   ConnectError: class MockConnectError extends Error {
     code: number;
+    rawMessage: string;
     constructor(msg: string, code: number) {
       super(msg);
       this.code = code;
+      this.rawMessage = msg;
     }
   },
   create: vi.fn(),
+}));
+
+vi.mock("next-intl/server", () => ({
+  getTranslations: vi.fn(() => Promise.resolve((key: string) => key)),
 }));
 
 describe("loginWithOIDCAndSession", () => {
@@ -180,6 +186,41 @@ describe("loginWithOIDCAndSession", () => {
 
     const result = await loginWithOIDCAndSession({
       serviceUrl: mockServiceUrl,
+      authRequest: mockAuthRequest,
+      sessionId: mockSessionId,
+      sessions: mockSessions,
+      sessionCookies: mockCookies,
+    });
+
+    expect(result).toEqual({ error: "Unknown error occurred" });
+  });
+
+  it.each([
+    ["Errors.User.GrantRequired (OIDC-foSyH49RvL)", "grantRequired"],
+    ["Errors.User.ProjectRequired (OIDC-foSyH49RvL)", "projectRequired"],
+  ])("should return a translated access denied error for %s", async (message, expectedKey) => {
+    const { ConnectError } = await import("@zitadel/client");
+    vi.mocked(sessionModule.isSessionValid).mockResolvedValue(true);
+    vi.mocked(zitadelModule.createCallback).mockRejectedValue(new ConnectError(message, 7));
+
+    const result = await loginWithOIDCAndSession({
+      serviceConfig: { baseUrl: mockServiceUrl },
+      authRequest: mockAuthRequest,
+      sessionId: mockSessionId,
+      sessions: mockSessions,
+      sessionCookies: mockCookies,
+    });
+
+    expect(result).toEqual({ error: expectedKey });
+  });
+
+  it("should return unknown error for other permission denied errors", async () => {
+    const { ConnectError } = await import("@zitadel/client");
+    vi.mocked(sessionModule.isSessionValid).mockResolvedValue(true);
+    vi.mocked(zitadelModule.createCallback).mockRejectedValue(new ConnectError("Errors.Token.Invalid (AUTH-7fs1e)", 7));
+
+    const result = await loginWithOIDCAndSession({
+      serviceConfig: { baseUrl: mockServiceUrl },
       authRequest: mockAuthRequest,
       sessionId: mockSessionId,
       sessions: mockSessions,
