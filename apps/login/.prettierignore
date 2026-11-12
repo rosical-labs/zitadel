@@ -7,3 +7,5 @@
 !locales/**
 !scripts
 !scripts/**
+# digisat: verbatim copy of the design system theme, kept byte-identical for updates
+src/digisat/globals.css

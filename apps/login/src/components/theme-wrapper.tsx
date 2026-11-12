@@ -122,7 +122,7 @@ export const ThemeWrapper = ({ children, branding }: Props) => {
         case ThemeMode.AUTO:
         case ThemeMode.UNSPECIFIED:
         default:
-          // Keep the visitor's stored choice; without one, ThemeProvider defaults to light.
+          // Keep the visitor's stored choice; without one, ThemeProvider follows the system theme.
           break;
       }
     }

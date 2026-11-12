@@ -1,0 +1,7 @@
+/* Loaded after globals.css: next/font generates its own family names, so the DS font tokens point at its variables (fonts.ts). */
+/* --zitadel-font-family is the branding custom font set by theme-wrapper.tsx; body sets font-sans itself, so it must be honoured here. */
+@theme inline {
+  --font-sans: var(--zitadel-font-family, var(--font-instrument-sans), system-ui, sans-serif);
+  --font-display: var(--font-gabarito), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+}

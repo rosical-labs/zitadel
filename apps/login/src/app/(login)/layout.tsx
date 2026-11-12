@@ -7,6 +7,8 @@ import { LegalFooter } from "@/components/legal-footer";
 import { SkeletonCard } from "@/components/skeleton-card";
 import { ThemeProvider } from "@/components/theme-provider";
 import ThemeSwitch from "@/components/theme-switch";
+// digisat: design system fonts (Gabarito, Instrument Sans, IBM Plex Mono) replace Geist
+import { fontVariables } from "@/digisat/fonts";
 import { LANGS, getLanguage } from "@/lib/i18n";
 import { getServiceConfig } from "@/lib/service-url";
 import { getThemeConfig } from "@/lib/theme";
@@ -14,13 +16,8 @@ import { getAllowedLanguages, getLegalAndSupportSettings } from "@/lib/zitadel";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Geist } from "next/font/google";
 import { headers } from "next/headers";
 import React, { Suspense } from "react";
-
-const geist = Geist({
-  subsets: ["latin"],
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("common");
@@ -52,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html className={`${geist.className}`} data-roundness={getThemeConfig().roundness} suppressHydrationWarning>
+    <html className={fontVariables} data-roundness={getThemeConfig().roundness} suppressHydrationWarning>
       <head />
       <body>
         <ThemeProvider>

@@ -1,0 +1,223 @@
+/* digisat design system version 1794484417-2012, read-only copy: the only change is that the Google Fonts @import was removed because the fonts come from next/font (src/digisat/fonts.ts). */
+/* digisat app theme for Tailwind v4 + shadcn/ui — generated from the digisat design system tokens.json. */
+/* Replace the :root/.dark/@theme blocks of your app's globals.css with this file. Set <html data-product="hotspot|mail-arsiv|endpoint-control|firewall|infotv"> per app (none = the hub), and class="dark" for dark mode. */
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.75rem;
+  --ink: #10233a;
+  --paper: #fff8f0;
+  --paper-2: #f6ecdf;
+  --slate: #4d5d72;
+  --line: #e6dacb;
+  --white: #ffffff;
+  --brand: #1a7fe0;
+  --brand-deep: #1670cc;
+  --product-hotspot: #1a7fe0;
+  --product-mail-arsiv: #ffc94a;
+  --product-endpoint-control: #2fa36b;
+  --product-firewall: #b9a8f0;
+  --product-infotv: #f25c3b;
+  --product-hotspot-tint: #e3eff9;
+  --product-mail-arsiv-tint: #fff0c7;
+  --product-endpoint-control-tint: #ddf1e6;
+  --product-firewall-tint: #eee9fc;
+  --product-infotv-tint: #fde4dd;
+  --product: var(--brand-deep);
+  --product-foreground: var(--white);
+  --product-tint: var(--product-hotspot-tint);
+  --product-mark: var(--brand);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--white);
+  --card-foreground: var(--ink);
+  --popover: var(--white);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--slate);
+  --accent: #f1e4d3;
+  --accent-foreground: var(--ink);
+  --destructive: #c0331a;
+  --destructive-foreground: var(--white);
+  --border: var(--line);
+  --input: #8f8070;
+  --ring: var(--brand-deep);
+  --success: #1e7a4c;
+  --success-surface: #e4f3ea;
+  --warning: #8a5a00;
+  --warning-surface: #fff0c7;
+  --danger-surface: #fde7e1;
+  --info: #1565b8;
+  --info-surface: #eaf3fd;
+  --chart-1: var(--product);
+  --chart-2: #1a7fe0;
+  --chart-3: #24915d;
+  --chart-4: #7b61d9;
+  --chart-5: #e0502e;
+  --chart-6: #a87300;
+  --chart-ink: var(--ink);
+  --topbar: var(--ink);
+  --topbar-foreground: var(--paper);
+  --sidebar: var(--paper-2);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--product);
+  --sidebar-primary-foreground: var(--product-foreground);
+  --sidebar-accent: var(--product-tint);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brand-deep);
+  --shadow-popover: 0 8px 24px rgba(16,35,58,0.12);
+}
+
+.dark {
+  --product-hotspot-tint: #15355a;
+  --product-mail-arsiv-tint: #3a3320;
+  --product-endpoint-control-tint: #173d30;
+  --product-firewall-tint: #2c2b52;
+  --product-infotv-tint: #3f2626;
+  --product: var(--brand-deep);
+  --product-foreground: var(--white);
+  --product-tint: var(--product-hotspot-tint);
+  --product-mark: var(--brand);
+  --background: #0b1a2c;
+  --foreground: var(--paper);
+  --card: var(--ink);
+  --card-foreground: var(--paper);
+  --popover: #16304d;
+  --popover-foreground: var(--paper);
+  --primary: var(--paper);
+  --primary-foreground: var(--ink);
+  --secondary: #16304d;
+  --secondary-foreground: var(--paper);
+  --muted: #132a44;
+  --muted-foreground: #a8b5c6;
+  --accent: #1b3756;
+  --accent-foreground: var(--paper);
+  --destructive: #ff7a5c;
+  --destructive-foreground: var(--ink);
+  --border: #23405e;
+  --input: #6a84a3;
+  --ring: #4da0f0;
+  --success: #4cc38a;
+  --success-surface: #173d30;
+  --warning: #ffc94a;
+  --warning-surface: #3a3320;
+  --danger-surface: #3f2626;
+  --info: #6cb2f5;
+  --info-surface: #15355a;
+  --chart-1: var(--product);
+  --chart-2: #4da0f0;
+  --chart-3: #4cc38a;
+  --chart-4: #b9a8f0;
+  --chart-5: #ff7a5c;
+  --chart-6: #ffc94a;
+  --chart-ink: var(--paper);
+  --topbar: #071321;
+  --topbar-foreground: var(--paper);
+  --sidebar: #0e1f33;
+  --sidebar-foreground: var(--paper);
+  --sidebar-primary: var(--product);
+  --sidebar-primary-foreground: var(--product-foreground);
+  --sidebar-accent: var(--product-tint);
+  --sidebar-accent-foreground: var(--paper);
+  --sidebar-border: #23405e;
+  --sidebar-ring: #4da0f0;
+  --shadow-popover: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+/* One app = one product colour. Everything else stays the same across apps. */
+[data-product="hotspot"] { --product: var(--brand-deep); --product-foreground: var(--white); --product-tint: var(--product-hotspot-tint); --product-mark: var(--product-hotspot); }
+[data-product="mail-arsiv"] { --product: var(--product-mail-arsiv); --product-foreground: var(--ink); --product-tint: var(--product-mail-arsiv-tint); --product-mark: var(--product-mail-arsiv); }
+[data-product="endpoint-control"] { --product: var(--product-endpoint-control); --product-foreground: var(--ink); --product-tint: var(--product-endpoint-control-tint); --product-mark: var(--product-endpoint-control); }
+[data-product="firewall"] { --product: var(--product-firewall); --product-foreground: var(--ink); --product-tint: var(--product-firewall-tint); --product-mark: var(--product-firewall); }
+[data-product="infotv"] { --product: var(--product-infotv); --product-foreground: var(--ink); --product-tint: var(--product-infotv-tint); --product-mark: var(--product-infotv); }
+[data-product] { --chart-1: var(--product); --sidebar-primary: var(--product); --sidebar-primary-foreground: var(--product-foreground); --sidebar-accent: var(--product-tint); }
+
+@theme inline {
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --font-display: "Gabarito", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --shadow-popover: var(--shadow-popover);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-slate: var(--slate);
+  --color-line: var(--line);
+  --color-white: var(--white);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-product-hotspot: var(--product-hotspot);
+  --color-product-mail-arsiv: var(--product-mail-arsiv);
+  --color-product-endpoint-control: var(--product-endpoint-control);
+  --color-product-firewall: var(--product-firewall);
+  --color-product-infotv: var(--product-infotv);
+  --color-product-hotspot-tint: var(--product-hotspot-tint);
+  --color-product-mail-arsiv-tint: var(--product-mail-arsiv-tint);
+  --color-product-endpoint-control-tint: var(--product-endpoint-control-tint);
+  --color-product-firewall-tint: var(--product-firewall-tint);
+  --color-product-infotv-tint: var(--product-infotv-tint);
+  --color-product: var(--product);
+  --color-product-foreground: var(--product-foreground);
+  --color-product-tint: var(--product-tint);
+  --color-product-mark: var(--product-mark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-danger-surface: var(--danger-surface);
+  --color-info: var(--info);
+  --color-info-surface: var(--info-surface);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-ink: var(--chart-ink);
+  --color-topbar: var(--topbar);
+  --color-topbar-foreground: var(--topbar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground font-sans antialiased; font-feature-settings: "tnum" 0; }
+  .font-display { letter-spacing: -0.02em; }
+  td, .tabular { font-variant-numeric: tabular-nums; }
+}
