@@ -23,6 +23,17 @@ function getLanguageSwitcherCardAppearance(): string {
   return appearance?.card || APPEARANCE_STYLES.flat.card; // Fallback to flat design
 }
 
+// digisat: extracted so the digisat language toggle (src/digisat/language-toggle.tsx) switches languages the same way
+export function useChangeLanguage(): (code: string) => Promise<void> {
+  const router = useRouter();
+
+  return async (code: string) => {
+    await setLanguageCookie(code);
+
+    router.refresh();
+  };
+}
+
 export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
   const currentLocale = useLocale();
   const switcherRoundness = getLanguageSwitcherRoundness();
@@ -30,15 +41,11 @@ export function LanguageSwitcher({ languages }: { languages: Lang[] }) {
 
   const [selected, setSelected] = useState(languages.find((l) => l.code === currentLocale) || languages[0]);
 
-  const router = useRouter();
+  const changeLanguage = useChangeLanguage();
 
   const handleChange = async (language: Lang) => {
     setSelected(language);
-    const newLocale = language.code;
-
-    await setLanguageCookie(newLocale);
-
-    router.refresh();
+    await changeLanguage(language.code);
   };
 
   return (

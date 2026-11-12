@@ -482,5 +482,21 @@
     "privacy": "Privacy",
     "help": "Help",
     "support": "Support"
+  },
+  "digisat": {
+    "brand": {
+      "headline": "one account, all of digisat.",
+      "lead": "hotspot, mail arşiv, endpoint control and the rest: you sign in to all of them with this account."
+    },
+    "language": {
+      "label": "Language"
+    },
+    "theme": {
+      "dark": "Switch to dark theme",
+      "light": "Switch to light theme"
+    },
+    "footer": {
+      "copyright": "© digisat"
+    }
   }
 }

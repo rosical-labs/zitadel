@@ -34,13 +34,7 @@
     @apply text-primary focus-visible:ring-ring/50 cursor-pointer font-medium underline-offset-4 transition-colors outline-none hover:underline focus-visible:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50;
   }
 
-  // Page backdrop: a soft tint of the instance primary color in the top-left corner.
-  // Only background-image, so bg-background and a NEXT_PUBLIC_THEME_BACKGROUND_IMAGE inline style still win.
-  .ztdl-page-bg {
-    background-image:
-      radial-gradient(70rem 45rem at 0% 0%, color-mix(in oklab, var(--primary) 9%, transparent), transparent 70%),
-      radial-gradient(50rem 35rem at 100% 100%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 70%);
-  }
+  // digisat: the .ztdl-page-bg gradient backdrop is gone; the design system uses no gradients.
 }
 
 // A title directly followed by its description sits close to it (shadcn CardHeader rhythm).
