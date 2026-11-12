@@ -1,10 +1,26 @@
+// digisat: merges instance and organization custom texts over the local messages
+import { mergeLoginMessages } from "@/digisat/login-messages";
 import { LANGS, LANGUAGE_COOKIE_NAME, LANGUAGE_HEADER_NAME } from "@/lib/i18n";
-import { mergeMessages } from "@/lib/merge-messages";
 import { getServiceConfig } from "@/lib/service-url";
-import { getAllowedLanguages, getHostedLoginTranslation } from "@/lib/zitadel";
+import { getAllowedLanguages, getHostedLoginTranslation, ServiceConfig } from "@/lib/zitadel";
 import { JsonObject } from "@zitadel/client";
 import { getRequestConfig } from "next-intl/server";
 import { cookies, headers } from "next/headers";
+
+// digisat: one level's custom texts; a failed call is logged and the local messages are used, as before
+async function loadCustomMessages(
+  serviceConfig: ServiceConfig,
+  locale: string,
+  organization: string,
+): Promise<JsonObject | Record<string, never>> {
+  try {
+    const i18nJSON = await getHostedLoginTranslation({ serviceConfig, locale, organization });
+    return i18nJSON ?? {};
+  } catch (error) {
+    console.warn("Error fetching custom translations:", error);
+    return {};
+  }
+}
 
 export default getRequestConfig(async () => {
   const fallback = "en";
@@ -52,22 +68,11 @@ export default getRequestConfig(async () => {
 
   const i18nOrganization = _headers.get("x-zitadel-i18n-organization") || ""; // You may need to set this header in middleware
 
-  let translations: JsonObject | Record<string, never> = {};
-  try {
-    const i18nJSON = await getHostedLoginTranslation({
-      serviceConfig,
-      locale,
-      organization: i18nOrganization,
-    });
-
-    if (i18nJSON) {
-      translations = i18nJSON;
-    }
-  } catch (error) {
-    console.warn("Error fetching custom translations:", error);
-  }
-
-  const customMessages = translations;
+  // digisat: the instance's and the organization's own custom texts, fetched separately (see mergeLoginMessages)
+  const [instanceMessages, organizationMessages] = await Promise.all([
+    loadCustomMessages(serviceConfig, locale, ""),
+    i18nOrganization ? loadCustomMessages(serviceConfig, locale, i18nOrganization) : {},
+  ]);
 
   // Load locale messages, fall back to default language messages if locale not found
   let localeMessages;
@@ -85,6 +90,12 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: mergeMessages(fallbackMessages, localeMessages, customMessages) as Record<string, string>,
+    // digisat: local en, local locale, instance custom texts, organization custom texts (later wins)
+    messages: mergeLoginMessages({
+      fallback: fallbackMessages,
+      locale: localeMessages,
+      instance: instanceMessages,
+      organization: organizationMessages,
+    }) as Record<string, string>,
   };
 });
