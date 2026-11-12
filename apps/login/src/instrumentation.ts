@@ -41,6 +41,12 @@ export async function register(): Promise<void> {
   // credential check so it is visible even if that check exits the process.
   await logSessionCookieSecretNotice();
 
+  // digisat: refuse to start with an invalid DIGISAT_PRODUCT_CLIENTS instead of failing every page
+  const { validateProductClientsAtStartup } = await import("./digisat/startup");
+  if (!validateProductClientsAtStartup()) {
+    process.exit(1);
+  }
+
   // Verify the configured API credentials once at startup (fail fast).
   // Connectivity problems are only logged; reachability is covered by the
   // readiness probe (/ready) and ZITADEL_API_AWAITINITIALCONN.

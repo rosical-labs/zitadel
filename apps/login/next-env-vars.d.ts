@@ -124,5 +124,12 @@ declare namespace NodeJS {
      * In local development (NODE_ENV=development), it is disabled by default unless explicitly set to "false".
      */
     OTEL_SDK_DISABLED?: string;
+
+    /**
+     * digisat: Optional JSON object mapping OIDC client ids to a digisat product, e.g.
+     * `{"<client_id>":"endpoint-control"}`. Products: hotspot, mail-arsiv, endpoint-control, firewall, infotv.
+     * Display only (sets `data-product` on <html>); unknown clients show the hub. Invalid JSON or an unknown product stops the server at startup.
+     */
+    DIGISAT_PRODUCT_CLIENTS?: string;
   }
 }
