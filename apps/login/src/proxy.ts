@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+// digisat: header that carries requestId to the root layout
+import { REQUEST_ID_HEADER } from "./digisat/products";
 import { buildCSP } from "./lib/csp";
 import { applyCustomHeaders } from "./lib/custom-headers";
 import { createLogger } from "./lib/logger";
@@ -19,6 +21,13 @@ export async function proxy(request: NextRequest) {
   const organization = request.nextUrl.searchParams.get("organization");
   if (organization) {
     requestHeaders.set("x-zitadel-i18n-organization", organization);
+  }
+
+  // digisat: pass requestId to the root layout for the product theme; drop any client-sent value first
+  requestHeaders.delete(REQUEST_ID_HEADER);
+  const requestId = request.nextUrl.searchParams.get("requestId");
+  if (requestId) {
+    requestHeaders.set(REQUEST_ID_HEADER, requestId);
   }
 
   // Internal infrastructure routes — skip middleware entirely.

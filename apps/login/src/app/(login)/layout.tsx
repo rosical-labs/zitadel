@@ -9,6 +9,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ThemeSwitch from "@/components/theme-switch";
 // digisat: design system fonts (Gabarito, Instrument Sans, IBM Plex Mono) replace Geist
 import { fontVariables } from "@/digisat/fonts";
+// digisat: product context (data-product on <html>) from the auth request's client id
+import { getProductForRequest } from "@/digisat/product-context";
+import { ProductProvider } from "@/digisat/product-provider";
+import { REQUEST_ID_HEADER } from "@/digisat/products";
 import { LANGS, getLanguage } from "@/lib/i18n";
 import { getServiceConfig } from "@/lib/service-url";
 import { getThemeConfig } from "@/lib/theme";
@@ -27,6 +31,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const _headers = await headers();
   const { serviceConfig } = getServiceConfig(_headers);
+  // digisat: display only, never affects the flow
+  const product = await getProductForRequest(_headers.get(REQUEST_ID_HEADER) ?? undefined, serviceConfig);
 
   let languages = LANGS;
   try {
@@ -48,8 +54,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     console.error("Failed to load legal and support settings", e);
   }
 
+  // digisat: data-product selects the product accent in digisat/globals.css
   return (
-    <html className={fontVariables} data-roundness={getThemeConfig().roundness} suppressHydrationWarning>
+    <html
+      className={fontVariables}
+      data-roundness={getThemeConfig().roundness}
+      data-product={product}
+      suppressHydrationWarning
+    >
       <head />
       <body>
         <ThemeProvider>
@@ -72,7 +84,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <LanguageSwitcher languages={languages} />
                     <ThemeSwitch />
                   </div>
-                  <main className="w-full max-w-[400px]">{children}</main>
+                  <main className="w-full max-w-[400px]">
+                    {/* digisat: product for client components (useProduct) */}
+                    <ProductProvider product={product}>{children}</ProductProvider>
+                  </main>
                   <footer className="mt-6 flex w-full max-w-[400px] justify-center">
                     <LegalFooter legal={legal} />
                   </footer>
