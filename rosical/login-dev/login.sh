@@ -47,7 +47,7 @@ case "${1:-}" in
     cd "$REPO"
     # Nx spawns `pnpm` itself; pnpm is only available through corepack here.
     export PATH="$DIR/bin:$PATH"
-    NEXT_PUBLIC_THEME_ROUNDNESS=edgy pnpm nx run @zitadel/login:build --skip-nx-cache
+    pnpm nx run @zitadel/login:build --skip-nx-cache
     echo "Built. Run: $0 stop && $0 start"
     ;;
   start)
