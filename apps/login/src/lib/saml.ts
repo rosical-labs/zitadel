@@ -1,3 +1,5 @@
+// digisat: marks the access-denied result for the no-access step
+import { AccessDeniedResult } from "@/digisat/access-denied-result";
 import { getAccessDeniedMessageKey } from "@/lib/access-denied";
 import { isSafeRedirectUri } from "@/lib/client-utils";
 import { Cookie } from "@/lib/cookies";
@@ -24,8 +26,12 @@ export async function loginWithSAMLAndSession({
   sessionId,
   sessions,
   sessionCookies,
+  // digisat: an access-denied result carries `accessDenied` next to its error
 }: LoginWithSAMLAndSession): Promise<
-  { error: string } | { redirect: string } | { samlData: { url: string; fields: Record<string, string> } }
+  | { error: string }
+  | AccessDeniedResult
+  | { redirect: string }
+  | { samlData: { url: string; fields: Record<string, string> } }
 > {
   console.log(`Login with session: ${sessionId} and samlRequest: ${samlRequest}`);
 
@@ -128,7 +134,7 @@ export async function loginWithSAMLAndSession({
         const accessDeniedMessageKey = getAccessDeniedMessageKey(error);
         if (accessDeniedMessageKey) {
           const t = await getTranslations("error");
-          return { error: t(accessDeniedMessageKey) };
+          return { error: t(accessDeniedMessageKey), accessDenied: true }; // digisat: lets the forms show the no-access step
         }
 
         return { error: "Unknown error occurred" };

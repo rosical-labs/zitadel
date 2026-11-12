@@ -11,6 +11,7 @@ import { fontVariables } from "@/digisat/fonts";
 import { getProductForRequest } from "@/digisat/product-context";
 import { ProductProvider } from "@/digisat/product-provider";
 import { REQUEST_ID_HEADER } from "@/digisat/products";
+import { StepOverrideProvider } from "@/digisat/step-override";
 import { LANGS, getLanguage } from "@/lib/i18n";
 import { getServiceConfig } from "@/lib/service-url";
 import { getThemeConfig } from "@/lib/theme";
@@ -69,7 +70,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <AuthShell product={product} languages={languages} legal={legal}>
                 <Suspense fallback={<SkeletonCard isLoading />}>
                   {/* digisat: product for client components (useProduct) */}
-                  <ProductProvider product={product}>{children}</ProductProvider>
+                  <ProductProvider product={product}>
+                    {/* digisat: the handoff and no-access views replace the step */}
+                    <StepOverrideProvider>{children}</StepOverrideProvider>
+                  </ProductProvider>
                 </Suspense>
               </AuthShell>
             </LanguageProvider>

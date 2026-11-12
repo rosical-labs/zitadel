@@ -55,8 +55,8 @@ describe("TextInput Component", () => {
       const { container } = render(<TextInput label="Email" error="Invalid" />);
       const input = container.querySelector("input");
       expect(input).toBeTruthy();
-      // Should have border-warn or warn-related styles
-      expect(input?.className).toMatch(/border-warn/);
+      // digisat: the design system error border is the destructive token
+      expect(input?.className).toMatch(/border-destructive/);
     });
 
     it("should render success state with message", () => {

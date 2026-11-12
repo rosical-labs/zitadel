@@ -1,9 +1,9 @@
 "use client";
 
-import { getComponentRoundness } from "@/lib/theme";
+import { FieldError, fieldErrorId, fieldLabelClasses, inputClasses } from "@/digisat/ui/field";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { clsx } from "clsx";
-import { ChangeEvent, CSSProperties, DetailedHTMLProps, forwardRef, InputHTMLAttributes, ReactNode } from "react";
+import { ChangeEvent, CSSProperties, DetailedHTMLProps, forwardRef, InputHTMLAttributes, ReactNode, useId } from "react";
 
 export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   label: string;
@@ -16,24 +16,15 @@ export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
   onChange?: (value: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (value: ChangeEvent<HTMLInputElement>) => void;
   roundness?: string; // Allow override via props
+  errorTestId?: string; // digisat: testid wrapper around the error, as the acceptance tests locate it
 };
 
-const styles = (error: boolean, disabled: boolean, roundnessClasses: string = "rounded-md") =>
-  clsx(
-    {
-      "h-9 w-full min-w-0 grow border bg-transparent px-3 py-1 shadow-xs transition-[color,box-shadow] dark:bg-input/30": true,
-      "text-base md:text-sm text-foreground placeholder:text-muted-foreground outline-none focus:outline-none focus:ring-[3px]": true,
-      "border-input focus:border-ring focus:ring-ring/50": !error,
-      "border-warn-light-500 dark:border-warn-dark-500 focus:ring-destructive/20 dark:focus:ring-destructive/40": error,
-      "pointer-events-none cursor-not-allowed opacity-50": disabled,
-    },
-    roundnessClasses, // Apply the full roundness classes directly
-  );
-
-// Helper function to get default input roundness from theme
-function getDefaultInputRoundness(): string {
-  return getComponentRoundness("input");
-}
+// digisat: the design system input (36px, card fill, input border, 2px ring focus), see src/digisat/ui/field.tsx.
+// Theme roundness no longer applies; an explicit roundness prop is appended after the 8px radius.
+const styles = (error: boolean, disabled: boolean, roundnessClasses?: string) =>
+  clsx(inputClasses({ invalid: error }), "grow", roundnessClasses, {
+    "pointer-events-none cursor-not-allowed opacity-50": disabled,
+  });
 
 // Reserve room for "@suffix" (~1ch per character, at most half the field) so typed text never runs under it.
 function suffixWidthStyle(suffix: string | undefined): CSSProperties | undefined {
@@ -57,34 +48,37 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       onChange,
       onBlur,
       roundness,
+      errorTestId,
       ...props
     },
     ref,
   ) => {
-    // Use theme-based roundness if not explicitly provided
-    const actualRoundness = roundness || getDefaultInputRoundness();
+    // digisat: an explicit label/id pair and error wiring (aria-invalid, aria-describedby, role="alert")
+    const generatedId = useId();
+    const id = props.id ?? generatedId;
+    const errorId = fieldErrorId(id);
 
     return (
-      <label className="text-foreground relative flex flex-col gap-2 text-sm">
-        <span className={`leading-none font-medium select-none ${error ? "text-destructive" : ""}`}>
+      <div className="text-foreground relative flex flex-col gap-1.5 text-sm">
+        <label htmlFor={id} className={clsx(fieldLabelClasses, error && "text-destructive")}>
           {label} {required && "*"}
-        </span>
+        </label>
         <span className="relative flex" style={suffixWidthStyle(suffix)}>
           <input
             suppressHydrationWarning
             ref={ref}
-            className={clsx(
-              styles(!!error, !!disabled, actualRoundness),
-              suffix && "pr-[calc(var(--suffix-width)+0.25rem)]",
-            )}
+            className={clsx(styles(!!error, !!disabled, roundness), suffix && "pr-[calc(var(--suffix-width)+0.25rem)]")}
             defaultValue={defaultValue}
             required={required}
             disabled={disabled}
             placeholder={placeholder}
             autoComplete={props.autoComplete ?? "off"}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
             onChange={(e) => onChange && onChange(e)}
             onBlur={(e) => onBlur && onBlur(e)}
             {...props}
+            id={id}
           />
 
           {suffix && (
@@ -94,15 +88,15 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           )}
         </span>
 
-        {error && <span className="text-destructive text-sm leading-snug">{error}</span>}
+        {error && <FieldError id={id} error={error} testId={errorTestId} />}
 
         {success && (
-          <span className="flex flex-row items-center gap-1.5 text-sm text-green-600 dark:text-green-500">
+          <span className="text-success flex flex-row items-center gap-1.5 text-xs leading-4">
             <CheckCircleIcon className="size-4 shrink-0" />
             <span>{success}</span>
           </span>
         )}
-      </label>
+      </div>
     );
   },
 );

@@ -31,7 +31,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
             disabled={disabled}
             type="checkbox"
             className={classNames(
-              "form-checkbox text-primary checked:border-primary border-input focus:border-ring focus:ring-ring/50 dark:bg-input/30 size-4 shrink-0 cursor-pointer rounded-sm bg-transparent shadow-xs transition-shadow focus:ring-[3px] focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50",
+              // digisat: design system checkbox (18px, 5px radius, input border, card fill; ink when checked, ring outline on focus)
+              "form-checkbox border-input bg-card text-primary checked:border-primary focus-visible:outline-ring size-[18px] shrink-0 cursor-pointer rounded-[5px] transition-colors focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
               className,
             )}
             {...props}

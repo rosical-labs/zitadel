@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { processIDPCallback } from "@/lib/server/idp-intent";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -41,6 +42,7 @@ export function IdpProcessHandler({
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
   const executedRef = useRef(false);
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   useEffect(() => {
     // Prevent double execution in React Strict Mode
@@ -64,6 +66,8 @@ export function IdpProcessHandler({
     })
       .then((result) => {
         if (result.error) {
+          // digisat: a user without access to the application sees the no-access step instead of this error
+          if (withCompletionView(result, () => false)) return;
           console.error("[IDP Process Handler] Error:", result.error);
           setError(result.error);
           setLoading(false);
@@ -72,7 +76,9 @@ export function IdpProcessHandler({
 
         if (result.redirect) {
           console.log("[IDP Process Handler] Redirecting to:", result.redirect);
-          router.push(result.redirect);
+          // digisat: handoff when it leaves the login app
+          const redirect = result.redirect;
+          withCompletionView(result, () => router.push(redirect));
           return;
         }
 
@@ -91,7 +97,20 @@ export function IdpProcessHandler({
         setError(err instanceof Error ? err.message : t("processing.unexpectedError"));
         setLoading(false);
       });
-  }, [provider, id, token, requestId, organization, link, sessionId, linkFingerprint, postErrorRedirectUrl, router, t]);
+  }, [
+    provider,
+    id,
+    token,
+    requestId,
+    organization,
+    link,
+    sessionId,
+    linkFingerprint,
+    postErrorRedirectUrl,
+    router,
+    t,
+    withCompletionView, // digisat: the view after a completed sign-in
+  ]);
 
   return (
     <div className="flex w-full items-center justify-center">

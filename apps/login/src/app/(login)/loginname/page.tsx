@@ -2,6 +2,7 @@ import { DynamicTheme } from "@/components/dynamic-theme";
 import { SignInWithIdp } from "@/components/sign-in-with-idp";
 import { Translated } from "@/components/translated";
 import { UsernameForm } from "@/components/username-form";
+import { ContextLabel } from "@/digisat/ui/context-label";
 import { getServiceConfig } from "@/lib/service-url";
 import { getActiveIdentityProviders, getBrandingSettings, getDefaultOrg, getLoginSettings } from "@/lib/zitadel";
 import { Organization } from "@zitadel/proto/zitadel/org/v2/org_pb";
@@ -53,6 +54,8 @@ export default async function Page(props: { searchParams: Promise<Record<string 
   return (
     <DynamicTheme branding={branding}>
       <div className="flex flex-col space-y-4">
+        {/* digisat: "<product> uygulamasına devam etmek için giriş yapın" when an app sent the user */}
+        <ContextLabel />
         <h1>
           <Translated i18nKey="title" namespace="loginname" />
         </h1>
@@ -61,7 +64,8 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="flex w-full flex-col gap-6">
+      {/* digisat: the step card's 16px rhythm between the form and the "veya" block */}
+      <div className="flex w-full flex-col gap-4">
         {loginSettings?.allowLocalAuthentication && (
           <UsernameForm
             loginName={loginName}

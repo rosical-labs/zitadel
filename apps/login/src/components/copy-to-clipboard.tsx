@@ -1,7 +1,9 @@
 "use client";
 
+import { buttonClasses } from "@/digisat/ui/button-styles";
 import { ClipboardDocumentCheckIcon, ClipboardIcon } from "@heroicons/react/20/solid";
 import copy from "copy-to-clipboard";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -10,6 +12,8 @@ type Props = {
 
 export function CopyToClipboard({ value }: Props) {
   const [copied, setCopied] = useState(false);
+  // digisat: the icon-only button gets a name, and says when it copied
+  const t = useTranslations("digisat");
 
   useEffect(() => {
     if (copied) {
@@ -24,10 +28,16 @@ export function CopyToClipboard({ value }: Props) {
       <button
         id="tooltip-ctc"
         type="button"
-        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 flex size-8 items-center justify-center rounded-md transition-colors outline-none focus-visible:ring-[3px]"
+        // digisat: design system ghost icon button
+        className={buttonClasses("ghost", "icon")}
+        aria-label={copied ? t("copy.copied") : t("copy.copy")}
         onClick={() => setCopied(true)}
       >
-        {!copied ? <ClipboardIcon className="size-4" /> : <ClipboardDocumentCheckIcon className="size-4" />}
+        {!copied ? (
+          <ClipboardIcon className="text-muted-foreground size-4" aria-hidden="true" />
+        ) : (
+          <ClipboardDocumentCheckIcon className="text-success size-4" aria-hidden="true" />
+        )}
       </button>
     </div>
   );

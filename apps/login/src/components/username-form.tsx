@@ -7,10 +7,9 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
@@ -100,7 +99,8 @@ export function UsernameForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
+      {/* digisat: step card layout: field (error under it), then one full-width primary, then "Geri" as ghost */}
+      <form className="flex w-full flex-col gap-4">
         <div className="flex flex-col gap-3">
           <TextInput
             type="text"
@@ -113,6 +113,8 @@ export function UsernameForm({
             label={inputLabel}
             data-testid="username-text-input"
             suffix={hideSuffix ? undefined : suffix}
+            error={error}
+            errorTestId="error"
           />
           {allowRegister && (
             <button
@@ -137,18 +139,11 @@ export function UsernameForm({
           )}
         </div>
 
-        {error && (
-          <div data-testid="error">
-            <Alert>{error}</Alert>
-          </div>
-        )}
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
-          <span className="flex-grow"></span>
+        <div className="flex w-full flex-col gap-2">
           <Button
             data-testid="submit-button"
             type="submit"
-            className="self-end"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit((e) => submitLoginName(e, organization))}
@@ -156,6 +151,7 @@ export function UsernameForm({
             {loading && <Spinner className="size-4" />}
             <Translated i18nKey="submit" namespace="loginname" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

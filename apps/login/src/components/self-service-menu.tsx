@@ -1,3 +1,4 @@
+import { sessionListClasses, sessionRowClasses } from "@/digisat/ui/list-styles";
 import Link from "next/link";
 
 export function SelfServiceMenu() {
@@ -15,7 +16,8 @@ export function SelfServiceMenu() {
   // }
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    // digisat: the items as design system session rows
+    <div className={sessionListClasses}>
       {list.map((menuitem, index) => {
         return <SelfServiceItem link={menuitem.link} key={"self-service-" + index} name={menuitem.name} />;
       })}
@@ -25,11 +27,7 @@ export function SelfServiceMenu() {
 
 const SelfServiceItem = ({ name, link }: { name: string; link: string }) => {
   return (
-    <Link
-      prefetch={false}
-      href={link}
-      className="group border-border bg-card hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 flex w-full flex-row items-center gap-3 rounded-md border px-3 py-2.5 text-left text-sm font-medium shadow-xs transition-colors outline-none focus-visible:ring-[3px]"
-    >
+    <Link prefetch={false} href={link} className={sessionRowClasses}>
       {name}
     </Link>
   );

@@ -1,6 +1,7 @@
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { SessionsList } from "@/components/sessions-list";
 import { Translated } from "@/components/translated";
+import { sessionRowClasses } from "@/digisat/ui/list-styles";
 import { getAllSessions } from "@/lib/cookies";
 import { getServiceConfig } from "@/lib/service-url";
 import { getBrandingSettings, getDefaultOrg, listSessions, ServiceConfig } from "@/lib/zitadel";
@@ -115,24 +116,21 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         </p>
       </div>
 
-      <div className="flex w-full flex-col gap-6">
-        <div className="flex w-full flex-col gap-2">
-          <SessionsList sessions={sessions} requestId={requestId} />
-          <Link
-            href={`/loginname?` + params}
-            className="focus-visible:ring-ring/50 rounded-md outline-none focus-visible:ring-[3px]"
-          >
-            <div className="hover:bg-accent hover:text-accent-foreground flex flex-row items-center gap-3 rounded-md border border-dashed px-3 py-2.5 transition-colors">
-              <div className="bg-muted text-muted-foreground flex size-8 shrink-0 flex-row items-center justify-center rounded-md">
-                <UserPlusIcon className="size-4" />
-              </div>
-              <span className="text-sm font-medium">
-                <Translated i18nKey="addAnother" namespace="accounts" />
-              </span>
-            </div>
+      {/* digisat: design system account picker: the sessions as rows, "add another account" as the last row */}
+      <SessionsList
+        sessions={sessions}
+        requestId={requestId}
+        lastRow={
+          <Link href={`/loginname?` + params} className={sessionRowClasses}>
+            <span className="text-muted-foreground inline-flex size-8 shrink-0 items-center justify-center">
+              <UserPlusIcon className="size-4" aria-hidden="true" />
+            </span>
+            <b className="font-semibold">
+              <Translated i18nKey="addAnother" namespace="accounts" />
+            </b>
           </Link>
-        </div>
-      </div>
+        }
+      />
     </DynamicTheme>
   );
 }

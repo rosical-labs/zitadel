@@ -1,8 +1,9 @@
 "use client";
 
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { timestampDate } from "@zitadel/client";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Alert } from "./alert";
 import { SessionItem } from "./session-item";
 import { Translated } from "./translated";
@@ -10,12 +11,15 @@ import { Translated } from "./translated";
 type Props = {
   sessions: Session[];
   requestId?: string;
+  /** digisat: the last row of the list ("Başka bir hesap kullan"). */
+  lastRow?: ReactNode;
 };
 
-export function SessionsList({ sessions, requestId }: Props) {
+export function SessionsList({ sessions, requestId, lastRow }: Props) {
   const [list, setList] = useState<Session[]>(sessions);
   return sessions ? (
-    <div className="flex flex-col gap-2">
+    // digisat: one design system session list; the accounts first, then the last row
+    <div className={sessionListClasses}>
       {list
         .filter((session) => session?.factors?.user?.loginName)
         // sort by change date descending
@@ -37,6 +41,7 @@ export function SessionsList({ sessions, requestId }: Props) {
             />
           );
         })}
+      {lastRow}
     </div>
   ) : (
     <Alert>

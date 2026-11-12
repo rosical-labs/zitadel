@@ -1,5 +1,6 @@
 "use client";
 
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { AuthenticationMethodType } from "@zitadel/proto/zitadel/user/v2/user_service_pb";
 import { EMAIL, SMS, TOTP, U2F } from "./auth-methods";
 
@@ -27,17 +28,23 @@ export function ChooseSecondFactor({ loginName, sessionId, requestId, organizati
     params.append("organization", organization);
   }
 
+  // digisat: the methods as design system session rows; a method without a row renders nothing
   return (
-    <div className="grid w-full grid-cols-1 gap-3">
-      {userMethods.map((method, i) => {
-        return (
-          <div key={"method-" + i}>
-            {method === AuthenticationMethodType.TOTP && TOTP(false, "/otp/time-based?" + params)}
-            {method === AuthenticationMethodType.U2F && U2F(false, "/u2f?" + params)}
-            {method === AuthenticationMethodType.OTP_EMAIL && EMAIL(false, "/otp/email?" + params)}
-            {method === AuthenticationMethodType.OTP_SMS && SMS(false, "/otp/sms?" + params)}
-          </div>
-        );
+    <div className={sessionListClasses}>
+      {userMethods.map((method) => {
+        if (method === AuthenticationMethodType.TOTP) {
+          return TOTP(false, "/otp/time-based?" + params, "row");
+        }
+        if (method === AuthenticationMethodType.U2F) {
+          return U2F(false, "/u2f?" + params, "row");
+        }
+        if (method === AuthenticationMethodType.OTP_EMAIL) {
+          return EMAIL(false, "/otp/email?" + params, "row");
+        }
+        if (method === AuthenticationMethodType.OTP_SMS) {
+          return SMS(false, "/otp/sms?" + params, "row");
+        }
+        return null;
       })}
     </div>
   );

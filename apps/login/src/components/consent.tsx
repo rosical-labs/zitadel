@@ -1,13 +1,17 @@
 "use client";
 
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { approveDeviceAuthorization, denyDeviceAuthorization } from "@/lib/server/device";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "./alert";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
+
+// digisat: a scope as a compact, non-interactive list row
+const scopeRowClasses = "flex w-full items-center px-4 py-2.5 text-sm";
 
 export function ConsentScreen({
   scope,
@@ -45,13 +49,14 @@ export function ConsentScreen({
 
   const scopes = scope?.filter((s) => !!s);
 
+  // digisat: step card layout: the scopes as a design system list, the user code in mono, one full-width primary, deny as outline
   return (
-    <div className="flex w-full flex-col gap-6">
-      <ul className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col gap-4">
+      <ul className={sessionListClasses}>
         {scopes?.length === 0 && (
-          <span className="border-border bg-muted/40 flex w-full flex-row items-center rounded-md border px-3 py-2 text-sm">
+          <li className={scopeRowClasses}>
             <Translated i18nKey="scope.openid" namespace="device" />
-          </span>
+          </li>
         )}
         {scopes?.map((s) => {
           const translationKey = `device.scope.${s}`;
@@ -61,10 +66,7 @@ export function ConsentScreen({
           const resolvedDescription = description === translationKey ? "" : description;
 
           return (
-            <li
-              key={s}
-              className="border-border bg-muted/40 flex w-full flex-row items-center rounded-md border px-3 py-2 text-sm"
-            >
+            <li key={s} className={scopeRowClasses}>
               <span>{resolvedDescription}</span>
             </li>
           );
@@ -74,7 +76,10 @@ export function ConsentScreen({
       {/* RFC 8628 5.4: show the user code so the user can compare it with the one on the device */}
       <p className="ztdl-p w-full text-left text-sm">
         <Translated i18nKey="request.usercode" namespace="device" />{" "}
-        <span className="font-mono font-bold" data-testid="user-code">
+        <span
+          className="bg-secondary text-foreground rounded-[6px] px-1.5 py-0.5 font-mono font-medium"
+          data-testid="user-code"
+        >
           {userCode}
         </span>
       </p>
@@ -89,22 +94,7 @@ export function ConsentScreen({
         </div>
       )}
 
-      <div className="flex w-full flex-row items-center justify-between gap-3">
-        <Button
-          onClick={() =>
-            run(
-              () => denyDeviceAuthorization({ userCode, sessionId, organization }),
-              (response) => router.push(response.redirect ?? "/device"),
-            )
-          }
-          variant={ButtonVariants.Secondary}
-          data-testid="deny-button"
-        >
-          {loading && <Spinner className="size-4" />}
-          <Translated i18nKey="request.deny" namespace="device" />
-        </Button>
-        <span className="flex-grow"></span>
-
+      <div className="flex w-full flex-col gap-2">
         <Button
           onClick={() =>
             run(
@@ -114,11 +104,25 @@ export function ConsentScreen({
           }
           disabled={loading}
           data-testid="submit-button"
-          className="self-end"
+          size={ButtonSizes.Large}
           variant={ButtonVariants.Primary}
         >
           {loading && <Spinner className="size-4" />}
           <Translated i18nKey="request.submit" namespace="device" />
+        </Button>
+        <Button
+          onClick={() =>
+            run(
+              () => denyDeviceAuthorization({ userCode, sessionId, organization }),
+              (response) => router.push(response.redirect ?? "/device"),
+            )
+          }
+          size={ButtonSizes.Large}
+          variant={ButtonVariants.Secondary}
+          data-testid="deny-button"
+        >
+          {loading && <Spinner className="size-4" />}
+          <Translated i18nKey="request.deny" namespace="device" />
         </Button>
       </div>
     </div>

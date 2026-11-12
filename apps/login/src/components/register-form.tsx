@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { registerUser } from "@/lib/server/register";
 import { LegalAndSupportSettings } from "@zitadel/proto/zitadel/settings/v2/legal_settings_pb";
@@ -12,7 +13,7 @@ import { Alert, AlertType } from "./alert";
 import { AuthenticationMethod, AuthenticationMethodRadio, methods } from "./authentication-method-radio";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { PrivacyPolicyCheckboxes } from "./privacy-policy-checkboxes";
 import { Spinner } from "./spinner";
@@ -64,6 +65,7 @@ export function RegisterForm({
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   async function submitAndRegister(values: Inputs) {
     setLoading(true);
@@ -76,7 +78,8 @@ export function RegisterForm({
         requestId: requestId,
       });
 
-      handleServerActionResponse(response, router, setSamlData, setError);
+      // digisat: handoff, or the no-access step for a user without access
+      withCompletionView(response, () => handleServerActionResponse(response, router, setSamlData, setError));
 
       return response;
     } catch {
@@ -116,12 +119,12 @@ export function RegisterForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+      <form className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4">
           <div className="">
             <TextInput
               type="firstname"
-              autoComplete="firstname"
+              autoComplete="given-name"
               autoFocus
               required
               {...register("firstname", { required: t("required.firstname") })}
@@ -133,7 +136,7 @@ export function RegisterForm({
           <div className="">
             <TextInput
               type="lastname"
-              autoComplete="lastname"
+              autoComplete="family-name"
               required
               {...register("lastname", { required: t("required.lastname") })}
               label={t("labels.lastname")}
@@ -184,10 +187,11 @@ export function RegisterForm({
           </div>
         )}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
+        {/* digisat: one full-width primary, then "Geri" as ghost */}
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !canSubmit}
             onClick={handleSubmit((values) => {
@@ -203,6 +207,7 @@ export function RegisterForm({
             {loading && <Spinner className="size-4" />}
             <Translated i18nKey="submit" namespace="register" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

@@ -1,7 +1,7 @@
 import { Alert, AlertType } from "@/components/alert";
-import { Button } from "@/components/button";
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { Translated } from "@/components/translated";
+import { buttonClasses } from "@/digisat/ui/button-styles";
 import { getServiceConfig } from "@/lib/service-url";
 import { getBrandingSettings, getDefaultOrg } from "@/lib/zitadel";
 import { Organization } from "@zitadel/proto/zitadel/org/v2/org_pb";
@@ -41,18 +41,15 @@ export default async function Page(props: { searchParams: Promise<Record<string 
         <p className="ztdl-p">
           <Translated i18nKey="registrationFailed.description" namespace="idp" />
         </p>
-
-        <div className="flex w-full flex-col gap-6">
-          <Alert type={AlertType.ALERT}>
-            <Translated i18nKey="registrationFailed.info" namespace="idp" />
-          </Alert>
-        </div>
-
+      </div>
+      {/* digisat: the message and one full-width primary (a link styled as the button) under the title block */}
+      <div className="flex w-full flex-col gap-4">
+        <Alert type={AlertType.ALERT}>
+          <Translated i18nKey="registrationFailed.info" namespace="idp" />
+        </Alert>
         {postErrorRedirectUrl && (
-          <Link href={postErrorRedirectUrl}>
-            <Button className="w-full">
-              <Translated i18nKey="registrationFailed.backToLogin" namespace="idp" />
-            </Button>
+          <Link href={postErrorRedirectUrl} className={buttonClasses("primary", "lg")}>
+            <Translated i18nKey="registrationFailed.backToLogin" namespace="idp" />
           </Link>
         )}
       </div>

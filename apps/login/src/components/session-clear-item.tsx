@@ -1,14 +1,16 @@
 "use client";
 
+import { Badge, badgeClasses } from "@/digisat/ui/badge";
+import { InitialsAvatar } from "@/digisat/ui/initials-avatar";
+import { sessionRowClasses } from "@/digisat/ui/list-styles";
 import { clearSession } from "@/lib/server/session";
-import { timestampDate } from "@zitadel/client";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
+import { clsx } from "clsx";
 import moment from "moment";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "./alert";
-import { Avatar } from "./avatar";
 import { isSessionPrimaryFactorAndLifetimeValid } from "./session-item";
 import { Translated } from "./translated";
 
@@ -41,67 +43,54 @@ export function SessionClearItem({ session, reload }: { session: Session; reload
     }
   }
 
-  const { valid, verifiedAt } = isSessionPrimaryFactorAndLifetimeValid(session);
+  const { valid } = isSessionPrimaryFactorAndLifetimeValid(session);
 
   const [error, setError] = useState<string | null>(null);
 
   // TODO: To we have to call this?
   useRouter();
 
+  const loginName = session.factors?.user?.loginName ?? "";
+  const name = session.factors?.user?.displayName || loginName;
+
+  // digisat: design system session row (avatar, name, login name); "end session" shows on hover/focus, an ended
+  // session carries a badge instead
   return (
-    <>
+    <div>
       <button
+        type="button"
         onClick={async () => {
           if (await clearSessionId(session.id)) {
             reload();
           }
         }}
-        className="group border-border bg-card hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 flex w-full flex-row items-center gap-3 rounded-md border px-3 py-2.5 text-left shadow-xs transition-colors outline-none focus-visible:ring-[3px]"
+        className={clsx(sessionRowClasses, "group text-left")}
       >
-        <div className="shrink-0">
-          <Avatar
-            size="small"
-            loginName={session.factors?.user?.loginName as string}
-            name={session.factors?.user?.displayName ?? ""}
-          />
+        <InitialsAvatar name={name} muted={!valid} />
+        <div className="min-w-0 flex-1">
+          <b className="block truncate leading-5 font-semibold">{name}</b>
+          {name !== loginName && <span className="text-muted-foreground block truncate text-xs leading-4">{loginName}</span>}
         </div>
-
-        <div className="flex min-w-0 flex-col items-start">
-          <span className="max-w-full truncate text-sm font-medium">{session.factors?.user?.displayName}</span>
-          <span className="text-muted-foreground max-w-full truncate text-xs">{session.factors?.user?.loginName}</span>
-          {valid ? (
-            <span className="text-muted-foreground max-w-full truncate text-xs">
-              {verifiedAt && (
-                <Translated
-                  i18nKey="verifiedAt"
-                  namespace="logout"
-                  data={{ time: moment(timestampDate(verifiedAt)).fromNow() }}
-                />
-              )}
-            </span>
-          ) : (
-            verifiedAt && (
-              <span className="text-muted-foreground max-w-full truncate text-xs">
-                expired {session.expirationDate && moment(timestampDate(session.expirationDate)).fromNow()}
-              </span>
-            )
-          )}
-        </div>
-
-        <span className="flex-grow"></span>
-        <div className="relative flex flex-row items-center">
-          <div className="text-destructive bg-destructive/10 mr-6 hidden items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium transition-all group-hover:block">
+        {valid ? (
+          <span
+            className={clsx(
+              badgeClasses("danger"),
+              "sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100",
+            )}
+          >
             <Translated i18nKey="clear" namespace="logout" />
-          </div>
-
-          {valid ? (
-            <div className="absolute right-0 mx-2 size-2 rounded-full bg-green-500 transition-all"></div>
-          ) : (
-            <div className="bg-destructive absolute right-0 mx-2 size-2 rounded-full transition-all"></div>
-          )}
-        </div>
+          </span>
+        ) : (
+          <Badge>
+            <Translated i18nKey="sessionEnded" namespace="accounts" />
+          </Badge>
+        )}
       </button>
-      {error && <Alert>{error}</Alert>}
-    </>
+      {error && (
+        <div className="px-4 pb-3">
+          <Alert>{error}</Alert>
+        </div>
+      )}
+    </div>
   );
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
+import { CodeInput } from "@/digisat/ui/code-input";
+import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
 import { completeFlowOrGetUrl } from "@/lib/client";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { updateOrCreateSession } from "@/lib/server/session";
@@ -14,8 +17,7 @@ import { useForm } from "react-hook-form";
 import { Alert, AlertType } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
-import { TextInput } from "./input";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
 
@@ -35,6 +37,8 @@ type Inputs = {
   code: string;
 };
 
+const CODE_FIELD_ID = "code";
+
 export function LoginOTP({ host, loginName, sessionId, requestId, organization, method, code, loginSettings }: Props) {
   const t = useTranslations("otp");
 
@@ -43,15 +47,18 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   const initialized = useRef(false);
 
-  const { register, handleSubmit, formState } = useForm<Inputs>({
+  const { register, handleSubmit, formState, watch } = useForm<Inputs>({
     mode: "onChange",
     defaultValues: {
       code: code ? code : "",
     },
   });
+  // digisat: the code boxes draw the current value
+  const codeValue = watch("code");
 
   const updateSessionForOTPChallenge = useCallback(async (): Promise<{
     error?: string;
@@ -201,7 +208,10 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
           );
           setLoading(false);
 
-          handleServerActionResponse(callbackResponse, router, setSamlData, setError);
+          // digisat: handoff, or the no-access step for a user without access
+          withCompletionView(callbackResponse, () =>
+            handleServerActionResponse(callbackResponse, router, setSamlData, setError),
+          );
         } else {
           setLoading(false);
         }
@@ -209,10 +219,21 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
     });
   }
 
+  // The submit button's handler; the TOTP boxes call the same one on the sixth digit.
+  const submitFromButton = handleSubmit(setCodeAndContinue);
+
+  // digisat: auto-submit a complete TOTP code once; not while a check or the redirect is pending
+  function submitCompleteCode() {
+    if (loading) {
+      return;
+    }
+    void submitFromButton();
+  }
+
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
+      <form className="flex w-full flex-col gap-4">
         {["email", "sms"].includes(method) && (
           <Alert type={AlertType.INFO}>
             <div className="flex flex-row items-start justify-between gap-4">
@@ -239,36 +260,47 @@ export function LoginOTP({ host, loginName, sessionId, requestId, organization, 
             </div>
           </Alert>
         )}
-        <div>
-          <TextInput
-            type="text"
-            autoFocus
-            {...register("code", { required: t("verify.required.code") })}
-            label={t("verify.labels.code")}
-            autoComplete="one-time-code"
-            data-testid="code-text-input"
-          />
-        </div>
+        {/* digisat: TOTP as six code boxes that submit on the sixth digit; SMS/e-mail codes (instance-configurable length) as one mono field */}
+        <Field id={CODE_FIELD_ID} label={t("verify.labels.code")} error={error} errorTestId="error">
+          {method === "time-based" ? (
+            <CodeInput
+              id={CODE_FIELD_ID}
+              autoFocus
+              autoComplete="one-time-code"
+              code={codeValue ?? ""}
+              invalid={!!error}
+              aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
+              onComplete={submitCompleteCode}
+              {...register("code", { required: t("verify.required.code") })}
+              data-testid="code-text-input"
+            />
+          ) : (
+            <Input
+              id={CODE_FIELD_ID}
+              type="text"
+              mono
+              autoFocus
+              autoComplete="one-time-code"
+              invalid={!!error}
+              aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
+              {...register("code", { required: t("verify.required.code") })}
+              data-testid="code-text-input"
+            />
+          )}
+        </Field>
 
-        {error && (
-          <div data-testid="error">
-            <Alert>{error}</Alert>
-          </div>
-        )}
-
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
-          <span className="flex-grow"></span>
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
-            className="self-end"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
-            onClick={handleSubmit(setCodeAndContinue)}
+            onClick={submitFromButton}
             data-testid="submit-button"
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="otp" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

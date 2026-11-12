@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { coerceToArrayBuffer, coerceToBase64Url } from "@/helpers/base64";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { sendPasskey } from "@/lib/server/passkeys";
@@ -13,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
 
@@ -34,6 +35,7 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
 
   const t = useTranslations("passkey");
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   const initialized = useRef(false);
 
@@ -120,7 +122,10 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
         requestId,
       });
 
-      const handled = handleServerActionResponse(response, router, setSamlData, setError);
+      // digisat: handoff, or the no-access step for a user without access
+      const handled = withCompletionView(response, () =>
+        handleServerActionResponse(response, router, setSamlData, setError),
+      );
 
       if (!handled) {
         if (!response) {
@@ -193,7 +198,40 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
           <Alert>{error}</Alert>
         </div>
       )}
-      <div className="flex w-full flex-row items-center justify-between gap-3">
+      {/* digisat: one full-width primary first, then "Şifre kullan" (outline) or "Geri" (ghost) */}
+      <div className="flex w-full flex-col gap-2">
+        <Button
+          type="submit"
+          size={ButtonSizes.Large}
+          variant={ButtonVariants.Primary}
+          disabled={loading}
+          onClick={async () => {
+            const response = await updateOrCreateSessionForChallenge().finally(() => {
+              setLoading(false);
+            });
+
+            const pK = response?.challenges?.webAuthN?.publicKeyCredentialRequestOptions?.publicKey;
+
+            if (!pK) {
+              setError(t("verify.errors.couldNotRequestChallenge"));
+              return;
+            }
+
+            setLoading(true);
+
+            return submitLoginAndContinue(pK)
+              .catch((error) => {
+                setError(error instanceof Error ? error.message : String(error));
+                return;
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}
+          data-testid="submit-button"
+        >
+          {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="passkey" />
+        </Button>
         {altPassword ? (
           <Button
             type="button"
@@ -228,40 +266,6 @@ export function LoginPasskey({ loginName, sessionId, requestId, altPassword, org
         ) : (
           <BackButton />
         )}
-
-        <span className="flex-grow"></span>
-        <Button
-          type="submit"
-          className="self-end"
-          variant={ButtonVariants.Primary}
-          disabled={loading}
-          onClick={async () => {
-            const response = await updateOrCreateSessionForChallenge().finally(() => {
-              setLoading(false);
-            });
-
-            const pK = response?.challenges?.webAuthN?.publicKeyCredentialRequestOptions?.publicKey;
-
-            if (!pK) {
-              setError(t("verify.errors.couldNotRequestChallenge"));
-              return;
-            }
-
-            setLoading(true);
-
-            return submitLoginAndContinue(pK)
-              .catch((error) => {
-                setError(error instanceof Error ? error.message : String(error));
-                return;
-              })
-              .finally(() => {
-                setLoading(false);
-              });
-          }}
-          data-testid="submit-button"
-        >
-          {loading && <Spinner className="size-4" />} <Translated i18nKey="verify.submit" namespace="passkey" />
-        </Button>
       </div>
     </div>
   );

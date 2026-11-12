@@ -1,5 +1,8 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
+import { CodeInput } from "@/digisat/ui/code-input";
+import { Field, fieldDescribedBy, fieldLabelClasses } from "@/digisat/ui/field";
 import { completeFlowOrGetUrl } from "@/lib/client";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { verifyTOTP } from "@/lib/server/verify";
@@ -10,13 +13,13 @@ import { useRouter } from "next/navigation";
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { CopyToClipboard } from "./copy-to-clipboard";
-import { TextInput } from "./input";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
+
+const CODE_FIELD_ID = "code";
 
 type Inputs = {
   code: string;
@@ -32,18 +35,30 @@ type Props = {
   checkAfter?: boolean;
   loginSettings?: LoginSettings;
 };
-export function TotpRegister({ uri, loginName, sessionId, requestId, organization, checkAfter, loginSettings }: Props) {
+export function TotpRegister({
+  uri,
+  secret,
+  loginName,
+  sessionId,
+  requestId,
+  organization,
+  checkAfter,
+  loginSettings,
+}: Props) {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
-  const { register, handleSubmit, formState } = useForm<Inputs>({
+  const { register, handleSubmit, formState, watch } = useForm<Inputs>({
     mode: "onChange",
     defaultValues: {
       code: "",
     },
   });
+  // digisat: the code boxes draw the current value
+  const codeValue = watch("code");
 
   const t = useTranslations("otp");
 
@@ -77,7 +92,10 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
               loginSettings?.defaultRedirectUri,
             );
 
-            handleServerActionResponse(callbackResponse, router, setSamlData, setError);
+            // digisat: handoff, or the no-access step for a user without access
+            withCompletionView(callbackResponse, () =>
+              handleServerActionResponse(callbackResponse, router, setSamlData, setError),
+            );
           } else if (loginName) {
             const callbackResponse = await completeFlowOrGetUrl(
               {
@@ -87,7 +105,10 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
               loginSettings?.defaultRedirectUri,
             );
 
-            handleServerActionResponse(callbackResponse, router, setSamlData, setError);
+            // digisat: handoff, or the no-access step for a user without access
+            withCompletionView(callbackResponse, () =>
+              handleServerActionResponse(callbackResponse, router, setSamlData, setError),
+            );
           }
         }
       })
@@ -100,48 +121,61 @@ export function TotpRegister({ uri, loginName, sessionId, requestId, organizatio
       });
   }
 
+  // The submit button's handler; the code boxes call the same one on the sixth digit.
+  const submitFromButton = handleSubmit(continueWithCode);
+
+  // digisat: auto-submit a complete code once; not while a check or the redirect is pending
+  function submitCompleteCode() {
+    if (loading) {
+      return;
+    }
+    void submitFromButton();
+  }
+
+  // digisat: step card layout: QR, the secret in mono (a link to the otpauth URI) with copy, six code boxes, one full-width primary
   return (
-    <div className="flex w-full flex-col items-center gap-5">
+    <div className="flex w-full flex-col items-center gap-4">
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
       {uri && (
         <>
-          <QRCodeSVG className="border-border size-44 rounded-md border bg-white p-2" value={uri} />
-          <div className="border-border bg-muted/40 flex w-full min-w-0 items-center gap-2 rounded-md border py-1 pr-1 pl-3 text-xs">
-            <Link
-              href={uri}
-              target="_blank"
-              className="text-muted-foreground hover:text-foreground min-w-0 flex-1 truncate font-mono"
-            >
-              {uri}
-            </Link>
-
-            <CopyToClipboard value={uri}></CopyToClipboard>
+          {/* The QR stays black on white in both themes so authenticator apps can read it. */}
+          <QRCodeSVG className="border-border size-44 rounded-lg border bg-white p-2" value={uri} />
+          <div className="flex w-full flex-col gap-1.5">
+            <span className={fieldLabelClasses}>{t("set.secret")}</span>
+            <div className="border-input bg-card flex h-9 w-full min-w-0 items-center gap-2 rounded-sm border pr-0.5 pl-3">
+              <Link
+                href={uri}
+                target="_blank"
+                className="text-foreground min-w-0 flex-1 truncate font-mono text-sm tracking-wide underline-offset-4 hover:underline"
+                data-testid="totp-secret"
+              >
+                {secret || uri}
+              </Link>
+              <CopyToClipboard value={secret || uri}></CopyToClipboard>
+            </div>
           </div>
-          <form className="flex w-full flex-col gap-6">
-            <div className="">
-              <TextInput
-                type="text"
+          <form className="flex w-full flex-col gap-4">
+            <Field id={CODE_FIELD_ID} label={t("set.labels.code")} error={error} errorTestId="error">
+              <CodeInput
+                id={CODE_FIELD_ID}
                 autoFocus
+                autoComplete="one-time-code"
+                code={codeValue ?? ""}
+                invalid={!!error}
+                aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
+                onComplete={submitCompleteCode}
                 {...register("code", { required: t("set.required.code") })}
-                label={t("set.labels.code")}
                 data-testid="code-text-input"
               />
-            </div>
+            </Field>
 
-            {error && (
-              <div>
-                <Alert>{error}</Alert>
-              </div>
-            )}
-
-            <div className="flex w-full flex-row items-center justify-between gap-3">
-              <span className="flex-grow"></span>
+            <div className="flex w-full flex-col">
               <Button
                 type="submit"
-                className="self-end"
+                size={ButtonSizes.Large}
                 variant={ButtonVariants.Primary}
                 disabled={loading || !formState.isValid}
-                onClick={handleSubmit(continueWithCode)}
+                onClick={submitFromButton}
                 data-testid="submit-button"
               >
                 {loading && <Spinner className="size-4" />}

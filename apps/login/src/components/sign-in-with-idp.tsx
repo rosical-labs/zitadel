@@ -1,5 +1,6 @@
 "use client";
 
+import { Divider } from "@/digisat/ui/divider";
 import { idpTypeToSlug } from "@/lib/idp";
 import { redirectToIdp } from "@/lib/server/idp";
 import { IdentityProvider, IdentityProviderType } from "@zitadel/proto/zitadel/settings/v2/login_settings_pb";
@@ -76,10 +77,11 @@ export function SignInWithIdp({
   return (
     <div className="flex w-full flex-col gap-3 text-sm">
       {state?.samlData && <AutoSubmitForm url={state.samlData.url} fields={state.samlData.fields} />}
+      {/* digisat: the design system divider reads just "veya" */}
       {showLabel && (
-        <p className="ztdl-separator">
-          <Translated i18nKey="orSignInWith" namespace="idp" />
-        </p>
+        <Divider>
+          <Translated i18nKey="or" namespace="digisat" />
+        </Divider>
       )}
       {!!identityProviders?.length && identityProviders?.map(renderIDPButton)}
       {state?.error && (

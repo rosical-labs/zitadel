@@ -1,5 +1,7 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
+import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
 import { lowerCaseValidator, numberValidator, symbolValidator, upperCaseValidator } from "@/helpers/validators";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { changePassword, resetPassword, sendPassword } from "@/lib/server/password";
@@ -13,7 +15,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { Alert, AlertType } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { PasswordComplexity } from "./password-complexity";
 import { Spinner } from "./spinner";
@@ -26,6 +28,8 @@ type Inputs =
       confirmPassword: string;
     }
   | FieldValues;
+
+const CODE_FIELD_ID = "code";
 
 type Props = {
   code?: string;
@@ -62,6 +66,7 @@ export function SetPasswordForm({
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   async function resendCode() {
     setError("");
@@ -144,12 +149,16 @@ export function SetPasswordForm({
     });
 
     setLoading(false);
-    handleServerActionResponse(passwordResponse as any, router, setSamlData, setError);
+    // digisat: handoff, or the no-access step for a user without access
+    withCompletionView(passwordResponse, () =>
+      handleServerActionResponse(passwordResponse as any, router, setSamlData, setError),
+    );
 
     return;
   }
 
   const { errors } = formState;
+  const codeError = errors.code?.message as string | undefined;
 
   const watchPassword = watch("password", "");
   const watchConfirmPassword = watch("confirmPassword", "");
@@ -171,8 +180,9 @@ export function SetPasswordForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
-        <div className="grid grid-cols-1 gap-5">
+      {/* digisat: step card layout: fields, the rules as help text, one full-width primary, "Geri" as ghost */}
+      <form className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <input
             type="text"
             name="username"
@@ -204,21 +214,24 @@ export function SetPasswordForm({
               </div>
             </Alert>
           )}
+          {/* digisat: the code (instance-configurable length) as one mono field */}
           {codeRequired && (
-            <div>
-              <TextInput
+            <Field id={CODE_FIELD_ID} label={t("set.labels.code")} error={codeError}>
+              <Input
+                id={CODE_FIELD_ID}
                 type="text"
+                mono
                 autoFocus
                 required
+                invalid={!!codeError}
+                aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error: codeError })}
                 {...register("code", {
                   required: t("set.required.code"),
                 })}
-                label={t("set.labels.code")}
                 autoComplete="one-time-code"
-                error={errors.code?.message as string}
                 data-testid="code-text-input"
               />
-            </div>
+            </Field>
           )}
           <div>
             <TextInput
@@ -259,10 +272,10 @@ export function SetPasswordForm({
 
         {error && <Alert>{error}</Alert>}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !policyIsValid || !formState.isValid || watchPassword !== watchConfirmPassword}
             onClick={handleSubmit(submitPassword)}
@@ -270,6 +283,7 @@ export function SetPasswordForm({
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="password" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>
