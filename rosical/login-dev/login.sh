@@ -52,6 +52,7 @@ case "${1:-}" in
     ;;
   start)
     key="$(container_env "$LOGIN_CONTAINER" SYSTEM_USER_PRIVATE_KEY)"
+    user_id="$(container_env "$LOGIN_CONTAINER" SYSTEM_USER_ID)"
     product_clients=""
     if [ -f "$SEED_OUT" ]; then
       product_clients="$(seed_value DIGISAT_PRODUCT_CLIENTS)"
@@ -61,7 +62,7 @@ case "${1:-}" in
     standalone="$REPO/apps/login/.next/standalone/apps/login"
     [ -f "$standalone/server.js" ] || die "no build at $standalone; run '$0 build' first."
     (cd "$standalone" && \
-      SYSTEM_USER_PRIVATE_KEY="$key" SYSTEM_USER_ID=rosical-login AUDIENCE=http://localhost:8082 \
+      SYSTEM_USER_PRIVATE_KEY="$key" SYSTEM_USER_ID="$user_id" AUDIENCE=http://localhost:8082 \
       ZITADEL_API_URL=http://localhost:8082 CUSTOM_REQUEST_HEADERS=X-Forwarded-Proto:http \
       DIGISAT_PRODUCT_CLIENTS="$product_clients" \
       PORT=3100 HOSTNAME=127.0.0.1 nohup node server.js >"$LOGS/login.log" 2>&1 &)
