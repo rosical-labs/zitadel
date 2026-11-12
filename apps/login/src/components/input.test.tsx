@@ -31,9 +31,11 @@ describe("TextInput Component", () => {
       expect(input?.defaultValue).toBe("John Doe");
     });
 
-    it("should show required indicator when required", () => {
-      render(<TextInput label="Required Field" required />);
-      expect(screen.getByText(/\*/)).toBeTruthy();
+    // digisat: the design system shows no asterisk; the field stays required for the browser and assistive tech
+    it("should mark the input required without an asterisk", () => {
+      const { container } = render(<TextInput label="Required Field" required />);
+      expect(screen.queryByText(/\*/)).toBeNull();
+      expect(container.querySelector("input")?.required).toBe(true);
     });
   });
 
@@ -185,10 +187,12 @@ describe("TextInput Component", () => {
       expect(input).toBeTruthy();
     });
 
-    it("should show required indicator", () => {
+    // digisat: no asterisk in the label; `required` stays on the input
+    it("should keep the label free of a required indicator", () => {
       const { container } = render(<TextInput label="UniqueRequiredField" required />);
       const label = container.querySelector("label");
-      expect(label?.textContent).toContain("*");
+      expect(label?.textContent).toBe("UniqueRequiredField");
+      expect(container.querySelector("input")?.required).toBe(true);
     });
   });
 });

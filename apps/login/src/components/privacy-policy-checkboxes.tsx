@@ -1,7 +1,7 @@
 "use client";
 import { resolveLocalizedLegalLink } from "@/lib/legal-links";
 import { LegalAndSupportSettings } from "@zitadel/proto/zitadel/settings/v2/legal_settings_pb";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { Checkbox } from "./checkbox";
@@ -19,6 +19,7 @@ type AcceptanceState = {
 
 export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
   const locale = useLocale();
+  const t = useTranslations("register");
   const tosLabelId = useId();
   const privacyLabelId = useId();
   const [acceptanceState, setAcceptanceState] = useState<AcceptanceState>({
@@ -47,7 +48,7 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
             <Link
               href={helpLink}
               target="_blank"
-              aria-label="Open help in a new tab"
+              aria-label={t("openHelp")} // digisat: via i18n
               data-testid="help-link"
               className="hover:text-foreground focus-visible:ring-ring/50 flex rounded-full transition-colors outline-none focus-visible:ring-[3px]"
             >

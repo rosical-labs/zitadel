@@ -2,6 +2,7 @@
 
 import { useCompletionView } from "@/digisat/step-override";
 import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
+import { ResendCode } from "@/digisat/ui/resend-code";
 import { lowerCaseValidator, numberValidator, symbolValidator, upperCaseValidator } from "@/helpers/validators";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { changePassword, resetPassword, sendPassword } from "@/lib/server/password";
@@ -12,7 +13,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Alert, AlertType } from "./alert";
+import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
 import { Button, ButtonSizes, ButtonVariants } from "./button";
@@ -193,45 +194,35 @@ export function SetPasswordForm({
             aria-hidden="true"
             className="sr-only"
           />
+          {/* digisat: the code (instance-configurable length) as one mono field, the resend action as a line under it */}
           {codeRequired && (
-            <Alert type={AlertType.INFO}>
-              <div className="flex flex-row items-start justify-between gap-4">
-                <span className="text-left">
-                  <Translated i18nKey="set.noCodeReceived" namespace="password" />
-                </span>
-                <button
-                  aria-label={t("set.resend")}
-                  disabled={loading}
-                  type="button"
-                  className="ztdl-link shrink-0"
-                  onClick={() => {
-                    resendCode();
-                  }}
-                  data-testid="resend-button"
-                >
-                  <Translated i18nKey="set.resend" namespace="password" />
-                </button>
-              </div>
-            </Alert>
-          )}
-          {/* digisat: the code (instance-configurable length) as one mono field */}
-          {codeRequired && (
-            <Field id={CODE_FIELD_ID} label={t("set.labels.code")} error={codeError}>
-              <Input
-                id={CODE_FIELD_ID}
-                type="text"
-                mono
-                autoFocus
-                required
-                invalid={!!codeError}
-                aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error: codeError })}
-                {...register("code", {
-                  required: t("set.required.code"),
-                })}
-                autoComplete="one-time-code"
-                data-testid="code-text-input"
+            <div className="flex flex-col gap-1.5">
+              <Field id={CODE_FIELD_ID} label={t("set.labels.code")} error={codeError}>
+                <Input
+                  id={CODE_FIELD_ID}
+                  type="text"
+                  mono
+                  autoFocus
+                  required
+                  invalid={!!codeError}
+                  aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error: codeError })}
+                  {...register("code", {
+                    required: t("set.required.code"),
+                  })}
+                  autoComplete="one-time-code"
+                  data-testid="code-text-input"
+                />
+              </Field>
+              <ResendCode
+                prompt={t("set.noCodeReceived")}
+                label={t("set.resend")}
+                disabled={loading}
+                onClick={() => {
+                  resendCode();
+                }}
+                data-testid="resend-button"
               />
-            </Field>
+            </div>
           )}
           <div>
             <TextInput
@@ -281,7 +272,9 @@ export function SetPasswordForm({
             onClick={handleSubmit(submitPassword)}
             data-testid="submit-button"
           >
-            {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="password" />
+            {loading && <Spinner className="size-4" />}{" "}
+            {/* digisat: a reset changes the password, a first-time set saves it */}
+            <Translated i18nKey={codeRequired ? "set.resetSubmit" : "set.submit"} namespace="password" />
           </Button>
           <BackButton data-testid="back-button" />
         </div>

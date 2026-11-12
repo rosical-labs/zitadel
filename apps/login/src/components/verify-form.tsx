@@ -1,8 +1,8 @@
 "use client";
 
-import { Alert, AlertType } from "@/components/alert";
 import { useCompletionView } from "@/digisat/step-override";
 import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
+import { ResendCode } from "@/digisat/ui/resend-code";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { UNKNOWN_USER_ID } from "@/lib/constants";
 import { resendVerification, sendVerification } from "@/lib/server/verify";
@@ -37,7 +37,6 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
   const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const codeSent = searchParams.get("codeSent") === "true";
 
   const { register, handleSubmit, formState } = useForm<Inputs>({
     mode: "onChange",
@@ -82,7 +81,7 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
       return;
     }
 
-    // Signal success via URL search param so the "code sent" alert is shown
+    // Signal success via URL search param so the page shows the "code sent" description
     const params = new URLSearchParams(searchParams.toString());
     params.set("codeSent", "true");
     router.replace(`${pathname}?${params.toString()}`);
@@ -129,47 +128,33 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      {codeSent && (
-        <div className="w-full py-4">
-          <Alert type={AlertType.INFO}>
-            <Translated i18nKey="verify.codeSent" namespace="verify" />
-          </Alert>
-        </div>
-      )}
-      {/* digisat: step card layout: the mono code field (error under it), one full-width primary, "Geri" as ghost */}
+      {/* digisat: step card layout: the mono code field (error under it), the resend action as a line under it,
+          one full-width primary, "Geri" as ghost; "code sent" is the page description */}
       <form className="flex w-full flex-col gap-4">
-        <Alert type={AlertType.INFO}>
-          <div className="flex flex-row items-start justify-between gap-4">
-            <span className="text-left">
-              <Translated i18nKey="verify.noCodeReceived" namespace="verify" />
-            </span>
-            <button
-              aria-label="Resend Code"
-              disabled={loading}
-              type="button"
-              className="ztdl-link shrink-0"
-              onClick={() => {
-                resendCode();
-              }}
-              data-testid="resend-button"
-            >
-              <Translated i18nKey="verify.resendCode" namespace="verify" />
-            </button>
-          </div>
-        </Alert>
-        <Field id={CODE_FIELD_ID} label={t("verify.labels.code")} error={error} errorTestId="error">
-          <Input
-            id={CODE_FIELD_ID}
-            type="text"
-            mono
-            autoComplete="one-time-code"
-            autoFocus
-            invalid={!!error}
-            aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
-            {...register("code", { required: t("verify.required.code") })}
-            data-testid="code-text-input"
+        <div className="flex flex-col gap-1.5">
+          <Field id={CODE_FIELD_ID} label={t("verify.labels.code")} error={error} errorTestId="error">
+            <Input
+              id={CODE_FIELD_ID}
+              type="text"
+              mono
+              autoComplete="one-time-code"
+              autoFocus
+              invalid={!!error}
+              aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
+              {...register("code", { required: t("verify.required.code") })}
+              data-testid="code-text-input"
+            />
+          </Field>
+          <ResendCode
+            prompt={t("verify.noCodeReceived")}
+            label={t("verify.resendCode")}
+            disabled={loading}
+            onClick={() => {
+              resendCode();
+            }}
+            data-testid="resend-button"
           />
-        </Field>
+        </div>
 
         <div className="flex w-full flex-col gap-2">
           <Button

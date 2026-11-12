@@ -14,8 +14,8 @@ const uppercaseCheck = "uppercase-check";
 const lowercaseCheck = "lowercase-check";
 const equalCheck = "equal-check";
 
-const matchText = "Matches";
-const noMatchText = "Doesn't match";
+const matchText = "Requirement met";
+const noMatchText = "Requirement not met";
 
 export async function changePasswordScreen(page: Page, password1: string, password2: string) {
   await page.getByTestId(passwordChangeField).pressSequentially(password1);
@@ -28,7 +28,7 @@ export async function passwordScreen(page: Page, password: string) {
 
 export async function passwordScreenExpect(page: Page, password: string) {
   await expect(page.getByTestId(passwordField)).toHaveValue(password);
-  await expect(page.getByTestId("error").locator("div")).toContainText("Failed to authenticate.");
+  await expect(page.getByTestId("error").locator("div")).toContainText("The password isn't correct.");
 }
 
 export async function changePasswordScreenExpect(

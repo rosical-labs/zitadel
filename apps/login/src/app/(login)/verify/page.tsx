@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page(props: { searchParams: Promise<any> }) {
   const searchParams = await props.searchParams;
 
-  const { userId, loginName, code, organization, requestId, invite } = searchParams;
+  const { userId, loginName, code, organization, requestId, invite, codeSent } = searchParams;
 
   const _headers = await headers();
   const { serviceConfig } = getServiceConfig(_headers);
@@ -109,8 +109,9 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         <h1>
           <Translated i18nKey="verify.title" namespace="verify" />
         </h1>
+        {/* digisat: once a code was sent, the description says so instead of a separate alert */}
         <p className="ztdl-p">
-          <Translated i18nKey="verify.description" namespace="verify" />
+          <Translated i18nKey={codeSent === "true" ? "verify.codeSent" : "verify.description"} namespace="verify" />
         </p>
 
         {sessionFactors ? (

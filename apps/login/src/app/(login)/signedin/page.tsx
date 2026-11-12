@@ -64,7 +64,8 @@ export default async function Page(props: { searchParams: Promise<any> }) {
       <div className="flex w-full flex-col gap-6">
         {requestId && requestId.startsWith("device_") && (
           <Alert type={AlertType.INFO}>
-            You can now close this window and return to the device where you started the authorization process to continue.
+            {/* digisat: via i18n */}
+            <Translated i18nKey="deviceDone" namespace="signedin" />
           </Alert>
         )}
 

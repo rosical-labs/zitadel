@@ -22,7 +22,10 @@ export function AuthenticationMethodRadio({
     <div className="w-full">
       <div className="w-full">
         <RadioGroup value={selected} onChange={selectionChanged}>
-          <Label className="sr-only">Server size</Label>
+          {/* digisat: the group's name via i18n (was an unrelated placeholder) */}
+          <Label className="sr-only">
+            <Translated i18nKey="selectMethod" namespace="register" />
+          </Label>
           <div className="grid grid-cols-2 gap-3">
             {methods.map((method) => (
               <Radio

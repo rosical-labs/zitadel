@@ -60,8 +60,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
     return (
       <div className="text-foreground relative flex flex-col gap-1.5 text-sm">
+        {/* digisat: no required asterisk (the design system shows none); the input keeps `required` */}
         <label htmlFor={id} className={clsx(fieldLabelClasses, error && "text-destructive")}>
-          {label} {required && "*"}
+          {label}
         </label>
         <span className="relative flex" style={suffixWidthStyle(suffix)}>
           <input
