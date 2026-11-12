@@ -5,3 +5,13 @@
   --font-display: var(--font-gabarito), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
 }
+
+/* Handoff progress bar (ui/handoff.tsx): a 60% bar that sweeps the track; static under prefers-reduced-motion. */
+@keyframes digisat-handoff-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(167%);
+  }
+}

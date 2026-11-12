@@ -211,7 +211,8 @@ describe("loginWithOIDCAndSession", () => {
       sessionCookies: mockCookies,
     });
 
-    expect(result).toEqual({ error: expectedKey });
+    // digisat: the access-denied result is marked for the no-access step
+    expect(result).toEqual({ error: expectedKey, accessDenied: true });
   });
 
   it("should return unknown error for other permission denied errors", async () => {

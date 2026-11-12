@@ -1,16 +1,17 @@
 "use client";
 
-import { Alert } from "@/components/alert";
+import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
 import { getDeviceAuthorizationRequest } from "@/lib/server/oidc";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
-import { TextInput } from "./input";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
+
+const CODE_FIELD_ID = "userCode";
 
 type Inputs = {
   userCode: string;
@@ -60,30 +61,29 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
 
   return (
     <>
-      <form className="flex w-full flex-col gap-6">
-        <div>
-          <TextInput
+      <form className="flex w-full flex-col gap-4">
+        {/* digisat: the user code as one mono field, its error under it */}
+        <Field id={CODE_FIELD_ID} label={t("usercode.labels.code")} error={error} errorTestId="error">
+          <Input
+            id={CODE_FIELD_ID}
             type="text"
+            mono
             autoComplete="one-time-code"
+            autoCapitalize="characters"
+            spellCheck={false}
             autoFocus
+            invalid={!!error}
+            aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
             {...register("userCode", { required: t("usercode.required.code") })}
-            label={t("usercode.labels.code")}
             data-testid="code-text-input"
           />
-        </div>
+        </Field>
 
-        {error && (
-          <div data-testid="error">
-            <Alert>{error}</Alert>
-          </div>
-        )}
-
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton />
-          <span className="flex-grow"></span>
+        {/* digisat: one full-width primary, then "Geri" as ghost */}
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
-            className="self-end"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit(submitCodeAndContinue)}
@@ -91,6 +91,7 @@ export function DeviceCodeForm({ userCode }: { userCode?: string }) {
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="usercode.submit" namespace="device" />
           </Button>
+          <BackButton />
         </div>
       </form>
     </>

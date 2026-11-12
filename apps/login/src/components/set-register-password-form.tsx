@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { lowerCaseValidator, numberValidator, symbolValidator, upperCaseValidator } from "@/helpers/validators";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { registerUser } from "@/lib/server/register";
@@ -11,7 +12,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { PasswordComplexity } from "./password-complexity";
 import { Spinner } from "./spinner";
@@ -57,6 +58,7 @@ export function SetRegisterPasswordForm({
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   async function submitRegister(values: Inputs) {
     setLoading(true);
@@ -70,7 +72,8 @@ export function SetRegisterPasswordForm({
         password: values.password,
       });
 
-      handleServerActionResponse(response, router, setSamlData, setError);
+      // digisat: handoff, or the no-access step for a user without access
+      withCompletionView(response, () => handleServerActionResponse(response, router, setSamlData, setError));
     } catch {
       setError(t("errors.couldNotRegisterUser"));
     } finally {
@@ -100,8 +103,8 @@ export function SetRegisterPasswordForm({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
-        <div className="grid grid-cols-1 gap-5">
+      <form className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <input
             type="text"
             name="username"
@@ -151,10 +154,11 @@ export function SetRegisterPasswordForm({
 
         {error && <Alert>{error}</Alert>}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
+        {/* digisat: one full-width primary, then "Geri" as ghost */}
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !policyIsValid || !formState.isValid || watchPassword !== watchConfirmPassword}
             onClick={handleSubmit(submitRegister)}
@@ -162,6 +166,7 @@ export function SetRegisterPasswordForm({
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="password.submit" namespace="register" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

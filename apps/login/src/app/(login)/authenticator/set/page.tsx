@@ -5,6 +5,7 @@ import { DynamicTheme } from "@/components/dynamic-theme";
 import { SignInWithIdp } from "@/components/sign-in-with-idp";
 import { Translated } from "@/components/translated";
 import { UserAvatar } from "@/components/user-avatar";
+import { Divider } from "@/digisat/ui/divider";
 import { getSessionCookieById } from "@/lib/cookies";
 import { getServiceConfig } from "@/lib/service-url";
 import { loadMostRecentSession } from "@/lib/session";
@@ -175,11 +176,10 @@ export default async function Page(props: { searchParams: Promise<Record<string 
 
         {loginSettings?.allowExternalIdp && !!identityProviders.length && (
           <>
-            <div className="flex flex-col">
-              <p className="ztdl-separator">
-                <Translated i18nKey="linkWithIDP" namespace="authenticator" />
-              </p>
-            </div>
+            {/* digisat: the design system divider */}
+            <Divider>
+              <Translated i18nKey="linkWithIDP" namespace="authenticator" />
+            </Divider>
 
             <SignInWithIdp
               showLabel={false}
@@ -192,9 +192,9 @@ export default async function Page(props: { searchParams: Promise<Record<string 
           </>
         )}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
+        {/* digisat: "Geri" as a full-width ghost under the method rows */}
+        <div className="flex w-full flex-col">
           <BackButton />
-          <span className="flex-grow"></span>
         </div>
       </div>
     </DynamicTheme>

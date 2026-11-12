@@ -36,7 +36,8 @@ describe("LoginOTP", () => {
   });
 
   test("should display translated fallback error when OTP verification request rejects", async () => {
-    mockUpdateOrCreateSession.mockRejectedValueOnce(new Error("network down"));
+    // digisat: rejects every call, because the sixth digit already submits once before the click
+    mockUpdateOrCreateSession.mockRejectedValue(new Error("network down"));
 
     render(<LoginOTP host={null} method="time-based" />);
 
@@ -53,6 +54,47 @@ describe("LoginOTP", () => {
     await waitFor(() => {
       expect(screen.getByText("errors.couldNotVerifyCode")).toBeInTheDocument();
     });
+    await waitFor(() => {
+      expect(mockUpdateOrCreateSession).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  test("submits a TOTP code once when the sixth digit is entered, without clicking the button", async () => {
+    mockUpdateOrCreateSession.mockResolvedValue({ error: "invalid code" });
+
+    render(<LoginOTP host={null} method="time-based" loginName="user@example.com" />);
+
+    const input = screen.getByTestId("code-text-input");
+    fireEvent.change(input, { target: { value: "12345" } });
+    expect(mockUpdateOrCreateSession).not.toHaveBeenCalled();
+
+    // A pasted code with a space still fills all six boxes.
+    fireEvent.change(input, { target: { value: "123 456" } });
+
+    await waitFor(() => {
+      expect(mockUpdateOrCreateSession).toHaveBeenCalledTimes(1);
+    });
+    expect(mockUpdateOrCreateSession.mock.calls[0][0].checks.totp.code).toBe("123456");
+    await waitFor(() => {
+      expect(screen.getByText("invalid code")).toBeInTheDocument();
+    });
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  test("does not auto-submit SMS codes, whose length is instance-configurable", async () => {
+    mockUpdateOrCreateSession.mockResolvedValue({});
+
+    render(<LoginOTP host={null} method="sms" loginName="user@example.com" />);
+
+    // The SMS challenge request on mount is the only call.
+    await waitFor(() => {
+      expect(mockUpdateOrCreateSession).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.change(screen.getByTestId("code-text-input"), { target: { value: "12345678" } });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(mockUpdateOrCreateSession).toHaveBeenCalledTimes(1);
   });
 
   test("should display translated fallback error when OTP challenge request rejects", async () => {

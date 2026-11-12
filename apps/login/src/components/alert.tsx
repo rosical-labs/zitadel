@@ -1,4 +1,3 @@
-import { getComponentRoundness } from "@/lib/theme";
 import { ExclamationTriangleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
 import { ReactNode } from "react";
@@ -13,16 +12,18 @@ export enum AlertType {
   INFO,
 }
 
-// shadcn "destructive" and "default" alert variants.
-const alert = "border-destructive/30 bg-destructive/10 text-destructive";
-const neutral = "border-border bg-muted/40 text-card-foreground [&>svg]:text-muted-foreground";
+// digisat: design system Banner (danger / info surfaces, icon in the status colour) for form-level messages.
+const alert = "bg-danger-surface text-foreground [&>svg]:text-destructive";
+const neutral = "bg-info-surface text-foreground [&>svg]:text-info";
 
 export function Alert({ children, type = AlertType.ALERT }: Props) {
   return (
     <div
+      // digisat: announce errors at once and info politely (design system: errors are announced)
+      role={type === AlertType.ALERT ? "alert" : "status"}
       className={clsx(
-        "flex w-full flex-row items-start gap-2.5 border px-4 py-3 text-left text-sm leading-normal",
-        getComponentRoundness("card"),
+        // digisat: design system Banner metrics (12px 16px, 500 14px/20px, radius)
+        "flex w-full flex-row items-start gap-3 rounded-lg px-4 py-3 text-left text-sm leading-5 font-medium",
         {
           [alert]: type === AlertType.ALERT,
           [neutral]: type === AlertType.INFO,

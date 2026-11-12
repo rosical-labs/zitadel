@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { lowerCaseValidator, numberValidator, symbolValidator, upperCaseValidator } from "@/helpers/validators";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { checkSessionAndSetPassword, sendPassword } from "@/lib/server/password";
@@ -13,7 +14,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { PasswordComplexity } from "./password-complexity";
 import { Spinner } from "./spinner";
@@ -37,6 +38,7 @@ type Props = {
 
 export function ChangePasswordForm({ passwordComplexitySettings, sessionId, loginName, requestId, organization }: Props) {
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   const { register, handleSubmit, watch, formState } = useForm<Inputs>({
     mode: "onChange",
@@ -96,7 +98,10 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
         setLoading(false);
       });
 
-    handleServerActionResponse(passwordResponse as any, router, setSamlData, setError);
+    // digisat: handoff, or the no-access step for a user without access
+    withCompletionView(passwordResponse, () =>
+      handleServerActionResponse(passwordResponse as any, router, setSamlData, setError),
+    );
 
     return;
   }
@@ -123,8 +128,9 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
-        <div className="grid grid-cols-1 gap-5">
+      {/* digisat: step card layout: fields, the rules as help text, one full-width primary, "Geri" as ghost */}
+      <form className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <input
             type="text"
             name="username"
@@ -187,10 +193,10 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
 
         {error && <Alert>{error}</Alert>}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !policyIsValid || !formState.isValid || watchPassword !== watchConfirmPassword}
             onClick={handleSubmit(submitChange)}
@@ -198,6 +204,7 @@ export function ChangePasswordForm({ passwordComplexitySettings, sessionId, logi
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="change.submit" namespace="password" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

@@ -9,7 +9,9 @@
     "addAnother": "Add another account",
     "noResults": "No accounts found",
     "verified": "verified",
-    "expired": "expired"
+    "expired": "expired",
+    "sessionEnded": "Session expired",
+    "remove": "Remove {name} from this browser"
   },
   "logout": {
     "title": "Logout",
@@ -261,7 +263,8 @@
       },
       "required": {
         "code": "This field is required"
-      }
+      },
+      "secret": "Setup key"
     },
     "errors": {
       "couldNotRequestChallenge": "Could not request OTP challenge",
@@ -497,6 +500,28 @@
     },
     "footer": {
       "copyright": "© digisat"
+    },
+    "context": {
+      "continueTo": "Sign in to continue to <product>{name}</product>"
+    },
+    "account": {
+      "change": "Change"
+    },
+    "or": "or",
+    "copy": {
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "handoff": {
+      "title": "Redirecting you",
+      "opening": "Opening {name}…"
+    },
+    "noAccess": {
+      "title": "You don't have access to this app",
+      "product": "Your account isn't authorized for {name}. Ask your administrator for access.",
+      "generic": "Your account isn't authorized for this app. Ask your administrator for access.",
+      "hub": "Go to digisat",
+      "signOut": "Sign out"
     }
   }
 }

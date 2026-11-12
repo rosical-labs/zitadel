@@ -179,9 +179,9 @@ export default async function Page(props: { searchParams: Promise<Record<string 
             ></ChooseSecondFactorToSetup>
           )}
 
-          <div className="flex w-full flex-row items-center justify-between gap-3">
+          {/* digisat: "Geri" as a full-width ghost under the method rows */}
+          <div className="flex w-full flex-col">
             <BackButton />
-            <span className="flex-grow"></span>
           </div>
         </div>
       </div>

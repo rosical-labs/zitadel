@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import { Badge, BadgeVariant } from "@/digisat/ui/badge";
 import { ReactNode } from "react";
 
 export enum BadgeState {
@@ -14,20 +14,14 @@ export type StateBadgeProps = {
   evenPadding?: boolean;
 };
 
-const getBadgeClasses = (state: BadgeState, evenPadding: boolean) =>
-  clsx({
-    "inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium": true,
-    "bg-state-success-light-background text-state-success-light-color dark:bg-state-success-dark-background dark:text-state-success-dark-color ":
-      state === BadgeState.Success,
-    "bg-state-neutral-light-background text-state-neutral-light-color dark:bg-state-neutral-dark-background dark:text-state-neutral-dark-color":
-      state === BadgeState.Info,
-    "bg-state-error-light-background text-state-error-light-color dark:bg-state-error-dark-background dark:text-state-error-dark-color":
-      state === BadgeState.Error,
-    "bg-state-alert-light-background text-state-alert-light-color dark:bg-state-alert-dark-background dark:text-state-alert-dark-color":
-      state === BadgeState.Alert,
-    "p-[2px]": evenPadding,
-  });
+// digisat: the state badge is the design system Badge; the legacy state-* colours and even padding are gone.
+const VARIANT_BY_STATE: Record<BadgeState, BadgeVariant> = {
+  [BadgeState.Success]: "success",
+  [BadgeState.Info]: "default",
+  [BadgeState.Error]: "danger",
+  [BadgeState.Alert]: "warning",
+};
 
-export function StateBadge({ state = BadgeState.Success, evenPadding = false, children }: StateBadgeProps) {
-  return <span className={`${getBadgeClasses(state, evenPadding)}`}>{children}</span>;
+export function StateBadge({ state = BadgeState.Success, children }: StateBadgeProps) {
+  return <Badge variant={VARIANT_BY_STATE[state]}>{children}</Badge>;
 }

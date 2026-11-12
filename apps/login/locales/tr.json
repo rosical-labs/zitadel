@@ -9,7 +9,9 @@
     "addAnother": "Başka hesap ekle",
     "noResults": "Hesap bulunamadı",
     "verified": "doğrulandı",
-    "expired": "süresi doldu"
+    "expired": "süresi doldu",
+    "sessionEnded": "Oturum sona erdi",
+    "remove": "{name} hesabını bu tarayıcıdan kaldır"
   },
   "logout": {
     "title": "Çıkış",
@@ -261,7 +263,8 @@
       },
       "required": {
         "code": "Bu alan zorunludur"
-      }
+      },
+      "secret": "Kurulum anahtarı"
     },
     "errors": {
       "couldNotRequestChallenge": "OTP meydan okuması istenemedi",
@@ -496,6 +499,28 @@
     },
     "footer": {
       "copyright": "© digisat"
+    },
+    "context": {
+      "continueTo": "<product>{name}</product> uygulamasına devam etmek için giriş yapın"
+    },
+    "account": {
+      "change": "Değiştir"
+    },
+    "or": "veya",
+    "copy": {
+      "copy": "Kopyala",
+      "copied": "Kopyalandı"
+    },
+    "handoff": {
+      "title": "Yönlendiriliyorsunuz",
+      "opening": "{name} açılıyor…"
+    },
+    "noAccess": {
+      "title": "Bu uygulamaya erişiminiz yok",
+      "product": "Hesabınız {name} için yetkili değil. Yöneticinizden erişim isteyin.",
+      "generic": "Hesabınız bu uygulama için yetkili değil. Yöneticinizden erişim isteyin.",
+      "hub": "digisat'a git",
+      "signOut": "Çıkış yap"
     }
   }
 }

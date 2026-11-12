@@ -1,6 +1,8 @@
+import { sessionRowClasses, sessionRowStaticClasses } from "@/digisat/ui/list-styles";
 import { getComponentRoundness } from "@/lib/theme";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { clsx } from "clsx";
+import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { BadgeState, StateBadge } from "./state-badge";
@@ -15,7 +17,31 @@ const cardClasses = (alreadyAdded: boolean) =>
       : "hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:hover:bg-input/50",
   );
 
-const LinkWrapper = ({ alreadyAdded, children, link }: { alreadyAdded: boolean; children: ReactNode; link: string }) => {
+// digisat: "row" draws a method as a design system session row (inside sessionListClasses) with a chevron
+export type MethodLayout = "card" | "row";
+
+const LinkWrapper = ({
+  alreadyAdded,
+  children,
+  link,
+  layout = "card",
+}: {
+  alreadyAdded: boolean;
+  children: ReactNode;
+  link: string;
+  layout?: MethodLayout;
+}) => {
+  if (layout === "row" && alreadyAdded) {
+    return <div className={clsx(sessionRowStaticClasses, "text-muted-foreground")}>{children}</div>;
+  }
+  if (layout === "row") {
+    return (
+      <Link href={link} className={sessionRowClasses}>
+        {children}
+        <ChevronRightIcon className="text-muted-foreground ml-auto size-4 shrink-0" aria-hidden="true" />
+      </Link>
+    );
+  }
   return !alreadyAdded ? (
     <Link href={link} className={cardClasses(alreadyAdded)}>
       {children}
@@ -25,9 +51,9 @@ const LinkWrapper = ({ alreadyAdded, children, link }: { alreadyAdded: boolean; 
   );
 };
 
-export const TOTP = (alreadyAdded: boolean, link: string) => {
+export const TOTP = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           className="text-muted-foreground mr-3 size-5 shrink-0 fill-current"
@@ -48,9 +74,9 @@ export const TOTP = (alreadyAdded: boolean, link: string) => {
   );
 };
 
-export const U2F = (alreadyAdded: boolean, link: string) => {
+export const U2F = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +103,9 @@ export const U2F = (alreadyAdded: boolean, link: string) => {
   );
 };
 
-export const EMAIL = (alreadyAdded: boolean, link: string) => {
+export const EMAIL = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           className="text-muted-foreground mr-3 size-5 shrink-0"
@@ -107,9 +133,9 @@ export const EMAIL = (alreadyAdded: boolean, link: string) => {
   );
 };
 
-export const SMS = (alreadyAdded: boolean, link: string) => {
+export const SMS = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           className="text-muted-foreground mr-3 size-5 shrink-0"
@@ -136,9 +162,9 @@ export const SMS = (alreadyAdded: boolean, link: string) => {
   );
 };
 
-export const PASSKEYS = (alreadyAdded: boolean, link: string) => {
+export const PASSKEYS = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -165,9 +191,9 @@ export const PASSKEYS = (alreadyAdded: boolean, link: string) => {
   );
 };
 
-export const PASSWORD = (alreadyAdded: boolean, link: string) => {
+export const PASSWORD = (alreadyAdded: boolean, link: string, layout: MethodLayout = "card") => {
   return (
-    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link}>
+    <LinkWrapper key={link} alreadyAdded={alreadyAdded} link={link} layout={layout}>
       <div className={clsx("flex items-center font-medium", alreadyAdded ? "" : "")}>
         <svg
           className="text-muted-foreground mr-3 size-5 shrink-0 fill-current"
@@ -192,7 +218,7 @@ function Setup() {
   return (
     <div className="absolute inset-y-0 right-3 flex items-center">
       <StateBadge evenPadding={true} state={BadgeState.Success}>
-        <CheckIcon className="h-4 w-4" />
+        <CheckIcon className="size-3.5" />
       </StateBadge>
     </div>
   );

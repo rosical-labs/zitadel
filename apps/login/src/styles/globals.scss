@@ -30,8 +30,9 @@
   }
 
   // The one text-link style for inline links and text buttons in the flows.
+  // digisat: design system link (brand-deep, info in dark, underline on hover) with the ring focus outline.
   .ztdl-link {
-    @apply text-primary focus-visible:ring-ring/50 cursor-pointer font-medium underline-offset-4 transition-colors outline-none hover:underline focus-visible:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50;
+    @apply text-brand-deep dark:text-info focus-visible:outline-ring cursor-pointer rounded-xs font-medium underline-offset-4 transition-colors outline-none hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
   // digisat: the .ztdl-page-bg gradient backdrop is gone; the design system uses no gradients.

@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { registerUserAndLinkToIDP } from "@/lib/server/register";
 import { useTranslations } from "next-intl";
@@ -9,7 +10,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
@@ -60,6 +61,7 @@ export function RegisterFormIDPIncomplete({
 
   const t = useTranslations("register");
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -80,7 +82,8 @@ export function RegisterFormIDPIncomplete({
         idpIntent: idpIntent,
       });
 
-      handleServerActionResponse(response, router, setSamlData, setError);
+      // digisat: handoff, or the no-access step for a user without access
+      withCompletionView(response, () => handleServerActionResponse(response, router, setSamlData, setError));
     } catch {
       setError("Could not register user");
     } finally {
@@ -93,8 +96,8 @@ export function RegisterFormIDPIncomplete({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
-        <div className="grid grid-cols-1 gap-5">
+      <form className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {!idpUserName && (
             <div className="">
               <TextInput
@@ -109,11 +112,11 @@ export function RegisterFormIDPIncomplete({
               />
             </div>
           )}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4">
             <div className="">
               <TextInput
                 type="firstname"
-                autoComplete="firstname"
+                autoComplete="given-name"
                 autoFocus={!!idpUserName}
                 required
                 {...register("firstname", { required: t("required.firstname") })}
@@ -125,7 +128,7 @@ export function RegisterFormIDPIncomplete({
             <div className="">
               <TextInput
                 type="lastname"
-                autoComplete="lastname"
+                autoComplete="family-name"
                 required
                 {...register("lastname", { required: t("required.lastname") })}
                 label={t("labels.lastname")}
@@ -153,10 +156,11 @@ export function RegisterFormIDPIncomplete({
           </div>
         )}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
+        {/* digisat: one full-width primary, then "Geri" as ghost */}
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit(submitAndRegister)}
@@ -164,6 +168,7 @@ export function RegisterFormIDPIncomplete({
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="submit" namespace="register" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

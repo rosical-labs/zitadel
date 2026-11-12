@@ -1,10 +1,10 @@
 import { Alert } from "@/components/alert";
 import { BackButton } from "@/components/back-button";
-import { Button, ButtonVariants } from "@/components/button";
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { TotpRegister } from "@/components/totp-register";
 import { Translated } from "@/components/translated";
 import { UserAvatar } from "@/components/user-avatar";
+import { buttonClasses } from "@/digisat/ui/button-styles";
 import { getEnrollmentAuthorizationError } from "@/lib/server/enrollment-guard";
 import { getServiceConfig } from "@/lib/service-url";
 import { loadMostRecentSession } from "@/lib/session";
@@ -176,15 +176,12 @@ export default async function Page(props: {
             ></TotpRegister>
           </div>
         ) : (
-          <div className="flex w-full flex-row items-center justify-between gap-3">
-            <BackButton />
-            <span className="flex-grow"></span>
-
-            <Link href={urlToContinue}>
-              <Button type="submit" className="self-end" variant={ButtonVariants.Primary}>
-                <Translated i18nKey="set.submit" namespace="otp" />
-              </Button>
+          // digisat: one full-width primary (a link styled as the button, not a button inside a link), then "Geri"
+          <div className="flex w-full flex-col gap-2">
+            <Link href={urlToContinue} className={buttonClasses("primary", "lg")}>
+              <Translated i18nKey="set.submit" namespace="otp" />
             </Link>
+            <BackButton />
           </div>
         )}
       </div>

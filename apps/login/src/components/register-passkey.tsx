@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert } from "./alert";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
 
@@ -205,17 +205,29 @@ export function RegisterPasskey({
   }, [code, submitRegisterAndContinue]);
 
   return (
-    <form className="flex w-full flex-col gap-6">
+    <form className="flex w-full flex-col gap-4">
       {error && (
         <div>
           <Alert>{error}</Alert>
         </div>
       )}
 
-      <div className="flex w-full flex-row items-center justify-between gap-3">
+      {/* digisat: one full-width primary first, then "skip" (outline) or "Geri" (ghost) */}
+      <div className="flex w-full flex-col gap-2">
+        <Button
+          type="submit"
+          size={ButtonSizes.Large}
+          variant={ButtonVariants.Primary}
+          disabled={loading || !formState.isValid}
+          onClick={handleSubmit(submitRegisterAndContinue)}
+          data-testid="submit-button"
+        >
+          {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="passkey" />
+        </Button>
         {isPrompt ? (
           <Button
             type="button"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Secondary}
             onClick={() => {
               continueAndLogin();
@@ -226,18 +238,6 @@ export function RegisterPasskey({
         ) : (
           <BackButton />
         )}
-
-        <span className="flex-grow"></span>
-        <Button
-          type="submit"
-          className="self-end"
-          variant={ButtonVariants.Primary}
-          disabled={loading || !formState.isValid}
-          onClick={handleSubmit(submitRegisterAndContinue)}
-          data-testid="submit-button"
-        >
-          {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="passkey" />
-        </Button>
       </div>
     </form>
   );

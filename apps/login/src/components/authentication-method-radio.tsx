@@ -1,6 +1,5 @@
 "use client";
 
-import { getComponentRoundness } from "@/lib/theme";
 import { Label, Radio, RadioGroup } from "@headlessui/react";
 import { clsx } from "clsx";
 import { Translated } from "./translated";
@@ -32,12 +31,11 @@ export function AuthenticationMethodRadio({
                 data-testid={method + "-radio"}
                 className={({ focus, checked }) =>
                   clsx(
-                    "bg-card relative flex h-full flex-1 cursor-pointer border px-5 py-4 shadow-xs transition-colors outline-none",
-                    getComponentRoundness("button"),
-                    checked
-                      ? "border-primary ring-primary/20 bg-primary/5 ring-[3px]"
-                      : "border-border hover:bg-accent dark:bg-input/30 dark:hover:bg-input/50",
-                    focus && !checked ? "border-ring ring-ring/50 ring-[3px]" : "",
+                    // digisat: a choice card with design system tokens: ink border when chosen, ring outline on focus
+                    "bg-card relative flex h-full flex-1 cursor-pointer rounded-lg border px-5 py-4 transition-colors outline-none",
+                    checked ? "border-primary" : "border-input hover:bg-accent",
+                    focus && "outline-ring outline-2 outline-offset-2",
+                    checked && !focus && "outline-primary outline-1 -outline-offset-2",
                   )
                 }
               >

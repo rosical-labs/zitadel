@@ -3,7 +3,7 @@ import { resolveLocalizedLegalLink } from "@/lib/legal-links";
 import { LegalAndSupportSettings } from "@zitadel/proto/zitadel/settings/v2/legal_settings_pb";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Checkbox } from "./checkbox";
 import { Translated } from "./translated";
 
@@ -19,6 +19,8 @@ type AcceptanceState = {
 
 export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
   const locale = useLocale();
+  const tosLabelId = useId();
+  const privacyLabelId = useId();
   const [acceptanceState, setAcceptanceState] = useState<AcceptanceState>({
     tosAccepted: false,
     privacyPolicyAccepted: false,
@@ -68,9 +70,11 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
         )}
       </p>
       {tosLink && (
-        <div className="flex items-center gap-3">
+        // digisat: design system check row; the link text names the checkbox
+        <div className="flex items-center gap-2.5 text-sm leading-5">
           <Checkbox
             checked={acceptanceState.tosAccepted}
+            aria-labelledby={tosLabelId}
             value={"tos"}
             onChangeVal={(checked: boolean) => {
               const newState = {
@@ -85,7 +89,7 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
 
           <div className="min-w-0">
             <p className="text-sm">
-              <Link href={tosLink} className="ztdl-link" target="_blank" data-testid="tos-link">
+              <Link id={tosLabelId} href={tosLink} className="ztdl-link" target="_blank" data-testid="tos-link">
                 <Translated i18nKey="termsOfService" namespace="register" />
               </Link>
             </p>
@@ -93,9 +97,10 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
         </div>
       )}
       {privacyPolicyLink && (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 text-sm leading-5">
           <Checkbox
             checked={acceptanceState.privacyPolicyAccepted}
+            aria-labelledby={privacyLabelId}
             value={"privacypolicy"}
             onChangeVal={(checked: boolean) => {
               const newState = {
@@ -110,7 +115,13 @@ export function PrivacyPolicyCheckboxes({ legal, onChange }: Props) {
 
           <div className="min-w-0">
             <p className="text-sm">
-              <Link href={privacyPolicyLink} className="ztdl-link" target="_blank" data-testid="privacy-policy-link">
+              <Link
+                id={privacyLabelId}
+                href={privacyPolicyLink}
+                className="ztdl-link"
+                target="_blank"
+                data-testid="privacy-policy-link"
+              >
                 <Translated i18nKey="privacyPolicy" namespace="register" />
               </Link>
             </p>

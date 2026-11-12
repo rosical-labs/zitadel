@@ -1,19 +1,24 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
+import { Badge } from "@/digisat/ui/badge";
+import { buttonClasses } from "@/digisat/ui/button-styles";
+import { InitialsAvatar } from "@/digisat/ui/initials-avatar";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { sendLoginname } from "@/lib/server/loginname";
 import { clearSession, continueWithSession, ContinueWithSessionCommand } from "@/lib/server/session";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Timestamp, timestampDate } from "@zitadel/client";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
+import { clsx } from "clsx";
+import { ChevronRightIcon } from "lucide-react";
 import moment from "moment";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
-import { Avatar } from "./avatar";
 import { Translated } from "./translated";
 
 export function isSessionPrimaryFactorAndLifetimeValid(session: Partial<Session>): {
@@ -36,6 +41,7 @@ export function SessionItem({ session, reload, requestId }: { session: Session; 
   const currentLocale = useLocale();
   moment.locale(currentLocale === "zh" ? "zh-cn" : currentLocale);
   const t = useTranslations("error");
+  const tAccounts = useTranslations("accounts");
 
   const [_loading, setLoading] = useState<boolean>(false);
 
@@ -61,108 +67,107 @@ export function SessionItem({ session, reload, requestId }: { session: Session; 
     }
   }
 
-  const { valid, verifiedAt } = isSessionPrimaryFactorAndLifetimeValid(session);
+  const { valid } = isSessionPrimaryFactorAndLifetimeValid(session);
+  const loginName = session.factors?.user?.loginName ?? "";
+  const name = session.factors?.user?.displayName || loginName;
   const [samlData, setSamlData] = useState<{ url: string; fields: Record<string, string> } | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
+  // digisat: design system account picker row (avatar, name, login name; a badge when the session cannot continue).
+  // The remove control is its own button next to the row instead of an icon inside it.
   return (
-    <>
-      <Tooltip.Root delayDuration={300}>
-        {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-        <Tooltip.Trigger asChild>
-          <button
-            onClick={async () => {
-              if (valid && session?.factors?.user) {
-                const sessionPayload: ContinueWithSessionCommand = session;
-                if (requestId) {
-                  sessionPayload.requestId = requestId;
-                }
-
-                const callbackResponse = await continueWithSession(sessionPayload);
-
-                handleServerActionResponse(callbackResponse, router, setSamlData, (e) => setError(e));
-              } else if (session.factors?.user) {
-                setLoading(true);
-                try {
-                  const res = await sendLoginname({
-                    loginName: session.factors?.user?.loginName,
-                    organization: session.factors.user.organizationId,
-                    requestId: requestId,
-                  });
-
-                  handleServerActionResponse(res, router, setSamlData, (e) => setError(e));
-                } catch {
-                  setError("An internal error occurred");
-                } finally {
-                  setLoading(false);
-                }
-              }
-            }}
-            className="group border-border bg-card hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 flex w-full flex-row items-center gap-3 rounded-md border px-3 py-2.5 text-left shadow-xs transition-colors outline-none focus-visible:ring-[3px]"
-          >
-            <div className="shrink-0">
-              <Avatar
-                size="small"
-                loginName={session.factors?.user?.loginName as string}
-                name={session.factors?.user?.displayName ?? ""}
-              />
-            </div>
-
-            <div className="flex min-w-0 flex-col items-start">
-              <span className="max-w-full truncate text-sm font-medium">{session.factors?.user?.displayName}</span>
-              <span className="text-muted-foreground max-w-full truncate text-xs">{session.factors?.user?.loginName}</span>
-              {valid ? (
-                <span className="text-muted-foreground max-w-full truncate text-xs">
-                  <Translated i18nKey="verified" namespace="accounts" />{" "}
-                  {verifiedAt && moment(timestampDate(verifiedAt)).fromNow()}
-                </span>
-              ) : (
-                verifiedAt && (
-                  <span className="text-muted-foreground max-w-full truncate text-xs">
-                    <Translated i18nKey="expired" namespace="accounts" />{" "}
-                    {session.expirationDate && moment(timestampDate(session.expirationDate)).fromNow()}
-                  </span>
-                )
-              )}
-            </div>
-
-            <span className="flex-grow"></span>
-            <div className="relative flex flex-row items-center">
-              {valid ? (
-                <div className="absolute right-6 mx-2 size-2 rounded-full bg-green-500 transition-all group-hover:right-6 sm:right-0"></div>
-              ) : (
-                <div className="bg-destructive absolute right-6 mx-2 size-2 rounded-full transition-all group-hover:right-6 sm:right-0"></div>
-              )}
-
-              <XCircleIcon
-                className="text-muted-foreground hover:text-foreground size-5 transition-colors group-hover:block sm:hidden"
-                onClick={async (event: React.MouseEvent) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  if (await clearSessionId(session.id)) {
-                    reload();
+    <div className="group">
+      {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
+      <div className="hover:bg-accent focus-within:bg-accent flex items-center transition-colors">
+        <Tooltip.Root delayDuration={300}>
+          <Tooltip.Trigger asChild>
+            <button
+              type="button"
+              onClick={async () => {
+                if (valid && session?.factors?.user) {
+                  const sessionPayload: ContinueWithSessionCommand = session;
+                  if (requestId) {
+                    sessionPayload.requestId = requestId;
                   }
-                }}
-              />
-            </div>
-          </button>
-        </Tooltip.Trigger>
-        {valid && session.expirationDate && (
-          <Tooltip.Portal>
-            <Tooltip.Content
-              className="bg-popover text-popover-foreground border-border z-50 rounded-md border px-3 py-1.5 text-xs shadow-md select-none"
-              sideOffset={5}
+
+                  const callbackResponse = await continueWithSession(sessionPayload);
+
+                  // digisat: handoff, or the no-access step for a user without access
+                  withCompletionView(callbackResponse, () =>
+                    handleServerActionResponse(callbackResponse, router, setSamlData, (e) => setError(e)),
+                  );
+                } else if (session.factors?.user) {
+                  setLoading(true);
+                  try {
+                    const res = await sendLoginname({
+                      loginName: session.factors?.user?.loginName,
+                      organization: session.factors.user.organizationId,
+                      requestId: requestId,
+                    });
+
+                    handleServerActionResponse(res, router, setSamlData, (e) => setError(e));
+                  } catch {
+                    setError("An internal error occurred");
+                  } finally {
+                    setLoading(false);
+                  }
+                }
+              }}
+              className="focus-visible:outline-ring flex min-h-14 min-w-0 flex-1 items-center gap-3 py-3 pr-2 pl-4 text-left text-sm outline-none focus-visible:outline-2 focus-visible:-outline-offset-2"
             >
-              Expires {moment(timestampDate(session.expirationDate)).fromNow()}
-              <Tooltip.Arrow className="fill-popover" />
-            </Tooltip.Content>
-          </Tooltip.Portal>
-        )}
-      </Tooltip.Root>
-      {error && <Alert>{error}</Alert>}
-    </>
+              <InitialsAvatar name={name} muted={!valid} />
+              <div className="min-w-0 flex-1">
+                <b className="block truncate leading-5 font-semibold">{name}</b>
+                {name !== loginName && (
+                  <span className="text-muted-foreground block truncate text-xs leading-4">{loginName}</span>
+                )}
+              </div>
+              {valid ? (
+                <ChevronRightIcon className="text-muted-foreground size-4 shrink-0" aria-hidden="true" />
+              ) : (
+                <Badge>
+                  <Translated i18nKey="sessionEnded" namespace="accounts" />
+                </Badge>
+              )}
+            </button>
+          </Tooltip.Trigger>
+          {valid && session.expirationDate && (
+            <Tooltip.Portal>
+              <Tooltip.Content
+                className="bg-popover text-popover-foreground border-border z-50 rounded-md border px-3 py-1.5 text-xs shadow-md select-none"
+                sideOffset={5}
+              >
+                Expires {moment(timestampDate(session.expirationDate)).fromNow()}
+                <Tooltip.Arrow className="fill-popover" />
+              </Tooltip.Content>
+            </Tooltip.Portal>
+          )}
+        </Tooltip.Root>
+        <button
+          type="button"
+          aria-label={tAccounts("remove", { name })}
+          className={clsx(
+            buttonClasses("ghost", "icon"),
+            "mr-2 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100",
+          )}
+          onClick={async () => {
+            if (await clearSessionId(session.id)) {
+              reload();
+            }
+          }}
+        >
+          <XMarkIcon className="text-muted-foreground size-4" aria-hidden="true" />
+        </button>
+      </div>
+      {error && (
+        <div className="px-4 pb-3">
+          <Alert>{error}</Alert>
+        </div>
+      )}
+    </div>
   );
 }

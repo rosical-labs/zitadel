@@ -1,5 +1,8 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
+import { buttonClasses } from "@/digisat/ui/button-styles";
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { skipMFAAndContinueWithNextUrl } from "@/lib/server/session";
 import { LoginSettings, SecondFactorType } from "@zitadel/proto/zitadel/settings/v2/login_settings_pb";
@@ -39,6 +42,7 @@ export function ChooseSecondFactorToSetup({
   force,
 }: Props) {
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
   const params = new URLSearchParams({});
 
   const [error, setError] = useState<string>("");
@@ -63,27 +67,32 @@ export function ChooseSecondFactorToSetup({
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <div className="grid w-full grid-cols-1 gap-3">
+      {/* digisat: the methods as design system session rows; set-up ones stay rows without a link */}
+      <div className={sessionListClasses}>
         {loginSettings.secondFactors.map((factor) => {
           switch (factor) {
             case SecondFactorType.OTP:
-              return TOTP(userMethods.includes(AuthenticationMethodType.TOTP), "/otp/time-based/set?" + params);
+              return TOTP(userMethods.includes(AuthenticationMethodType.TOTP), "/otp/time-based/set?" + params, "row");
             case SecondFactorType.U2F:
-              return U2F(userMethods.includes(AuthenticationMethodType.U2F), "/u2f/set?" + params);
+              return U2F(userMethods.includes(AuthenticationMethodType.U2F), "/u2f/set?" + params, "row");
             case SecondFactorType.OTP_EMAIL:
               return (
-                emailVerified && EMAIL(userMethods.includes(AuthenticationMethodType.OTP_EMAIL), "/otp/email/set?" + params)
+                emailVerified &&
+                EMAIL(userMethods.includes(AuthenticationMethodType.OTP_EMAIL), "/otp/email/set?" + params, "row")
               );
             case SecondFactorType.OTP_SMS:
-              return phoneVerified && SMS(userMethods.includes(AuthenticationMethodType.OTP_SMS), "/otp/sms/set?" + params);
+              return (
+                phoneVerified && SMS(userMethods.includes(AuthenticationMethodType.OTP_SMS), "/otp/sms/set?" + params, "row")
+              );
             default:
               return null;
           }
         })}
       </div>
       {!force && (
+        // digisat: "skip" is a secondary action of the card, so a full-width ghost button
         <button
-          className="ztdl-link self-start text-sm"
+          className={buttonClasses("ghost", "lg")}
           onClick={async () => {
             const skipResponse = await skipMFAAndContinueWithNextUrl({
               userId,
@@ -93,7 +102,8 @@ export function ChooseSecondFactorToSetup({
               requestId,
             });
 
-            handleServerActionResponse(skipResponse, router, setSamlData, setError);
+            // digisat: handoff, or the no-access step for a user without access
+            withCompletionView(skipResponse, () => handleServerActionResponse(skipResponse, router, setSamlData, setError));
           }}
           type="button"
           data-testid="reset-button"

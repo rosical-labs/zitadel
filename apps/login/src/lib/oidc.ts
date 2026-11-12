@@ -1,3 +1,5 @@
+// digisat: marks the access-denied result for the no-access step
+import { AccessDeniedResult } from "@/digisat/access-denied-result";
 import { getAccessDeniedMessageKey } from "@/lib/access-denied";
 import { isSafeRedirectUri } from "@/lib/client-utils";
 import { Cookie } from "@/lib/cookies";
@@ -23,7 +25,8 @@ export async function loginWithOIDCAndSession({
   sessionId,
   sessions,
   sessionCookies,
-}: LoginWithOIDCAndSession): Promise<{ error: string } | { redirect: string }> {
+  // digisat: an access-denied result carries `accessDenied` next to its error
+}: LoginWithOIDCAndSession): Promise<{ error: string } | AccessDeniedResult | { redirect: string }> {
   const selectedSession = sessions.find((s) => s.id === sessionId);
 
   if (selectedSession && selectedSession.id) {
@@ -105,7 +108,7 @@ export async function loginWithOIDCAndSession({
         const accessDeniedMessageKey = getAccessDeniedMessageKey(error);
         if (accessDeniedMessageKey) {
           const t = await getTranslations("error");
-          return { error: t(accessDeniedMessageKey) };
+          return { error: t(accessDeniedMessageKey), accessDenied: true }; // digisat: lets the forms show the no-access step
         }
 
         return { error: "Unknown error occurred" };

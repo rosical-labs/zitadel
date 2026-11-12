@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompletionView } from "@/digisat/step-override";
 import { coerceToArrayBuffer, coerceToBase64Url } from "@/helpers/base64";
 import { completeFlowOrGetUrl } from "@/lib/client";
 import { handleServerActionResponse } from "@/lib/client-utils";
@@ -11,7 +12,7 @@ import { useState } from "react";
 import { Alert } from "./alert";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
 
@@ -31,6 +32,7 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
 
   async function submitVerify(u2fId: string, passkeyName: string, publicKeyCredential: any, sessionId: string) {
     setError("");
@@ -158,7 +160,10 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
             loginSettings?.defaultRedirectUri,
           );
 
-          handleServerActionResponse(callbackResponse, router, setSamlData, setError);
+          // digisat: handoff, or the no-access step for a user without access
+          withCompletionView(callbackResponse, () =>
+            handleServerActionResponse(callbackResponse, router, setSamlData, setError),
+          );
         } else if (loginName) {
           const callbackResponse = await completeFlowOrGetUrl(
             {
@@ -168,7 +173,10 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
             loginSettings?.defaultRedirectUri,
           );
 
-          handleServerActionResponse(callbackResponse, router, setSamlData, setError);
+          // digisat: handoff, or the no-access step for a user without access
+          withCompletionView(callbackResponse, () =>
+            handleServerActionResponse(callbackResponse, router, setSamlData, setError),
+          );
         }
       }
     }
@@ -177,20 +185,18 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
   return (
     <>
       {samlData && <AutoSubmitForm url={samlData.url} fields={samlData.fields} />}
-      <form className="flex w-full flex-col gap-6">
+      <form className="flex w-full flex-col gap-4">
         {error && (
           <div>
             <Alert>{error}</Alert>
           </div>
         )}
 
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton data-testid="back-button" />
-
-          <span className="flex-grow"></span>
+        {/* digisat: one full-width primary, then "Geri" as ghost */}
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
-            className="self-end"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading}
             onClick={submitRegisterAndContinue}
@@ -198,6 +204,7 @@ export function RegisterU2f({ loginName, sessionId, organization, requestId, che
           >
             {loading && <Spinner className="size-4" />} <Translated i18nKey="set.submit" namespace="u2f" />
           </Button>
+          <BackButton data-testid="back-button" />
         </div>
       </form>
     </>

@@ -1,3 +1,4 @@
+import { Alert } from "@/components/alert";
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { Translated } from "@/components/translated";
 import { getServiceConfig } from "@/lib/service-url";
@@ -28,8 +29,13 @@ export default async function LinkingFailedPage(props: {
         <p className="ztdl-p">
           <Translated i18nKey="errors.linkingFailed" namespace="idp" />
         </p>
-        {error && <p className="text-destructive text-sm">{error}</p>}
       </div>
+      {/* digisat: the error as a design system banner under the title block */}
+      {error && (
+        <div className="flex w-full flex-col">
+          <Alert>{error}</Alert>
+        </div>
+      )}
     </DynamicTheme>
   );
 }

@@ -1,3 +1,4 @@
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { LoginSettings, PasskeysType } from "@zitadel/proto/zitadel/settings/v2/login_settings_pb";
 import { AuthenticationMethodType } from "@zitadel/proto/zitadel/user/v2/user_service_pb";
 import { PASSKEYS, PASSWORD } from "./auth-methods";
@@ -17,14 +18,15 @@ export function ChooseAuthenticatorToLogin({ authMethods, params, loginSettings 
           <Translated i18nKey="chooseAlternativeMethod" namespace="idp" />
         </div>
       )}
-      <div className="grid w-full grid-cols-1 gap-3">
+      {/* digisat: the methods as design system session rows */}
+      <div className={sessionListClasses}>
         {authMethods.includes(AuthenticationMethodType.PASSWORD) &&
           loginSettings?.allowLocalAuthentication &&
-          PASSWORD(false, "/password?" + params)}
+          PASSWORD(false, "/password?" + params, "row")}
         {authMethods.includes(AuthenticationMethodType.PASSKEY) &&
           loginSettings?.allowLocalAuthentication &&
           loginSettings?.passkeysType == PasskeysType.ALLOWED &&
-          PASSKEYS(false, "/passkey?" + params)}
+          PASSKEYS(false, "/passkey?" + params, "row")}
       </div>
     </>
   );

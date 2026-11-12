@@ -1,8 +1,8 @@
 import { Alert, AlertType } from "@/components/alert";
-import { Button, ButtonVariants } from "@/components/button";
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { Translated } from "@/components/translated";
 import { UserAvatar } from "@/components/user-avatar";
+import { buttonClasses } from "@/digisat/ui/button-styles";
 import { resolveRedirectUri } from "@/lib/client";
 import { getServiceConfig } from "@/lib/service-url";
 import { loadMostRecentSession, loadSessionById } from "@/lib/session";
@@ -69,13 +69,10 @@ export default async function Page(props: { searchParams: Promise<any> }) {
         )}
 
         {redirectUri && !isSamePage && (
-          <div className="flex w-full flex-row items-center justify-between gap-3">
-            <span className="flex-grow"></span>
-
-            <Link href={redirectUri}>
-              <Button type="submit" className="self-end" variant={ButtonVariants.Primary}>
-                <Translated i18nKey="continue" namespace="signedin" />
-              </Button>
+          // digisat: one full-width primary (a link styled as the button, not a button inside a link)
+          <div className="flex w-full flex-col">
+            <Link href={redirectUri} className={buttonClasses("primary", "lg")}>
+              <Translated i18nKey="continue" namespace="signedin" />
             </Link>
           </div>
         )}

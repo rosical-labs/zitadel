@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert } from "./alert";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { TextInput } from "./input";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
@@ -82,7 +82,7 @@ export function LDAPUsernamePasswordForm({
   }
 
   return (
-    <form className="flex w-full flex-col gap-6">
+    <form className="flex w-full flex-col gap-4">
       <TextInput
         type="text"
         autoComplete="username"
@@ -98,7 +98,7 @@ export function LDAPUsernamePasswordForm({
       <div className={`${error && "animate-shake transform-gpu"}`}>
         <TextInput
           type="password"
-          autoComplete="password"
+          autoComplete="current-password"
           {...register("password", { required: t("required.password") })}
           label={t("labels.password")}
           data-testid="password-text-input"
@@ -111,12 +111,11 @@ export function LDAPUsernamePasswordForm({
         </div>
       )}
 
-      <div className="flex w-full flex-row items-center justify-between gap-3">
-        <BackButton data-testid="back-button" />
-        <span className="flex-grow"></span>
+      {/* digisat: one full-width primary, then "Geri" as ghost */}
+      <div className="flex w-full flex-col gap-2">
         <Button
           type="submit"
-          className="self-end"
+          size={ButtonSizes.Large}
           variant={ButtonVariants.Primary}
           disabled={loading || !formState.isValid}
           onClick={handleSubmit(submitUsernamePassword)}
@@ -125,6 +124,7 @@ export function LDAPUsernamePasswordForm({
           {loading && <Spinner className="size-4" />}
           <Translated i18nKey="submit" namespace="ldap" />
         </Button>
+        <BackButton data-testid="back-button" />
       </div>
     </form>
   );

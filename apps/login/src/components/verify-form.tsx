@@ -1,6 +1,8 @@
 "use client";
 
 import { Alert, AlertType } from "@/components/alert";
+import { useCompletionView } from "@/digisat/step-override";
+import { Field, fieldDescribedBy, Input } from "@/digisat/ui/field";
 import { handleServerActionResponse } from "@/lib/client-utils";
 import { UNKNOWN_USER_ID } from "@/lib/constants";
 import { resendVerification, sendVerification } from "@/lib/server/verify";
@@ -10,10 +12,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AutoSubmitForm } from "./auto-submit-form";
 import { BackButton } from "./back-button";
-import { Button, ButtonVariants } from "./button";
-import { TextInput } from "./input";
+import { Button, ButtonSizes, ButtonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { Translated } from "./translated";
+
+const CODE_FIELD_ID = "code";
 
 type Inputs = {
   code: string;
@@ -31,6 +34,7 @@ type Props = {
 
 export function VerifyForm({ userId, loginName, organization, requestId, code, isInvite, submit }: Props) {
   const router = useRouter();
+  const withCompletionView = useCompletionView(); // digisat: the view after a completed sign-in
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const codeSent = searchParams.get("codeSent") === "true";
@@ -103,14 +107,16 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
           requestId: requestId,
         });
 
-        handleServerActionResponse(response, router, setSamlData, setError);
+        // digisat: handoff, or the no-access step for a user without access
+        withCompletionView(response, () => handleServerActionResponse(response, router, setSamlData, setError));
       } catch {
         setError(t("errors.couldNotVerifyUser"));
       } finally {
         setLoading(false);
       }
     },
-    [isInvite, userId, loginName, organization, requestId, router, t],
+    // digisat: withCompletionView
+    [isInvite, userId, loginName, organization, requestId, router, t, withCompletionView],
   );
 
   useEffect(() => {
@@ -130,7 +136,8 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
           </Alert>
         </div>
       )}
-      <form className="flex w-full flex-col gap-6">
+      {/* digisat: step card layout: the mono code field (error under it), one full-width primary, "Geri" as ghost */}
+      <form className="flex w-full flex-col gap-4">
         <Alert type={AlertType.INFO}>
           <div className="flex flex-row items-start justify-between gap-4">
             <span className="text-left">
@@ -150,29 +157,24 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
             </button>
           </div>
         </Alert>
-        <div>
-          <TextInput
+        <Field id={CODE_FIELD_ID} label={t("verify.labels.code")} error={error} errorTestId="error">
+          <Input
+            id={CODE_FIELD_ID}
             type="text"
+            mono
             autoComplete="one-time-code"
             autoFocus
+            invalid={!!error}
+            aria-describedby={fieldDescribedBy(CODE_FIELD_ID, { error })}
             {...register("code", { required: t("verify.required.code") })}
-            label={t("verify.labels.code")}
             data-testid="code-text-input"
           />
-        </div>
+        </Field>
 
-        {error && (
-          <div data-testid="error">
-            <Alert>{error}</Alert>
-          </div>
-        )}
-
-        <div className="flex w-full flex-row items-center justify-between gap-3">
-          <BackButton />
-          <span className="flex-grow"></span>
+        <div className="flex w-full flex-col gap-2">
           <Button
             type="submit"
-            className="self-end"
+            size={ButtonSizes.Large}
             variant={ButtonVariants.Primary}
             disabled={loading || !formState.isValid}
             onClick={handleSubmit(fcn)}
@@ -181,6 +183,7 @@ export function VerifyForm({ userId, loginName, organization, requestId, code, i
             {loading && <Spinner className="size-4" />}
             <Translated i18nKey="verify.submit" namespace="verify" />
           </Button>
+          <BackButton />
         </div>
       </form>
     </>

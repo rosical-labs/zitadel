@@ -1,4 +1,4 @@
-import { APPEARANCE_STYLES, getComponentRoundness, getThemeConfig } from "@/lib/theme";
+import { buttonClasses } from "@/digisat/ui/button-styles";
 import { ThemeableProps } from "@/lib/themeUtils";
 import { clsx } from "clsx";
 import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from "react";
@@ -52,16 +52,13 @@ export const getButtonClasses = (
     appearance, // Apply appearance-specific styling (shadows, borders, etc.)
   );
 
-// Helper function to get default button roundness from theme
-function getDefaultButtonRoundness(): string {
-  return getComponentRoundness("button");
-}
-
-// Helper function to get default button appearance from centralized theme system
-function getDefaultButtonAppearance(): string {
-  const themeConfig = getThemeConfig();
-  const appearance = APPEARANCE_STYLES[themeConfig.appearance];
-  return appearance?.button || APPEARANCE_STYLES.flat.button; // Fallback to flat design
+// digisat: buttons are the design system's pills (src/digisat/ui/button-styles.ts), not the theme's roundness and appearance.
+function digisatButtonClasses(size: ButtonSizes, variant: ButtonVariants, color: ButtonColors): string {
+  const dgSize = size === ButtonSizes.Large ? "lg" : "md";
+  if (variant === ButtonVariants.Primary) {
+    return buttonClasses(color === ButtonColors.Warn ? "destructive" : "primary", dgSize);
+  }
+  return buttonClasses("outline", dgSize);
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -72,20 +69,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = ButtonVariants.Primary,
       size = ButtonSizes.Small,
       color = ButtonColors.Primary,
-      roundness, // Will use theme default if not provided
+      roundness, // digisat: overrides the pill only when passed explicitly
       ...props
     },
     ref,
   ) => {
-    // Use theme-based values if not explicitly provided
-    const actualRoundness = roundness || getDefaultButtonRoundness();
-    const actualAppearance = getDefaultButtonAppearance();
-
     return (
       <button
         type="button"
         ref={ref}
-        className={`${getButtonClasses(size, variant, color, actualRoundness, actualAppearance)} ${className}`}
+        className={clsx(digisatButtonClasses(size, variant, color), roundness, className)}
         {...props}
       >
         {children}

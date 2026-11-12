@@ -1,5 +1,7 @@
 "use server";
 
+// digisat: keeps the no-access mark of a completion result
+import { isAccessDenied } from "@/digisat/access-denied-result";
 import { getSessionCookieById } from "@/lib/cookies";
 import { isClassifiedError } from "@/lib/grpc/interceptors/error-classification";
 import { createLogger } from "@/lib/logger";
@@ -279,6 +281,7 @@ type IDPHandlerResult = {
   redirect?: string;
   error?: string;
   samlData?: { url: string; fields: Record<string, string> };
+  accessDenied?: true; // digisat: a user without access to the application (no-access step)
 } | null;
 
 /**
@@ -427,7 +430,7 @@ async function handleExplicitLinking(ctx: IDPHandlerContext): Promise<IDPHandler
 
       if ("error" in sessionResult && sessionResult.error) {
         logger.error("Error creating session", { error: sessionResult.error });
-        return { error: sessionResult.error };
+        return isAccessDenied(sessionResult) ? sessionResult : { error: sessionResult.error }; // digisat: keep the no-access mark
       }
 
       if ("redirect" in sessionResult && sessionResult.redirect) {
@@ -495,7 +498,7 @@ async function handleUserExists(ctx: IDPHandlerContext): Promise<IDPHandlerResul
 
     if ("error" in sessionResult && sessionResult.error) {
       logger.error("Error creating session", { error: sessionResult.error });
-      return { error: sessionResult.error };
+      return isAccessDenied(sessionResult) ? sessionResult : { error: sessionResult.error }; // digisat: keep the no-access mark
     }
 
     if ("redirect" in sessionResult && sessionResult.redirect) {
@@ -607,7 +610,7 @@ async function handleAutoLinking(ctx: IDPHandlerContext): Promise<IDPHandlerResu
 
         if ("error" in sessionResult && sessionResult.error) {
           logger.error("Error creating session", { error: sessionResult.error });
-          return { error: sessionResult.error };
+          return isAccessDenied(sessionResult) ? sessionResult : { error: sessionResult.error }; // digisat: keep the no-access mark
         }
 
         if ("redirect" in sessionResult && sessionResult.redirect) {
@@ -710,7 +713,7 @@ async function handleAutoCreation(ctx: IDPHandlerContext): Promise<IDPHandlerRes
 
       if ("error" in sessionResult && sessionResult.error) {
         logger.error("Error creating session", { error: sessionResult.error });
-        return { error: sessionResult.error };
+        return isAccessDenied(sessionResult) ? sessionResult : { error: sessionResult.error }; // digisat: keep the no-access mark
       }
 
       if ("redirect" in sessionResult && sessionResult.redirect) {

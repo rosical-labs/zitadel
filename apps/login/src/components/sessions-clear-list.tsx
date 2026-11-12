@@ -1,5 +1,6 @@
 "use client";
 
+import { sessionListClasses } from "@/digisat/ui/list-styles";
 import { clearSession } from "@/lib/server/session";
 import { timestampDate } from "@zitadel/client";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
@@ -72,30 +73,33 @@ export function SessionsClearList({ sessions, logoutHint, postLogoutRedirectUri,
   }, [logoutHint, clearHintedSession]);
 
   return sessions ? (
-    <div className="flex flex-col gap-2">
-      {list
-        .filter((session) => session?.factors?.user?.loginName)
-        // sort by change date descending
-        .sort((a, b) => {
-          const dateA = a.changeDate ? timestampDate(a.changeDate).getTime() : 0;
-          const dateB = b.changeDate ? timestampDate(b.changeDate).getTime() : 0;
-          return dateB - dateA;
-        })
-        // TODO: add sorting to move invalid sessions to the bottom
-        .map((session, index) => {
-          return (
-            <SessionClearItem
-              session={session}
-              reload={() => {
-                setList(list.filter((s) => s.id !== session.id));
-                if (postLogoutRedirectUri) {
-                  router.push(postLogoutRedirectUri);
-                }
-              }}
-              key={"session-" + index}
-            />
-          );
-        })}
+    // digisat: the accounts as one design system session list, the messages under it
+    <div className="flex flex-col gap-4">
+      <div className={sessionListClasses}>
+        {list
+          .filter((session) => session?.factors?.user?.loginName)
+          // sort by change date descending
+          .sort((a, b) => {
+            const dateA = a.changeDate ? timestampDate(a.changeDate).getTime() : 0;
+            const dateB = b.changeDate ? timestampDate(b.changeDate).getTime() : 0;
+            return dateB - dateA;
+          })
+          // TODO: add sorting to move invalid sessions to the bottom
+          .map((session, index) => {
+            return (
+              <SessionClearItem
+                session={session}
+                reload={() => {
+                  setList(list.filter((s) => s.id !== session.id));
+                  if (postLogoutRedirectUri) {
+                    router.push(postLogoutRedirectUri);
+                  }
+                }}
+                key={"session-" + index}
+              />
+            );
+          })}
+      </div>
       {error && <Alert>{error}</Alert>}
       {list.length === 0 && (
         <Alert type={AlertType.INFO}>
