@@ -10,8 +10,8 @@ Runs our login build from this repo against the `rosical-iam` local stack, behin
 ## Sequence
 
 1. `just dev` in `rosical-iam` (starts ZITADEL on http://localhost:8082 and waits until it is healthy).
-2. `./login.sh seed` creates or updates the test data and writes `seed.out.env`. You can run it again.
-3. `./login.sh build` builds `apps/login` with `NEXT_PUBLIC_THEME_ROUNDNESS=edgy`. This takes a few minutes.
+2. `./login.sh seed` creates or updates the test data and writes `seed.out.env`. You can run it again. It also sets the branding theme mode to AUTO (instance and org), so the login follows the system theme and the theme toggle works.
+3. `./login.sh build` builds `apps/login`. This takes a few minutes.
 4. `./login.sh start` starts the build on 127.0.0.1:3100 and the proxy on http://localhost:3200. It passes `DIGISAT_PRODUCT_CLIENTS` from `seed.out.env`.
 5. `./login.sh rp` starts the relying parties: http://localhost:4001 (endpoint control) and http://localhost:4002 (hub).
 
