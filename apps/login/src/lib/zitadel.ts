@@ -118,6 +118,8 @@ export async function getHostedLoginTranslation({
                 value: true,
               },
           locale: locale,
+          // digisat: only the texts set at this level; the API's built-in defaults would override the local copy
+          ignoreInheritance: true,
         },
         {},
       )

@@ -139,3 +139,37 @@ describe("startIdentityProviderFlow", () => {
     expect(value).not.toHaveProperty("loginHint");
   });
 });
+
+// digisat: the login asks for each level's own custom texts, so the API's built-in defaults never override the local copy
+describe("getHostedLoginTranslation", () => {
+  const serviceConfig = { serviceUrl: "https://api.example.com" } as any;
+
+  async function requestFor(organization: string, locale: string) {
+    const getHostedLoginTranslation = vi.fn().mockResolvedValue({ translations: { loginname: { title: "Custom" } } });
+    const { createServiceForHost } = await import("./service");
+    vi.mocked(createServiceForHost).mockResolvedValue({ getHostedLoginTranslation } as any);
+
+    const { getHostedLoginTranslation: get } = await import("./zitadel");
+    const result = await get({ serviceConfig, organization, locale });
+    return { request: getHostedLoginTranslation.mock.calls[0][0], result };
+  }
+
+  test("requests the instance level without inheritance when no organization is given", async () => {
+    const { request, result } = await requestFor("", "tr-instance-test");
+    expect(request).toEqual({
+      level: { case: "instance", value: true },
+      locale: "tr-instance-test",
+      ignoreInheritance: true,
+    });
+    expect(result).toEqual({ loginname: { title: "Custom" } });
+  });
+
+  test("requests the organization level without inheritance when an organization is given", async () => {
+    const { request } = await requestFor("org-1", "tr-org-test");
+    expect(request).toEqual({
+      level: { case: "organizationId", value: "org-1" },
+      locale: "tr-org-test",
+      ignoreInheritance: true,
+    });
+  });
+});
