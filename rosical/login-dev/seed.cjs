@@ -1,4 +1,4 @@
-// Idempotent seed of the local rosical-iam instance for login tests: project, two OIDC apps, three users, login settings.
+// Idempotent seed of the local rosical-iam instance for login tests: project, two OIDC apps, three users, login and branding settings.
 // Run through `./login.sh seed`, which passes the credentials below from the running stack.
 const crypto = require("crypto");
 const fs = require("fs");
@@ -223,6 +223,39 @@ async function ensureDefaultRedirect(token) {
   console.log(`login settings: defaultRedirectUri set to ${HUB_URL}`);
 }
 
+const BRANDING_FIELDS = [
+  "primaryColor", "hideLoginNameSuffix", "warnColor", "backgroundColor", "fontColor", "primaryColorDark",
+  "backgroundColorDark", "warnColorDark", "fontColorDark", "disableWatermark",
+];
+const BRANDING_ASSETS = ["logoUrl", "iconUrl", "logoUrlDark", "iconUrlDark", "fontUrl"];
+
+// Theme mode AUTO lets the login follow the system theme and keeps the theme toggle; LIGHT or DARK force one.
+// apiPrefix is /admin/v1 for the instance default or /management/v1 for the org's own branding.
+async function ensureThemeModeAuto(token, apiPrefix, label) {
+  const { policy: active } = await call(token, "GET", `${apiPrefix}/policies/label`);
+  if (active.themeMode === "THEME_MODE_AUTO") {
+    console.log(`branding (${label}): theme mode already AUTO`);
+    return;
+  }
+  // Activation publishes the whole preview, so refuse when it holds other unpublished branding changes.
+  const { policy: preview } = await call(token, "GET", `${apiPrefix}/policies/label/_preview`);
+  const pending = [...BRANDING_FIELDS, ...BRANDING_ASSETS].filter((f) => (preview[f] ?? "") !== (active[f] ?? ""));
+  if (pending.length) throw new Error(`the ${label} branding preview has unpublished changes (${pending.join(", ")}); activate or revert them in the Console first`);
+  if (preview.themeMode !== "THEME_MODE_AUTO") {
+    const update = Object.fromEntries(BRANDING_FIELDS.filter((f) => active[f] !== undefined).map((f) => [f, active[f]]));
+    await call(token, "PUT", `${apiPrefix}/policies/label`, { ...update, themeMode: "THEME_MODE_AUTO" });
+  }
+  await call(token, "POST", `${apiPrefix}/policies/label/_activate`, {});
+  console.log(`branding (${label}): theme mode set from ${active.themeMode || "unspecified"} to AUTO`);
+}
+
+// The login uses the org's own branding when it has one, so both levels are set.
+async function ensureBrandingThemeMode(token) {
+  await ensureThemeModeAuto(token, "/admin/v1", "instance");
+  const { policy: orgPolicy } = await call(token, "GET", "/management/v1/policies/label");
+  if (!orgPolicy.isDefault) await ensureThemeModeAuto(token, "/management/v1", "org");
+}
+
 function readPrevious(name) {
   if (!fs.existsSync(OUT)) return undefined;
   const line = fs.readFileSync(OUT, "utf8").split("\n").find((l) => l.startsWith(`${name}=`));
@@ -244,6 +277,7 @@ async function main() {
       if (spec.totp) totpSecret = await ensureTotp(admin.token, userId, readPrevious("ALICE_TOTP_SECRET"));
     }
     await ensureDefaultRedirect(admin.token);
+    await ensureBrandingThemeMode(admin.token);
 
     // Only product apps are mapped; the hub has no product.
     const productClients = Object.fromEntries(APPS.filter((app) => app.product).map((app) => [clientIds[app.slug], app.product]));
