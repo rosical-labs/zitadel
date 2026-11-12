@@ -1,12 +1,10 @@
 import "@/styles/globals.scss";
 
-import { BackgroundWrapper } from "@/components/background-wrapper";
 import { LanguageProvider } from "@/components/language-provider";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { LegalFooter } from "@/components/legal-footer";
 import { SkeletonCard } from "@/components/skeleton-card";
 import { ThemeProvider } from "@/components/theme-provider";
-import ThemeSwitch from "@/components/theme-switch";
+// digisat: the sign-in screen layout (brand panel, toolbar, footer) replaces the toolbar, page background and LegalFooter
+import { AuthShell } from "@/digisat/auth-shell";
 // digisat: design system fonts (Gabarito, Instrument Sans, IBM Plex Mono) replace Geist
 import { fontVariables } from "@/digisat/fonts";
 // digisat: product context (data-product on <html>) from the auth request's client id
@@ -66,34 +64,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <ThemeProvider>
           <Tooltip.Provider>
-            <Suspense
-              fallback={
-                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground relative flex min-h-dvh flex-col items-center justify-center px-4 pt-16 pb-10 sm:pt-20">
-                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2 sm:top-6 sm:right-6">
-                    <ThemeSwitch />
-                  </div>
-                  <div className="w-full max-w-[400px]">
-                    <SkeletonCard isLoading />
-                  </div>
-                </BackgroundWrapper>
-              }
-            >
-              <LanguageProvider>
-                <BackgroundWrapper className="ztdl-page-bg bg-background text-foreground relative flex min-h-dvh flex-col items-center justify-center px-4 pt-16 pb-10 sm:pt-20">
-                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2 sm:top-6 sm:right-6">
-                    <LanguageSwitcher languages={languages} />
-                    <ThemeSwitch />
-                  </div>
-                  <main className="w-full max-w-[400px]">
-                    {/* digisat: product for client components (useProduct) */}
-                    <ProductProvider product={product}>{children}</ProductProvider>
-                  </main>
-                  <footer className="mt-6 flex w-full max-w-[400px] justify-center">
-                    <LegalFooter legal={legal} />
-                  </footer>
-                </BackgroundWrapper>
-              </LanguageProvider>
-            </Suspense>
+            {/* digisat: the shell stays outside Suspense, so the loading state already shows the brand panel */}
+            <LanguageProvider>
+              <AuthShell product={product} languages={languages} legal={legal}>
+                <Suspense fallback={<SkeletonCard isLoading />}>
+                  {/* digisat: product for client components (useProduct) */}
+                  <ProductProvider product={product}>{children}</ProductProvider>
+                </Suspense>
+              </AuthShell>
+            </LanguageProvider>
           </Tooltip.Provider>
         </ThemeProvider>
       </body>

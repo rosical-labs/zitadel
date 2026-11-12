@@ -481,5 +481,21 @@
     "privacy": "Gizlilik",
     "help": "Yardım",
     "support": "Destek"
+  },
+  "digisat": {
+    "brand": {
+      "headline": "tek hesap, tüm digisat.",
+      "lead": "hotspot, mail arşiv, endpoint control ve diğerleri: hepsine bu hesapla girersiniz."
+    },
+    "language": {
+      "label": "Dil"
+    },
+    "theme": {
+      "dark": "Karanlık temaya geç",
+      "light": "Açık temaya geç"
+    },
+    "footer": {
+      "copyright": "© digisat"
+    }
   }
 }

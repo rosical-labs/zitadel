@@ -3,6 +3,15 @@ export const PRODUCTS = ["hotspot", "mail-arsiv", "endpoint-control", "firewall"
 
 export type Product = (typeof PRODUCTS)[number];
 
+// Display names, lowercase as the design system writes them; product names are never translated.
+export const PRODUCT_NAMES: Readonly<Record<Product, string>> = {
+  hotspot: "hotspot",
+  "mail-arsiv": "mail arşiv",
+  "endpoint-control": "endpoint control",
+  firewall: "firewall",
+  infotv: "infotv",
+};
+
 export type ProductClients = Readonly<Record<string, Product>>;
 
 // Set by the proxy from the `requestId` search param, because the root layout gets no search params.
