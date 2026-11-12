@@ -1,4 +1,4 @@
-import { Alert, AlertType } from "@/components/alert";
+import { Alert } from "@/components/alert";
 import { DynamicTheme } from "@/components/dynamic-theme";
 import { SetPasswordForm } from "@/components/set-password-form";
 import { Translated } from "@/components/translated";
@@ -103,9 +103,12 @@ export default async function Page(props: { searchParams: Promise<Record<string 
   return (
     <DynamicTheme branding={branding}>
       <div className="flex flex-col space-y-4">
-        <h1>{session?.factors?.user?.displayName ?? <Translated i18nKey="set.title" namespace="password" />}</h1>
+        {/* digisat: the title is the action (the account chip shows the user); a reset says the code was sent */}
+        <h1>
+          <Translated i18nKey={initial ? "set.title" : "set.resetTitle"} namespace="password" />
+        </h1>
         <p className="ztdl-p">
-          <Translated i18nKey="set.description" namespace="password" />
+          <Translated i18nKey={initial ? "set.description" : "set.codeSent"} namespace="password" />
         </p>
 
         {/* Only warn when there is neither a loginName nor a userId to continue with.
@@ -132,12 +135,6 @@ export default async function Page(props: { searchParams: Promise<Record<string 
       </div>
 
       <div className="flex w-full flex-col gap-6">
-        {!initial && (
-          <Alert type={AlertType.INFO}>
-            <Translated i18nKey="set.codeSent" namespace="password" />
-          </Alert>
-        )}
-
         {passwordComplexity &&
         (loginName ?? user?.preferredLoginName) &&
         (userId ?? session?.factors?.user?.id ?? (loginSettings?.ignoreUnknownUsernames ? UNKNOWN_USER_ID : undefined)) ? (

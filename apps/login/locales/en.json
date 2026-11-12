@@ -1,166 +1,168 @@
 {
   "common": {
     "back": "Back",
-    "title": "Login with Zitadel"
+    "title": "Sign in to digisat"
   },
   "accounts": {
-    "title": "Accounts",
-    "description": "Select the account you want to use.",
-    "addAnother": "Add another account",
-    "noResults": "No accounts found",
+    "title": "Choose an account",
+    "description": "Sessions open in this browser.",
+    "addAnother": "Use another account",
+    "noResults": "No sessions are open in this browser.",
     "verified": "verified",
     "expired": "expired",
     "sessionEnded": "Session expired",
     "remove": "Remove {name} from this browser"
   },
   "logout": {
-    "title": "Logout",
-    "description": "Click an account to end the session",
-    "noResults": "No accounts found",
-    "clear": "End Session",
+    "title": "Sign out",
+    "description": "Choose the account whose session you want to end.",
+    "noResults": "No sessions are open in this browser.",
+    "clear": "End session",
     "verifiedAt": "Last active: {time}",
     "success": {
-      "title": "Logout successful",
-      "description": "You have successfully logged out."
+      "title": "You're signed out",
+      "description": "Your session in this browser has ended."
     }
   },
   "loginname": {
-    "title": "Welcome back!",
-    "description": "Enter your login details.",
-    "register": "Register new user",
+    "title": "Sign in",
+    "description": "The email address or username of your digisat account.",
+    "register": "Create an account",
     "submit": "Continue",
     "labels": {
-      "loginname": "Loginname",
+      "loginname": "Email or username",
       "username": "Username",
       "usernameOrPhoneNumber": "Username or phone number",
-      "usernameOrEmail": "Username or email"
+      "usernameOrEmail": "Email or username"
     },
     "required": {
-      "loginName": "This field is required"
+      "loginName": "Enter your email address or username."
     },
     "errors": {
-      "internalError": "An internal error occurred",
-      "couldNotGetLoginSettings": "Could not get login settings",
-      "couldNotSearchUsers": "Could not search users",
-      "couldNotGetDomain": "Could not get domain",
-      "couldNotGetHost": "Could not get host",
-      "couldNotStartIDPFlow": "Could not start IDP flow",
-      "moreThanOneUserFound": "More than one user found. Provide a unique identifier.",
-      "userNotFound": "User not found in the system",
-      "couldNotCreateSession": "Could not create session for user",
-      "initialUserNotSupported": "Initial User not supported",
-      "localAuthenticationNotAllowed": "Local authentication is not allowed! Contact your administrator for more information.",
-      "passkeysNotAllowed": "Passkeys not allowed! Contact your administrator for more information.",
-      "couldNotFindIdentityProvider": "Could not find identity provider.",
-      "userNotActive": "User is not active. Contact your administrator for more information."
+      "internalError": "Something went wrong. Try again in a moment.",
+      "couldNotGetLoginSettings": "Couldn't load the sign-in settings. Reload the page and try again.",
+      "couldNotSearchUsers": "Couldn't check your account details. Try again in a moment.",
+      "couldNotGetDomain": "Couldn't determine the domain. Try again in a moment.",
+      "couldNotGetHost": "Couldn't determine the server address. Try again in a moment.",
+      "couldNotStartIDPFlow": "Couldn't start sign-in with the identity provider. Try again.",
+      "moreThanOneUserFound": "This matches more than one account. Enter your full username.",
+      "userNotFound": "Couldn't sign in with these details. Check your email address or username.",
+      "couldNotCreateSession": "Couldn't start a session. Try again.",
+      "initialUserNotSupported": "This account isn't set up yet. Contact your administrator.",
+      "localAuthenticationNotAllowed": "Signing in with a password or passkey is turned off for this account. Contact your administrator.",
+      "passkeysNotAllowed": "Signing in with a passkey is turned off. Contact your administrator.",
+      "couldNotFindIdentityProvider": "Couldn't find the identity provider. Contact your administrator.",
+      "userNotActive": "This account isn't active. Contact your administrator."
     }
   },
   "zitadel": {
     "errors": {
-      "errorOccured": "An error occurred",
-      "multipleUsersFound": "Multiple users found",
-      "userNotFound": "User not found in the system"
+      "errorOccured": "Something went wrong. Try again.",
+      "multipleUsersFound": "This matches more than one account. Enter your full username.",
+      "userNotFound": "Couldn't sign in with these details. Check your email address or username."
     }
   },
   "password": {
     "verify": {
-      "title": "Password",
-      "description": "Enter your password.",
-      "resetPassword": "Reset Password",
-      "submit": "Continue",
+      "title": "Enter your password",
+      "description": "The password of your digisat account.",
+      "resetPassword": "Forgot password",
+      "submit": "Sign in",
       "labels": {
         "password": "Password"
       },
       "required": {
-        "password": "This field is required"
+        "password": "Enter your password."
       },
       "errors": {
-        "couldNotVerifyPassword": "Could not verify password",
-        "couldNotResetPassword": "Could not reset password"
+        "couldNotVerifyPassword": "Couldn't check your password. Try again.",
+        "couldNotResetPassword": "Couldn't start the password reset. Try again."
       },
       "info": {
-        "passwordResetSent": "Password was reset. Please check your email"
+        "passwordResetSent": "We sent a reset code to your email address."
       }
     },
     "set": {
-      "title": "Set Password",
-      "description": "Set the password for your account",
-      "codeSent": "A new code has been sent to your email address.",
-      "noCodeReceived": "Didn't receive a code?",
+      "title": "Set a password",
+      "resetTitle": "Reset your password",
+      "description": "Set a password for your account.",
+      "codeSent": "We sent a reset code to your email address.",
+      "noCodeReceived": "Didn't get a code?",
       "resend": "Resend code",
-      "submit": "Continue",
+      "submit": "Save password",
+      "resetSubmit": "Change password",
       "labels": {
         "code": "Code",
-        "newPassword": "New Password",
-        "confirmPassword": "Confirm Password"
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password"
       },
       "required": {
-        "code": "This field is required",
-        "newPassword": "You have to provide a password!",
-        "confirmPassword": "This field is required"
+        "code": "Enter the code.",
+        "newPassword": "Enter your new password.",
+        "confirmPassword": "Enter your new password again."
       },
       "errors": {
-        "couldNotSetPassword": "Could not set password",
-        "couldNotResetPassword": "Could not reset password",
-        "couldNotVerifyPassword": "Could not verify password"
+        "couldNotSetPassword": "Couldn't save the password. Try again.",
+        "couldNotResetPassword": "Couldn't send the code. Try again in a moment.",
+        "couldNotVerifyPassword": "Your password was saved, but signing in failed. Sign in again with your new password."
       }
     },
     "change": {
-      "title": "Change Password",
-      "description": "Set the password for your account",
-      "submit": "Continue",
+      "title": "Change your password",
+      "description": "Set a new password for your account.",
+      "submit": "Change password",
       "labels": {
-        "currentPassword": "Current Password",
-        "newPassword": "New Password",
-        "confirmPassword": "Confirm Password"
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password"
       },
       "required": {
-        "currentPassword": "You have to provide your current password!",
-        "newPassword": "You have to provide a new password!",
-        "confirmPassword": "This field is required"
+        "currentPassword": "Enter your current password.",
+        "newPassword": "Enter your new password.",
+        "confirmPassword": "Enter your new password again."
       },
       "errors": {
-        "currentPasswordInvalid": "Current password is incorrect.",
-        "couldNotChangePassword": "Could not change password",
-        "couldNotVerifyPassword": "Could not verify password",
-        "unknownError": "Unknown error"
+        "currentPasswordInvalid": "The current password isn't correct.",
+        "couldNotChangePassword": "Couldn't change the password. Try again.",
+        "couldNotVerifyPassword": "Couldn't check your password. Try again.",
+        "unknownError": "Something went wrong. Try again."
       }
     },
     "complexity": {
-      "length": "Must be at least {minLength} characters long.",
-      "hasSymbol": "Must include a symbol.",
-      "hasNumber": "Must include a number.",
-      "hasUppercase": "Must include an uppercase letter.",
-      "hasLowercase": "Must include a lowercase letter.",
-      "equals": "Password confirmation matched.",
-      "matches": "Matches",
-      "doesNotMatch": "Doesn't match"
+      "length": "At least {minLength} characters.",
+      "hasSymbol": "At least one symbol.",
+      "hasNumber": "At least one number.",
+      "hasUppercase": "At least one uppercase letter.",
+      "hasLowercase": "At least one lowercase letter.",
+      "equals": "Both passwords match.",
+      "matches": "Requirement met",
+      "doesNotMatch": "Requirement not met"
     },
     "errors": {
-      "noHostFound": "No host found",
-      "couldNotSendResetLink": "Could not send Password Reset Link",
-      "couldNotCreateSessionForUser": "Could not create session for user",
-      "couldNotVerifyPassword": "Could not verify password",
-      "failedToAuthenticate": "Failed to authenticate. You had {failedAttempts} of {maxPasswordAttempts} password attempts.{lockoutMessage}",
-      "failedToAuthenticateNoLimit": "Failed to authenticate.",
-      "accountLockedContactAdmin": " Contact your administrator to unlock your account",
-      "userNotFound": "User not found in the system",
-      "initialUserNotSupported": "Initial User not supported",
-      "userInitialStateNotSupported": "User Initial State is not supported",
-      "codeOrVerificationRequired": "You have to provide a code or have a valid User Verification Check",
-      "verificationRequired": "User Verification Check has to be done",
-      "couldNotLoadSession": "Could not load session",
-      "couldNotLoadAuthMethods": "Could not load auth methods",
-      "failedPrecondition": "Failed precondition",
-      "sessionNotValid": "Session is not valid",
-      "passwordVerificationMissing": "Password verification is missing.",
-      "passwordVerificationTooOld": "Password verification is too old. Please verify your password again.",
-      "passwordResetNotAllowed": "Password reset is not allowed. Contact your administrator for more information."
+      "noHostFound": "Couldn't determine the server address. Try again in a moment.",
+      "couldNotSendResetLink": "Couldn't reset the password with these details. Check your email address or username.",
+      "couldNotCreateSessionForUser": "The password isn't correct. Try again.",
+      "couldNotVerifyPassword": "The password isn't correct. Try again.",
+      "failedToAuthenticate": "The password isn't correct. You have used {failedAttempts} of {maxPasswordAttempts} attempts.{lockoutMessage}",
+      "failedToAuthenticateNoLimit": "The password isn't correct. Try again.",
+      "accountLockedContactAdmin": " Your account is locked. Ask your administrator to unlock it.",
+      "userNotFound": "Couldn't sign in with these details. Check your email address or username.",
+      "initialUserNotSupported": "This account isn't set up yet. Contact your administrator.",
+      "userInitialStateNotSupported": "This account isn't set up yet. Contact your administrator.",
+      "codeOrVerificationRequired": "Enter the code or verify with your device.",
+      "verificationRequired": "Verify your identity on your device to continue.",
+      "couldNotLoadSession": "Couldn't load your session. Sign in again.",
+      "couldNotLoadAuthMethods": "Couldn't load the sign-in methods. Reload the page.",
+      "failedPrecondition": "This can't be done right now. Try again.",
+      "sessionNotValid": "Your session isn't valid. Sign in again.",
+      "passwordVerificationMissing": "Enter your password first.",
+      "passwordVerificationTooOld": "Your password check has expired. Enter your password again.",
+      "passwordResetNotAllowed": "Password reset is turned off. Contact your administrator."
     }
   },
   "idp": {
     "title": "Sign in with SSO",
-    "description": "Select one of the following providers to sign in",
+    "description": "Choose an identity provider to sign in.",
     "orSignInWith": "or sign in with",
     "signInWithApple": "Sign in with Apple",
     "signInWithGoogle": "Sign in with Google",
@@ -169,147 +171,147 @@
     "signInWithGitlab": "Sign in with GitLab",
     "signInWithZitadel": "Sign in with Zitadel",
     "loginError": {
-      "title": "Login failed",
-      "description": "An error occurred while trying to login."
+      "title": "Couldn't sign in",
+      "description": "Signing in with the identity provider failed. Try again."
     },
     "linkingError": {
-      "title": "Account linking failed",
-      "description": "An error occurred while trying to link your account."
+      "title": "Couldn't link the account",
+      "description": "Your account couldn't be linked to the identity provider. Try again."
     },
     "completeRegister": {
-      "title": "Complete your data",
-      "description": "You need to complete your registration by providing your email address and name."
+      "title": "Complete your details",
+      "description": "Enter your email address and name to finish signing up."
     },
     "accountNotFound": {
-      "title": "Account Not Found",
-      "description": "We couldn't find an account associated with your identity provider credentials.",
-      "info": "No existing account was found. Please sign in with an existing account or contact your administrator for assistance.",
-      "backToLogin": "Back to Login"
+      "title": "No linked account",
+      "description": "No digisat account is linked to this identity provider account.",
+      "info": "Sign in with your existing account or contact your administrator.",
+      "backToLogin": "Back to sign-in"
     },
     "registrationFailed": {
-      "title": "Registration Not Available",
-      "description": "We couldn't complete the registration process.",
-      "info": "Unable to determine the organization for registration. Please contact your administrator for assistance.",
-      "backToLogin": "Back to Login"
+      "title": "Sign-up isn't available",
+      "description": "The sign-up couldn't be completed.",
+      "info": "The organization for the sign-up couldn't be determined. Contact your administrator.",
+      "backToLogin": "Back to sign-in"
     },
     "processing": {
-      "message": "Processing authentication...",
-      "noRedirect": "No redirect or error returned from server",
-      "unexpectedError": "An unexpected error occurred"
+      "message": "Signing you in…",
+      "noRedirect": "The server didn't respond. Try again.",
+      "unexpectedError": "Something unexpected went wrong. Try again."
     },
     "errors": {
-      "missingParameters": "Missing required parameters",
-      "missingIdpInfo": "IDP information missing",
-      "idpNotFound": "Identity provider not found",
-      "linkingNotAllowed": "Linking is not allowed for this identity provider",
-      "linkingFailed": "Failed to link identity provider to account",
-      "autoLinkingFailed": "Failed to automatically link account",
-      "userCreationFailed": "Failed to create user account",
-      "orgResolutionFailed": "Could not determine organization for registration",
-      "sessionCreationFailed": "Could not create session or determine redirect",
-      "unknownError": "An unknown error occurred"
+      "missingParameters": "Required details are missing. Start signing in again.",
+      "missingIdpInfo": "Identity provider details are missing. Start signing in again.",
+      "idpNotFound": "Couldn't find the identity provider. Contact your administrator.",
+      "linkingNotAllowed": "Linking accounts with this identity provider is turned off. Contact your administrator.",
+      "linkingFailed": "Couldn't link the identity provider to your account. Try again.",
+      "autoLinkingFailed": "Couldn't link the account automatically. Contact your administrator.",
+      "userCreationFailed": "Couldn't create the account. Contact your administrator.",
+      "orgResolutionFailed": "The organization for the sign-up couldn't be determined. Contact your administrator.",
+      "sessionCreationFailed": "Couldn't start a session. Sign in again.",
+      "unknownError": "Something went wrong. Try again."
     }
   },
   "ldap": {
-    "title": "LDAP Login",
-    "description": "Enter your LDAP credentials.",
-    "submit": "Continue",
+    "title": "Sign in with LDAP",
+    "description": "Enter your LDAP username and password.",
+    "submit": "Sign in",
     "labels": {
       "username": "Username",
       "password": "Password"
     },
     "required": {
-      "username": "This field is required",
-      "password": "This field is required"
+      "username": "Enter your username.",
+      "password": "Enter your password."
     }
   },
   "mfa": {
     "verify": {
       "title": "Verify your identity",
-      "description": "Choose one of the following factors.",
-      "noResults": "No second factors available to setup."
+      "description": "Choose a verification method.",
+      "noResults": "No verification method can be set up. Contact your administrator."
     },
     "set": {
-      "title": "Set up 2-Factor",
-      "description": "Choose one of the following second factors.",
+      "title": "Set up two-step verification",
+      "description": "Choose a verification method.",
       "skip": "Skip"
     }
   },
   "otp": {
     "verify": {
-      "title": "Verify 2-Factor",
-      "totpDescription": "Enter the code from your authenticator app.",
-      "smsDescription": "Enter the code you received via SMS.",
-      "emailDescription": "Enter the code you received via email.",
-      "noCodeReceived": "Didn't receive a code?",
+      "title": "Verification code",
+      "totpDescription": "Enter the 6-digit code from your authenticator app.",
+      "smsDescription": "Enter the code we sent by SMS.",
+      "emailDescription": "Enter the code we sent by email.",
+      "noCodeReceived": "Didn't get a code?",
       "resendCode": "Resend code",
-      "submit": "Continue",
+      "submit": "Verify",
       "labels": {
         "code": "Code"
       },
       "required": {
-        "code": "This field is required"
+        "code": "Enter the code."
       }
     },
     "set": {
-      "title": "Set up 2-Factor",
+      "title": "Set up two-step verification",
       "totpDescription": "Scan the QR code with your authenticator app.",
-      "smsDescription": "Enter your phone number to receive a code via SMS.",
-      "emailDescription": "Enter your email address to receive a code via email.",
-      "totpRegisterDescription": "Scan the QR Code or navigate to the URL manually.",
-      "submit": "Continue",
+      "smsDescription": "Enter your phone number to get a code by SMS.",
+      "emailDescription": "Enter your email address to get a code by email.",
+      "totpRegisterDescription": "Scan the QR code or enter the setup key in your app.",
+      "submit": "Verify",
       "labels": {
         "code": "Code"
       },
       "required": {
-        "code": "This field is required"
+        "code": "Enter the code."
       },
       "secret": "Setup key"
     },
     "errors": {
-      "couldNotRequestChallenge": "Could not request OTP challenge",
-      "couldNotVerifyCode": "Could not verify OTP code"
+      "couldNotRequestChallenge": "Couldn't send the code. Try again.",
+      "couldNotVerifyCode": "Couldn't verify the code. Try again."
     }
   },
   "passkey": {
     "verify": {
-      "title": "Authenticate with a passkey",
-      "description": "Your device will ask for your fingerprint, face, or screen lock",
+      "title": "Sign in with a passkey",
+      "description": "Your device will ask for your fingerprint, face or screen lock.",
       "usePassword": "Use password",
       "submit": "Continue",
       "errors": {
-        "couldNotRequestChallenge": "Could not request passkey challenge",
-        "couldNotVerifyPasskey": "Could not verify passkey",
-        "noResponseReceived": "Passkey verification failed - no response received",
-        "noRedirectProvided": "Passkey verification completed but no redirect was provided",
-        "couldNotRetrievePasskey": "An error occurred while retrieving passkey",
-        "verificationCancelled": "Passkey verification was cancelled",
-        "verificationFailed": "An error occurred during passkey verification",
-        "couldNotFindSession": "Could not find session",
-        "couldNotUpdateSession": "Could not update session",
-        "userNotFound": "User not found in the system",
-        "couldNotDetermineRedirect": "Could not determine redirect URL after passkey verification"
+        "couldNotRequestChallenge": "Couldn't start the passkey request. Try again.",
+        "couldNotVerifyPasskey": "Couldn't verify the passkey. Try again.",
+        "noResponseReceived": "The passkey didn't respond. Try again.",
+        "noRedirectProvided": "The passkey was verified, but the redirect failed. Try again.",
+        "couldNotRetrievePasskey": "Couldn't get the passkey. Try again.",
+        "verificationCancelled": "The passkey check was cancelled. Try again or use your password.",
+        "verificationFailed": "Couldn't verify the passkey. Try again.",
+        "couldNotFindSession": "Couldn't find your session. Sign in again.",
+        "couldNotUpdateSession": "Couldn't update your session. Try again.",
+        "userNotFound": "Couldn't sign in with these details. Check your email address or username.",
+        "couldNotDetermineRedirect": "The passkey was verified, but the redirect failed. Try again."
       }
     },
     "set": {
-      "title": "Setup a passkey",
-      "description": "Your device will ask for your fingerprint, face, or screen lock",
+      "title": "Set up a passkey",
+      "description": "Your device will ask for your fingerprint, face or screen lock.",
       "info": {
-        "description": "A passkey is an authentication method on a device like your fingerprint, Apple FaceID or similar. ",
-        "link": "Passkey Authentication"
+        "description": "A passkey signs you in with your device, using your fingerprint, Face ID or screen lock. ",
+        "link": "About passkeys"
       },
       "skip": "Skip",
-      "submit": "Continue"
+      "submit": "Set up passkey"
     }
   },
   "u2f": {
     "verify": {
-      "title": "Verify 2-Factor",
+      "title": "Two-step verification",
       "description": "Verify your account with your device."
     },
     "set": {
-      "title": "Set up 2-Factor",
-      "description": "Set up a device as a second factor.",
+      "title": "Set up two-step verification",
+      "description": "Set up a device as your second step.",
       "submit": "Continue"
     }
   },
@@ -319,165 +321,167 @@
       "password": "Password"
     },
     "disabled": {
-      "title": "Registration disabled",
-      "description": "The registration is disabled. Please contact your administrator."
+      "title": "Sign-up is turned off",
+      "description": "Self sign-up is turned off. Contact your administrator for an account."
     },
     "missingdata": {
-      "title": "Missing data",
-      "description": "Provide email, first and last name to register."
+      "title": "Missing details",
+      "description": "Enter your email address, first name and last name to sign up."
     },
-    "title": "Register",
-    "description": "Create your Zitadel account.",
-    "noMethodAvailableWarning": "No authentication method available. Please contact your administrator.",
-    "selectMethod": "Select the method you would like to authenticate",
-    "agreeTo": "To register you must agree to the terms and conditions",
-    "termsOfService": "Terms of Service",
-    "privacyPolicy": "Privacy Policy",
+    "title": "Create an account",
+    "description": "Create your digisat account.",
+    "noMethodAvailableWarning": "No sign-in method is available. Contact your administrator.",
+    "selectMethod": "Choose a sign-in method",
+    "agreeTo": "To sign up, accept the terms",
+    "termsOfService": "Terms of service",
+    "privacyPolicy": "Privacy policy",
     "submit": "Continue",
     "password": {
-      "title": "Set Password",
-      "description": "Set the password for your account",
+      "title": "Set a password",
+      "description": "Set a password for your account.",
       "submit": "Continue",
       "labels": {
         "password": "Password",
-        "confirmPassword": "Confirm Password"
+        "confirmPassword": "Confirm password"
       },
       "required": {
-        "password": "You have to provide a password!",
-        "confirmPassword": "This field is required"
+        "password": "Enter your password.",
+        "confirmPassword": "Enter your password again."
       }
     },
     "labels": {
       "firstname": "First name",
       "lastname": "Last name",
-      "email": "E-mail"
+      "email": "Email"
     },
     "required": {
-      "firstname": "This field is required",
-      "lastname": "This field is required",
-      "email": "This field is required"
+      "firstname": "Enter your first name.",
+      "lastname": "Enter your last name.",
+      "email": "Enter your email address."
     },
     "errors": {
-      "couldNotCreateUser": "Could not create user",
-      "couldNotCreateSession": "Could not create session",
-      "userNotFound": "User not found in the system",
-      "couldNotLinkIDP": "Could not link IDP to user",
-      "couldNotRegisterUser": "Could not register user"
-    }
+      "couldNotCreateUser": "Couldn't create the account. Try again.",
+      "couldNotCreateSession": "Couldn't start a session. Sign in again.",
+      "userNotFound": "Couldn't sign in with these details. Check your email address or username.",
+      "couldNotLinkIDP": "Couldn't link the identity provider to your account. Try again.",
+      "couldNotRegisterUser": "Couldn't complete the sign-up. Try again."
+    },
+    "openHelp": "Open help in a new tab"
   },
   "invite": {
-    "title": "Invite User",
-    "description": "Provide the email address and the name of the user you want to invite.",
-    "info": "The user will receive an email with further instructions.",
-    "notAllowed": "Your settings do not allow you to invite users.",
+    "title": "Invite a user",
+    "description": "Enter the email address and name of the person you want to invite.",
+    "info": "The user will get an email with the next steps.",
+    "notAllowed": "Your settings don't allow you to invite users.",
     "submit": "Continue",
     "success": {
       "title": "User invited",
-      "description": "The email has successfully been sent.",
-      "verified": "The user has been invited and has already verified his email.",
-      "notVerifiedYet": "The user has been invited. They will receive an email with further instructions.",
+      "description": "The email was sent.",
+      "verified": "The user was invited. Their email address is already verified.",
+      "notVerifiedYet": "The user was invited. They will get an email with the next steps.",
       "submit": "Invite another user"
     }
   },
   "signedin": {
-    "title": "Welcome {user}!",
-    "description": "You are signed in.",
+    "title": "Welcome, {user}",
+    "description": "You're signed in.",
     "continue": "Continue",
+    "deviceDone": "You can close this window and return to the device where you started the authorization.",
     "error": {
-      "title": "Error",
-      "description": "An error occurred while trying to sign in."
+      "title": "Couldn't sign in",
+      "description": "Something went wrong while signing in. Try again."
     }
   },
   "verify": {
-    "userIdMissing": "No userId provided!",
-    "successTitle": "User verified",
-    "successDescription": "The user has been verified successfully.",
+    "userIdMissing": "User details are missing. Open the link in the email again.",
+    "successTitle": "Your account is verified",
+    "successDescription": "Continue to sign in.",
     "successContinue": "Continue",
-    "setupAuthenticator": "Setup authenticator",
+    "setupAuthenticator": "Set up a sign-in method",
     "verify": {
-      "title": "Verify user",
-      "description": "Enter the Code provided in the verification email.",
-      "noCodeReceived": "Didn't receive a code?",
+      "title": "Verify your account",
+      "description": "Enter the code from the verification email.",
+      "noCodeReceived": "Didn't get a code?",
       "resendCode": "Resend code",
-      "codeSent": "A new code has just been sent to your email address.",
-      "submit": "Continue",
+      "codeSent": "We sent a verification code to your email address.",
+      "submit": "Verify",
       "labels": {
         "code": "Code"
       },
       "required": {
-        "code": "This field is required"
+        "code": "Enter the code."
       }
     },
     "errors": {
-      "couldNotResendEmail": "Could not resend email",
-      "couldNotVerifyUser": "Could not verify user",
-      "couldNotVerifyInvite": "Could not verify invite",
-      "couldNotVerifyEmail": "Could not verify email",
-      "couldNotVerify": "Could not verify",
-      "couldNotLoadUser": "Could not load user",
-      "couldNotLoadAuthenticators": "Could not load possible authenticators",
-      "couldNotCreateSession": "Could not create session",
-      "noHostFound": "No host found",
-      "userAlreadyVerified": "User is already verified!",
-      "couldNotResendInvite": "Could not resend invite",
-      "inviteSendFailed": "Failed to send invitation email",
-      "emailSendFailed": "Failed to send verification email",
-      "contextMissing": "An error occurred. Please try again."
+      "couldNotResendEmail": "Couldn't resend the email. Try again in a moment.",
+      "couldNotVerifyUser": "Couldn't verify. Check the code and try again.",
+      "couldNotVerifyInvite": "Couldn't verify the invitation. Check the code and try again.",
+      "couldNotVerifyEmail": "Couldn't verify your email. Check the code and try again.",
+      "couldNotVerify": "Couldn't verify. Try again.",
+      "couldNotLoadUser": "Couldn't load your account details. Try again.",
+      "couldNotLoadAuthenticators": "Couldn't load the sign-in methods. Try again.",
+      "couldNotCreateSession": "Couldn't start a session. Sign in again.",
+      "noHostFound": "Couldn't determine the server address. Try again in a moment.",
+      "userAlreadyVerified": "Your account is already verified. You can sign in.",
+      "couldNotResendInvite": "Couldn't resend the invitation. Try again in a moment.",
+      "inviteSendFailed": "Couldn't send the invitation email. Try again in a moment.",
+      "emailSendFailed": "Couldn't send the verification email. Try again in a moment.",
+      "contextMissing": "Something went wrong. Try again."
     }
   },
   "authenticator": {
-    "title": "Choose authentication method",
-    "description": "Select the method you would like to authenticate",
-    "noMethodsAvailable": "No authentication methods available",
-    "allSetup": "You have already setup an authenticator!",
-    "linkWithIDP": "or link with an Identity Provider",
+    "title": "Choose a sign-in method",
+    "description": "Choose how you want to sign in to your account.",
+    "noMethodsAvailable": "No sign-in method is available. Contact your administrator.",
+    "allSetup": "Your sign-in method is already set up.",
+    "linkWithIDP": "or link an identity provider",
     "methods": {
-      "totp": "Authenticator App",
-      "u2f": "Universal Second Factor",
-      "otpEmail": "Code via Email",
-      "otpSms": "Code via SMS",
-      "passkey": "Passkeys",
+      "totp": "Authenticator app",
+      "u2f": "Security key",
+      "otpEmail": "Code by email",
+      "otpSms": "Code by SMS",
+      "passkey": "Passkey",
       "password": "Password"
     }
   },
   "device": {
     "usercode": {
       "title": "Device code",
-      "description": "Enter the code displayed on your app or device.",
+      "description": "Enter the code shown in your app or on your device.",
       "submit": "Continue",
       "labels": {
         "code": "Code"
       },
       "required": {
-        "code": "This field is required"
+        "code": "Enter the code."
       }
     },
     "request": {
-      "title": "{appName} would like to connect",
-      "description": "{appName} will have access to:",
-      "disclaimer": "By clicking Allow, you allow {appName} and Zitadel to use your information in accordance with their respective terms of service and privacy policies. You can revoke this access at any time.",
-      "usercode": "Code displayed on your device:",
+      "title": "{appName} wants to connect",
+      "description": "{appName} will be able to:",
+      "disclaimer": "By choosing Allow, you let {appName} and digisat use your information under their terms of service and privacy policies. You can revoke this access at any time.",
+      "usercode": "Code shown on your device:",
       "submit": "Allow",
       "deny": "Deny"
     },
     "scope": {
       "openid": "Verify your identity.",
-      "email": "View your email address.",
-      "profile": "View your full profile information.",
-      "offline_access": "Allow offline access to your account."
+      "email": "See your email address.",
+      "profile": "See your full profile.",
+      "offline_access": "Access your account while you're offline."
     }
   },
   "error": {
-    "noUserCode": "No user code provided!",
-    "noDeviceRequest": "No device request found.",
-    "unknownContext": "Could not get the context of the user. Make sure to enter the username first or provide a loginName as searchParam.",
-    "sessionExpired": "Your session has expired or requires re-authentication. Please sign in again.",
-    "failedLoading": "Failed to load data. Please try again.",
-    "tryagain": "Try Again",
-    "couldNotContinueSession": "Could not continue with session - missing user information",
-    "couldNotClearSession": "Could not end the session. Please try again.",
-    "grantRequired": "Login not possible. The user is required to have at least one grant on the application. Please contact your administrator.",
-    "projectRequired": "Login not possible. The organization of the user must be granted to the project. Please contact your administrator."
+    "noUserCode": "The user code is missing. Enter the code again.",
+    "noDeviceRequest": "Couldn't find the device request. Start signing in on the device again.",
+    "unknownContext": "Couldn't tell which account to continue with. Start signing in again.",
+    "sessionExpired": "Your session has expired. Sign in again.",
+    "failedLoading": "Couldn't load the page. Try again.",
+    "tryagain": "Try again",
+    "couldNotContinueSession": "Couldn't continue your session. Sign in again.",
+    "couldNotClearSession": "Couldn't end the session. Try again.",
+    "grantRequired": "You don't have access to this app. Ask your administrator for access.",
+    "projectRequired": "Your organization doesn't have access to this app. Ask your administrator for access."
   },
   "footer": {
     "label": "Legal and support",

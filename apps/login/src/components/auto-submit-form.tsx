@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 
 export function AutoSubmitForm({ url, fields }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
+  const t = useTranslations("signedin");
 
   useEffect(() => {
     if (formRef.current) {
@@ -22,7 +24,8 @@ export function AutoSubmitForm({ url, fields }: Props) {
         <input key={key} type="hidden" name={key} value={value} />
       ))}
       <noscript>
-        <button type="submit">Continue</button>
+        {/* digisat: via i18n */}
+        <button type="submit">{t("continue")}</button>
       </noscript>
     </form>
   );
