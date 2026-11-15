@@ -131,5 +131,12 @@ declare namespace NodeJS {
      * Display only (sets `data-product` on <html>); unknown clients show the hub. Invalid JSON or an unknown product stops the server at startup.
      */
     DIGISAT_PRODUCT_CLIENTS?: string;
+
+    /**
+     * digisat: comma-separated instance hostnames that get the digisat look, e.g. `auth.digisat.cloud`.
+     * Matched case-insensitively against the instance host, ignoring the port. Unset or blank: every host shows the
+     * instance's own branding. A scheme, path, inner whitespace or empty entry stops the server at startup.
+     */
+    DIGISAT_HOSTS?: string;
   }
 }
