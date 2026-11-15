@@ -1,0 +1,38 @@
+{
+  "common": {
+    "title": "digisat'a giriş yapın"
+  },
+  "loginname": {
+    "description": "digisat hesabınızın e-posta adresi veya kullanıcı adı."
+  },
+  "password": {
+    "verify": {
+      "description": "digisat hesabınızın şifresi."
+    }
+  },
+  "idp": {
+    "accountNotFound": {
+      "description": "Bu kimlik sağlayıcı hesabına bağlı bir digisat hesabı yok."
+    }
+  },
+  "register": {
+    "description": "digisat hesabınızı oluşturun."
+  },
+  "device": {
+    "request": {
+      "disclaimer": "İzin ver'e tıkladığınızda {appName} ve digisat bilgilerinizi kendi hizmet şartlarına ve gizlilik politikalarına göre kullanabilir. Bu erişimi istediğiniz zaman geri alabilirsiniz."
+    }
+  },
+  "digisat": {
+    "noAccess": {
+      "hub": "digisat'a git"
+    },
+    "brand": {
+      "headline": "tek hesap, tüm digisat.",
+      "lead": "Bir kez giriş yapın, tüm digisat uygulamalarına aynı hesapla geçin."
+    },
+    "footer": {
+      "copyright": "© digisat"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "common": {
     "back": "Back",
-    "title": "Sign in to digisat"
+    "title": "Sign in"
   },
   "accounts": {
     "title": "Choose an account",
@@ -26,7 +26,7 @@
   },
   "loginname": {
     "title": "Sign in",
-    "description": "The email address or username of your digisat account.",
+    "description": "The email address or username of your account.",
     "register": "Create an account",
     "submit": "Continue",
     "labels": {
@@ -65,7 +65,7 @@
   "password": {
     "verify": {
       "title": "Enter your password",
-      "description": "The password of your digisat account.",
+      "description": "The password of your account.",
       "resetPassword": "Forgot password",
       "submit": "Sign in",
       "labels": {
@@ -184,7 +184,7 @@
     },
     "accountNotFound": {
       "title": "No linked account",
-      "description": "No digisat account is linked to this identity provider account.",
+      "description": "No account is linked to this identity provider account.",
       "info": "Sign in with your existing account or contact your administrator.",
       "backToLogin": "Back to sign-in"
     },
@@ -329,7 +329,7 @@
       "description": "Enter your email address, first name and last name to sign up."
     },
     "title": "Create an account",
-    "description": "Create your digisat account.",
+    "description": "Create your account.",
     "noMethodAvailableWarning": "No sign-in method is available. Contact your administrator.",
     "selectMethod": "Choose a sign-in method",
     "agreeTo": "To sign up, accept the terms",
@@ -459,7 +459,7 @@
     "request": {
       "title": "{appName} wants to connect",
       "description": "{appName} will be able to:",
-      "disclaimer": "By choosing Allow, you let {appName} and digisat use your information under their terms of service and privacy policies. You can revoke this access at any time.",
+      "disclaimer": "By choosing Allow, you let {appName} use your information under its terms of service and privacy policy. You can revoke this access at any time.",
       "usercode": "Code shown on your device:",
       "submit": "Allow",
       "deny": "Deny"
@@ -491,19 +491,12 @@
     "support": "Support"
   },
   "digisat": {
-    "brand": {
-      "headline": "one account, all of digisat.",
-      "lead": "Sign in once and move between all digisat apps with the same account."
-    },
     "language": {
       "label": "Language"
     },
     "theme": {
       "dark": "Switch to dark theme",
       "light": "Switch to light theme"
-    },
-    "footer": {
-      "copyright": "© digisat"
     },
     "context": {
       "continueTo": "Sign in to continue to <product>{name}</product>"
@@ -524,7 +517,7 @@
       "title": "You don't have access to this app",
       "product": "Your account isn't authorized for {name}. Ask your administrator for access.",
       "generic": "Your account isn't authorized for this app. Ask your administrator for access.",
-      "hub": "Go to digisat",
+      "hub": "Continue",
       "signOut": "Sign out"
     }
   }

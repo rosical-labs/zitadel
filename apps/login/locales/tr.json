@@ -1,7 +1,7 @@
 {
   "common": {
     "back": "Geri",
-    "title": "digisat'a giriş yapın"
+    "title": "Giriş yapın"
   },
   "accounts": {
     "title": "Hesap seçin",
@@ -26,7 +26,7 @@
   },
   "loginname": {
     "title": "Giriş yapın",
-    "description": "digisat hesabınızın e-posta adresi veya kullanıcı adı.",
+    "description": "Hesabınızın e-posta adresi veya kullanıcı adı.",
     "register": "Hesap oluştur",
     "submit": "Devam",
     "labels": {
@@ -65,7 +65,7 @@
   "password": {
     "verify": {
       "title": "Şifrenizi girin",
-      "description": "digisat hesabınızın şifresi.",
+      "description": "Hesabınızın şifresi.",
       "resetPassword": "Şifremi unuttum",
       "submit": "Giriş yap",
       "labels": {
@@ -184,7 +184,7 @@
     },
     "accountNotFound": {
       "title": "Bağlı hesap yok",
-      "description": "Bu kimlik sağlayıcı hesabına bağlı bir digisat hesabı yok.",
+      "description": "Bu kimlik sağlayıcı hesabına bağlı bir hesap yok.",
       "info": "Mevcut hesabınızla giriş yapın veya yöneticinize başvurun.",
       "backToLogin": "Girişe dön"
     },
@@ -329,7 +329,7 @@
       "description": "Kayıt için e-posta adresinizi, adınızı ve soyadınızı girin."
     },
     "title": "Hesap oluşturun",
-    "description": "digisat hesabınızı oluşturun.",
+    "description": "Hesabınızı oluşturun.",
     "noMethodAvailableWarning": "Kullanılabilir giriş yöntemi yok. Yöneticinize başvurun.",
     "selectMethod": "Bir giriş yöntemi seçin",
     "agreeTo": "Kayıt için şartları kabul etmeniz gerekiyor",
@@ -459,7 +459,7 @@
     "request": {
       "title": "{appName} bağlanmak istiyor",
       "description": "{appName} şunlara erişebilecek:",
-      "disclaimer": "İzin ver'e tıkladığınızda {appName} ve digisat bilgilerinizi kendi hizmet şartlarına ve gizlilik politikalarına göre kullanabilir. Bu erişimi istediğiniz zaman geri alabilirsiniz.",
+      "disclaimer": "İzin ver'e tıkladığınızda {appName} bilgilerinizi kendi hizmet şartlarına ve gizlilik politikasına göre kullanabilir. Bu erişimi istediğiniz zaman geri alabilirsiniz.",
       "usercode": "Cihazınızda görünen kod:",
       "submit": "İzin ver",
       "deny": "Reddet"
@@ -491,19 +491,12 @@
     "support": "Destek"
   },
   "digisat": {
-    "brand": {
-      "headline": "tek hesap, tüm digisat.",
-      "lead": "Bir kez giriş yapın, tüm digisat uygulamalarına aynı hesapla geçin."
-    },
     "language": {
       "label": "Dil"
     },
     "theme": {
       "dark": "Karanlık temaya geç",
       "light": "Açık temaya geç"
-    },
-    "footer": {
-      "copyright": "© digisat"
     },
     "context": {
       "continueTo": "<product>{name}</product> uygulamasına devam etmek için giriş yapın"
@@ -524,7 +517,7 @@
       "title": "Bu uygulamaya erişiminiz yok",
       "product": "Hesabınız {name} için yetkili değil. Yöneticinizden erişim isteyin.",
       "generic": "Hesabınız bu uygulama için yetkili değil. Yöneticinizden erişim isteyin.",
-      "hub": "digisat'a git",
+      "hub": "Devam et",
       "signOut": "Çıkış yap"
     }
   }

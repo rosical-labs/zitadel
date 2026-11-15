@@ -15,32 +15,42 @@ function getFooterLinks(legal: LegalAndSupportSettings | undefined, locale: stri
   return links;
 }
 
-/** "© digisat" on the left, the instance's privacy and help links on the right. */
-export function AuthFooter({ legal }: { legal: LegalAndSupportSettings | undefined }) {
+/** The instance's privacy and help links; nothing when neither is set. */
+export function FooterLinks({ legal }: { legal: LegalAndSupportSettings | undefined }) {
   const locale = useLocale();
-  const t = useTranslations("digisat.footer");
   const tLegal = useTranslations("footer");
   const links = getFooterLinks(legal, locale);
+
+  if (links.length === 0) {
+    return null;
+  }
+
+  return (
+    <nav aria-label={tLegal("label")} className="flex gap-4" data-testid="legal-footer">
+      {links.map((link) => (
+        <a
+          key={link.key}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-foreground focus-visible:outline-ring underline-offset-4 transition-colors outline-none hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+          data-testid={`legal-footer-${link.key}`}
+        >
+          {tLegal(link.key)}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+/** "© digisat" on the left, the instance's privacy and help links on the right. */
+export function AuthFooter({ legal }: { legal: LegalAndSupportSettings | undefined }) {
+  const t = useTranslations("digisat.footer");
 
   return (
     <footer className="text-muted-foreground flex items-center justify-between gap-4 px-4 py-4 text-xs leading-4 min-[960px]:px-8">
       <span>{t("copyright")}</span>
-      {links.length > 0 && (
-        <nav aria-label={tLegal("label")} className="flex gap-4" data-testid="legal-footer">
-          {links.map((link) => (
-            <a
-              key={link.key}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground focus-visible:outline-ring underline-offset-4 transition-colors outline-none hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
-              data-testid={`legal-footer-${link.key}`}
-            >
-              {tLegal(link.key)}
-            </a>
-          ))}
-        </nav>
-      )}
+      <FooterLinks legal={legal} />
     </footer>
   );
 }

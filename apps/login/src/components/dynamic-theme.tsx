@@ -1,7 +1,10 @@
 "use client";
 
+import { Logo } from "@/components/logo";
+import { useIsDigisatHost } from "@/digisat/host-provider";
 import { BrandingSettings } from "@zitadel/proto/zitadel/settings/v2/branding_settings_pb";
 import { Children, ReactNode } from "react";
+import { Card } from "./card";
 import { ThemeWrapper } from "./theme-wrapper";
 
 // digisat: the step title in the design system's page-title style (Gabarito 800, 28/32, -0.02em)
@@ -9,8 +12,9 @@ const TITLE_CLASSES =
   "text-left [&_h1]:font-display [&_h1]:text-[28px] [&_h1]:leading-8 [&_h1]:font-extrabold [&_h1]:tracking-[-0.02em]";
 
 /**
- * DynamicTheme renders the login step frame: a frameless column (title block, then form) on the page background.
- * The logo lives in the digisat brand panel (src/digisat/brand-panel.tsx), not above the step.
+ * DynamicTheme renders the login step frame. On a digisat host: a frameless column (title block, then form) on the
+ * page background; the logo lives in the digisat brand panel (src/digisat/brand-panel.tsx). On any other host: the
+ * instance logo (none if the branding has none) above one centred card.
  *
  * Children: the first child is the title block (title, description); the rest is the form.
  * A single child is treated as form content only.
@@ -29,6 +33,26 @@ export function DynamicTheme({
   const hasTitle = childArray.length > 1;
   const titleContent = hasTitle ? childArray[0] : null;
   const formContent = hasTitle ? childArray.slice(1) : childArray;
+  const digisat = useIsDigisatHost();
+
+  if (!digisat) {
+    return (
+      <ThemeWrapper branding={branding}>
+        <div className="flex w-full flex-col items-center gap-8">
+          {branding && (
+            <Logo lightSrc={branding.lightTheme?.logoUrl} darkSrc={branding.darkTheme?.logoUrl} height={80} width={320} />
+          )}
+
+          <Card className="w-full" padding="p-6 sm:p-8">
+            {titleContent && <div className="text-left">{titleContent}</div>}
+
+            {/* Hidden when a page passes only an empty placeholder, so the card does not end in blank space. */}
+            <div className={`space-y-6 has-[>:only-child:empty]:hidden ${titleContent ? "mt-6" : ""}`}>{formContent}</div>
+          </Card>
+        </div>
+      </ThemeWrapper>
+    );
+  }
 
   return (
     <ThemeWrapper branding={branding}>

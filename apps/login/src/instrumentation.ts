@@ -42,8 +42,12 @@ export async function register(): Promise<void> {
   await logSessionCookieSecretNotice();
 
   // digisat: refuse to start with an invalid DIGISAT_PRODUCT_CLIENTS instead of failing every page
-  const { validateProductClientsAtStartup } = await import("./digisat/startup");
-  if (!validateProductClientsAtStartup()) {
+  // digisat: refuse to start with a malformed DIGISAT_HOSTS; unset or blank is valid (every host neutral)
+  const { validateProductClientsAtStartup, validateDigisatHostsAtStartup } = await import("./digisat/startup");
+  // Both run, so every broken value is logged before exiting.
+  const productClientsValid = validateProductClientsAtStartup();
+  const digisatHostsValid = validateDigisatHostsAtStartup();
+  if (!productClientsValid || !digisatHostsValid) {
     process.exit(1);
   }
 

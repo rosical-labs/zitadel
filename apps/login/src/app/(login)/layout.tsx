@@ -7,6 +7,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthShell } from "@/digisat/auth-shell";
 // digisat: design system fonts (Gabarito, Instrument Sans, IBM Plex Mono) replace Geist
 import { fontVariables } from "@/digisat/fonts";
+// digisat: only DIGISAT_HOSTS get the digisat look; other hosts get the instance's logo and colours
+import { DigisatHostProvider } from "@/digisat/host-provider";
+import { isDigisatHost } from "@/digisat/hosts";
+import { InstanceShell } from "@/digisat/instance-shell";
 // digisat: product context (data-product on <html>) from the auth request's client id
 import { getProductForRequest } from "@/digisat/product-context";
 import { ProductProvider } from "@/digisat/product-provider";
@@ -30,8 +34,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const _headers = await headers();
   const { serviceConfig } = getServiceConfig(_headers);
-  // digisat: display only, never affects the flow
-  const product = await getProductForRequest(_headers.get(REQUEST_ID_HEADER) ?? undefined, serviceConfig);
+  // digisat: the instance host is what ZITADEL selects the instance by
+  const digisat = isDigisatHost(serviceConfig.instanceHost);
+  // digisat: display only, never affects the flow; no product on a non-digisat host
+  const product = digisat
+    ? await getProductForRequest(_headers.get(REQUEST_ID_HEADER) ?? undefined, serviceConfig)
+    : undefined;
 
   let languages = LANGS;
   try {
@@ -53,12 +61,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     console.error("Failed to load legal and support settings", e);
   }
 
-  // digisat: data-product selects the product accent in digisat/globals.css
+  const step = (
+    <Suspense fallback={<SkeletonCard isLoading />}>
+      {/* digisat: product for client components (useProduct) */}
+      <ProductProvider product={product}>
+        {/* digisat: the handoff and no-access views replace the step */}
+        <StepOverrideProvider>{children}</StepOverrideProvider>
+      </ProductProvider>
+    </Suspense>
+  );
+
+  // digisat: data-product selects the product accent in digisat/globals.css;
+  // data-brand="instance" maps the tokens to the instance branding (styles/globals.scss)
   return (
     <html
       className={fontVariables}
       data-roundness={getThemeConfig().roundness}
       data-product={product}
+      data-brand={digisat ? undefined : "instance"}
       suppressHydrationWarning
     >
       <head />
@@ -67,15 +87,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Tooltip.Provider>
             {/* digisat: the shell stays outside Suspense, so the loading state already shows the brand panel */}
             <LanguageProvider>
-              <AuthShell product={product} languages={languages} legal={legal}>
-                <Suspense fallback={<SkeletonCard isLoading />}>
-                  {/* digisat: product for client components (useProduct) */}
-                  <ProductProvider product={product}>
-                    {/* digisat: the handoff and no-access views replace the step */}
-                    <StepOverrideProvider>{children}</StepOverrideProvider>
-                  </ProductProvider>
-                </Suspense>
-              </AuthShell>
+              <DigisatHostProvider digisat={digisat}>
+                {digisat ? (
+                  <AuthShell product={product} languages={languages} legal={legal}>
+                    {step}
+                  </AuthShell>
+                ) : (
+                  <InstanceShell languages={languages} legal={legal}>
+                    {step}
+                  </InstanceShell>
+                )}
+              </DigisatHostProvider>
             </LanguageProvider>
           </Tooltip.Provider>
         </ThemeProvider>
