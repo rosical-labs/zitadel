@@ -1,5 +1,6 @@
 // digisat: merges instance and organization custom texts over the local messages
-import { mergeLoginMessages } from "@/digisat/login-messages";
+import { isDigisatHost } from "@/digisat/hosts";
+import { getDigisatMessages, mergeLoginMessages } from "@/digisat/login-messages";
 import { LANGS, LANGUAGE_COOKIE_NAME, LANGUAGE_HEADER_NAME } from "@/lib/i18n";
 import { getServiceConfig } from "@/lib/service-url";
 import { getAllowedLanguages, getHostedLoginTranslation, ServiceConfig } from "@/lib/zitadel";
@@ -75,13 +76,17 @@ export default getRequestConfig(async () => {
   ]);
 
   // Load locale messages, fall back to default language messages if locale not found
+  // digisat: messagesLocale is the catalog actually loaded, so its digisat overlay matches it
   let localeMessages;
+  let messagesLocale = locale;
   try {
     localeMessages = (await import(`../../locales/${locale}.json`)).default;
   } catch {
     try {
+      messagesLocale = defaultLanguage;
       localeMessages = (await import(`../../locales/${defaultLanguage}.json`)).default;
     } catch {
+      messagesLocale = fallback;
       localeMessages = (await import(`../../locales/${fallback}.json`)).default;
     }
   }
@@ -90,10 +95,14 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    // digisat: local en, local locale, instance custom texts, organization custom texts (later wins)
+    // digisat: local en, local locale (each with its digisat overlay on a digisat host), instance custom texts,
+    // organization custom texts (later wins)
     messages: mergeLoginMessages({
       fallback: fallbackMessages,
       locale: localeMessages,
+      digisat: isDigisatHost(serviceConfig.instanceHost)
+        ? { fallback: getDigisatMessages(fallback), locale: getDigisatMessages(messagesLocale) }
+        : undefined,
       instance: instanceMessages,
       organization: organizationMessages,
     }) as Record<string, string>,

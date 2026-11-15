@@ -1,0 +1,38 @@
+{
+  "common": {
+    "title": "Sign in to digisat"
+  },
+  "loginname": {
+    "description": "The email address or username of your digisat account."
+  },
+  "password": {
+    "verify": {
+      "description": "The password of your digisat account."
+    }
+  },
+  "idp": {
+    "accountNotFound": {
+      "description": "No digisat account is linked to this identity provider account."
+    }
+  },
+  "register": {
+    "description": "Create your digisat account."
+  },
+  "device": {
+    "request": {
+      "disclaimer": "By choosing Allow, you let {appName} and digisat use your information under their terms of service and privacy policies. You can revoke this access at any time."
+    }
+  },
+  "digisat": {
+    "noAccess": {
+      "hub": "Go to digisat"
+    },
+    "brand": {
+      "headline": "one account, all of digisat.",
+      "lead": "Sign in once and move between all digisat apps with the same account."
+    },
+    "footer": {
+      "copyright": "© digisat"
+    }
+  }
+}
