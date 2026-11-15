@@ -4,6 +4,57 @@
 @use "../digisat/theme";
 @config "../../tailwind.config.mjs";
 
+// digisat: on a non-digisat host (data-brand="instance", set by the root layout) the shadcn tokens come from the
+// instance branding again: ThemeWrapper renders the --theme-* vars (getThemeVariables in src/helpers/colors.ts).
+// The fallbacks are neutral zinc values for where no branding is rendered yet (e.g. the loading skeleton).
+// Unlayered like the design system's :root/.dark blocks; html[...] and html[...].dark outrank :root and .dark.
+// The status colours (success, warning, info, *-surface) stay the design system's.
+html[data-brand="instance"] {
+  --background: var(--theme-light-background-500, oklch(1 0 0));
+  --foreground: var(--theme-light-text-500, oklch(0.141 0.005 285.823));
+  --card: var(--theme-light-background-400, oklch(1 0 0));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--theme-light-primary-500, oklch(0.21 0.006 285.885));
+  --primary-foreground: var(--theme-light-primary-contrast-500, oklch(0.985 0 0));
+  --secondary: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --muted-foreground: color-mix(in oklab, var(--foreground) 55%, var(--background));
+  --accent: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --accent-foreground: var(--foreground);
+  --destructive: var(--theme-light-warn-500, oklch(0.577 0.245 27.325));
+  --destructive-foreground: var(--theme-light-warn-contrast-500, oklch(0.985 0 0));
+  --border: color-mix(in oklab, var(--foreground) 9%, var(--background));
+  --input: color-mix(in oklab, var(--foreground) 9%, var(--background));
+  --ring: color-mix(in oklab, var(--foreground) 35%, var(--background));
+  --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+html[data-brand="instance"].dark {
+  --background: var(--theme-dark-background-500, oklch(0.141 0.005 285.823));
+  --foreground: var(--theme-dark-text-500, oklch(0.985 0 0));
+  --card: var(--theme-dark-background-400, oklch(0.21 0.006 285.885));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--theme-dark-primary-500, oklch(0.92 0.004 286.32));
+  --primary-foreground: var(--theme-dark-primary-contrast-500, oklch(0.21 0.006 285.885));
+  --secondary: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --muted-foreground: color-mix(in oklab, var(--foreground) 67%, var(--background));
+  --accent: color-mix(in oklab, var(--foreground) 16%, var(--background));
+  --accent-foreground: var(--foreground);
+  --destructive: var(--theme-dark-warn-500, oklch(0.704 0.191 22.216));
+  --destructive-foreground: var(--theme-dark-warn-contrast-500, oklch(0.141 0.005 285.823));
+  --border: color-mix(in oklab, var(--foreground) 10%, var(--background));
+  --input: color-mix(in oklab, var(--foreground) 15%, var(--background));
+  --ring: color-mix(in oklab, var(--foreground) 50%, var(--background));
+  --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -36,6 +87,12 @@
   }
 
   // digisat: the .ztdl-page-bg gradient backdrop is gone; the design system uses no gradients.
+}
+
+// digisat: on a non-digisat host links use the instance's primary colour (pre-restyle look), not brand-deep/info.
+// Unlayered and more specific than .ztdl-link:is(.dark *), so it wins in both themes.
+html[data-brand="instance"] .ztdl-link {
+  color: var(--primary);
 }
 
 // A title directly followed by its description sits close to it (shadcn CardHeader rhythm).
